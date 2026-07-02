@@ -54,7 +54,7 @@
         <form id="form-login" onsubmit="handleLogin(event)">
             <div class="mb-3">
                 <label class="form-label">Username</label>
-                <input type="text" id="login-user" class="form-control" placeholder="Masukkan User" required>
+                <input type="text" id="login-user" class="form-control" placeholder="Masukkan Username" required autocomplete="off">
             </div>
             <div class="mb-4">
                 <label class="form-label">Password</label>
@@ -62,13 +62,10 @@
             </div>
             <button type="submit" class="btn btn-slog w-100 py-2">MASUK <i class="fa-solid fa-right-to-bracket"></i></button>
         </form>
-        <div class="text-center mt-3">
-            <small class="text-muted">Otoritas SLOG KORPASGAT Level 1</small>
-        </div>
     </div>
 </div>
 
-<!-- APLIKASI UTAMA (Tersembunyi sebelum login) -->
+<!-- APLIKASI UTAMA -->
 <div id="main-app" class="d-none">
     <nav class="navbar navbar-expand-lg navbar-dark navbar-military p-3">
         <div class="container-fluid">
@@ -82,7 +79,6 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- SIDEBAR -->
             <nav class="col-md-2 d-none d-md-block sidebar p-3">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
@@ -112,7 +108,7 @@
                     </div>
                 </section>
 
-                <!-- VIEW: CATEGORY VIEWS -->
+                <!-- VIEW: CATEGORY (Halaman Detail base) -->
                 <section id="view-category" class="view-section d-none">
                     <h3 id="category-title" class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Kategori</h3>
                     <div class="card card-tactical p-3">
@@ -120,15 +116,15 @@
                     </div>
                 </section>
 
-                <!-- VIEW: MASTER ITEM -->
+                <!-- VIEW: MASTER ITEM (6 KOLOM) -->
                 <section id="view-manage-items" class="view-section d-none">
                     <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Master Item Barang</h3>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card card-tactical p-4">
-                                <h5 class="text-warning mb-3">Input Item (6 Kolom)</h5>
+                                <h5 class="text-warning mb-3">Input Item</h5>
                                 <form id="form-master-item" onsubmit="handleSaveMasterItem(event)">
-                                    <input type="hidden" id="master-idx"><label class="form-label">1. Nama Base</label><select class="form-select mb-2" id="m-base" onchange="generateAutoCode(this.value)" required><option value="">-- Pilih --</option><option value="SENMU">Senmu</option><option value="ALPALSUS">Alpalsus</option><option value="RANMOR">Ranmor</option></select><label class="form-label">2. Kode (Otomatis)</label><input type="text" class="form-control mb-2" id="m-kode" readonly><label class="form-label">3. Nama Barang</label><input type="text" class="form-control mb-2" id="m-nama" required><label class="form-label">4. Sub Nama Barang</label><input type="text" class="form-control mb-2" id="m-sub"><label class="form-label">5. Kaliber / PN / SN</label><input type="text" class="form-control mb-2" id="m-spec"><label class="form-label">6. Satuan</label><input type="text" class="form-control mb-3" id="m-satuan" required><button type="submit" class="btn btn-slog w-100" id="btn-save-master">SIMPAN MASTER</button><button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-master" onclick="resetMasterItemForm()">BATAL</button></form>
+                                    <input type="hidden" id="master-idx"><label class="form-label">1. Nama Base</label><select class="form-select mb-2" id="m-base" onchange="generateAutoCode(this.value)" required><option value="">-- Pilih --</option><option value="SENMU">Senmu</option><option value="ALPALSUS">Alpalsus</option><option value="RANMOR">Ranmor</option></select><label class="form-label">2. Kode (Otomatis)</label><input type="text" class="form-control mb-2" id="m-kode" readonly><label class="form-label">3. Nama Barang</label><input type="text" class="form-control mb-2" id="m-nama" required><label class="form-label">4. Sub Nama</label><input type="text" class="form-control mb-2" id="m-sub"><label class="form-label">5. Kaliber / PN / SN</label><input type="text" class="form-control mb-2" id="m-spec"><label class="form-label">6. Satuan</label><input type="text" class="form-control mb-3" id="m-satuan" required><button type="submit" class="btn btn-slog w-100" id="btn-save-master">SIMPAN MASTER</button><button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-master" onclick="resetMasterItemForm()">BATAL</button></form>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -140,15 +136,15 @@
                     </div>
                 </section>
 
-                <!-- VIEW: USER JAJARAN -->
+                <!-- VIEW: USER JAJARAN (7 KOLOM) -->
                 <section id="view-manage-users" class="view-section d-none">
                     <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">User Jajaran</h3>
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card card-tactical p-4">
-                                <h5 class="text-warning mb-3" id="user-form-title">Buat Akses (7 Kolom)</h5>
+                                <h5 class="text-warning mb-3" id="user-form-title">Buat Akses</h5>
                                 <form id="form-manage-user" onsubmit="handleSaveUser(event)">
-                                    <input type="hidden" id="u-idx"><label class="form-label">1. Nama Satuan</label><input type="text" class="form-control mb-2" id="u-satuan" required><div class="row"><div class="col-md-6"><label class="form-label">2. User</label><input type="text" class="form-control mb-2" id="u-user" required></div><div class="col-md-6"><label class="form-label">3. Pass</label><input type="text" class="form-control mb-2" id="u-pass" required></div></div><label class="form-label">4. Nama Staf</label><input type="text" class="form-control mb-2" id="u-nama" required><div class="row"><div class="col-md-6"><label class="form-label">5. Pangkat</label><input type="text" class="form-control mb-2" id="u-pangkat" required></div><div class="col-md-6"><label class="form-label">6. NRP</label><input type="text" class="form-control mb-2" id="u-nrp" required></div></div><label class="form-label">7. No Telp</label><input type="text" class="form-control mb-3" id="u-telp" required><button type="submit" class="btn btn-slog w-100" id="btn-save-user">BUAT USER AKSES</button><button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-user" onclick="resetUserForm()">BATAL EDIT</button></form>
+                                    <input type="hidden" id="u-idx"><label class="form-label">1. Nama Satuan</label><input type="text" class="form-control mb-2" id="u-satuan" required><div class="row"><div class="col-md-6"><label class="form-label">2. User</label><input type="text" class="form-control mb-2" id="u-user" required></div><div class="col-md-6"><label class="form-label">3. Pass</label><input type="text" class="form-control mb-2" id="u-pass" required></div></div><label class="form-label">4. Nama Staf</label><input type="text" class="form-control mb-2" id="u-nama" required><div class="row"><div class="col-md-6"><label class="form-label">5. Pangkat</label><input type="text" class="form-control mb-2" id="u-pangkat" required></div><div class="col-md-6"><label class="form-label">6. NRP</label><input type="text" class="form-control mb-2" id="u-nrp" required></div></div><label class="form-label">7. No Telp</label><input type="text" class="form-control mb-3" id="u-telp" required><button type="submit" class="btn btn-slog w-100" id="btn-save-user">BUAT USER AKSES</button><button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-user" onclick="resetUserForm()">BATAL</button></form>
                             </div>
                         </div>
                         <div class="col-md-8">
@@ -164,25 +160,43 @@
 </div>
 
 <script>
-// DATABASE
+// INITIAL DATABASE
 let db_master = JSON.parse(localStorage.getItem('db_master_items')) || [
     { base: 'SENMU', kode: 'SM-001', nama: 'MU1-TJ', sub: '', spec: '9 x 19 MM', satuan: 'Butir' },
     { base: 'ALPALSUS', kode: 'AP-001', nama: 'Aqualung', sub: '', spec: 'SN-08182', satuan: 'Set' },
     { base: 'RANMOR', kode: 'RM-001', nama: 'P6-ATAV', sub: '', spec: 'SSE-V1', satuan: 'Unit' }
 ];
-let db_users = JSON.parse(localStorage.getItem('db_users')) || [
-    { satuan: "SLOG KORPASGAT", user: "slog", pass: "123", nama: "ADMIN SLOG", pangkat: "MAYO", nrp: "000000", telp: "081" }
-];
+
+// PERBAIKAN: MEMASTIKAN AKUN SLOG SELALU ADA
+let db_users = JSON.parse(localStorage.getItem('db_users')) || [];
+
+function verifyAdminAccount() {
+    const adminExists = db_users.find(u => u.user === 'slog');
+    if (!adminExists) {
+        db_users.push({
+            satuan: "SLOG KORPASGAT",
+            user: "slog",
+            pass: "123",
+            nama: "ADMIN UTAMA",
+            pangkat: "MAYOR",
+            nrp: "00000000",
+            telp: "081"
+        });
+        localStorage.setItem('db_users', JSON.stringify(db_users));
+    }
+}
 
 let currentUser = null;
 
 // FUNGSI LOGIN
 function handleLogin(e) {
     e.preventDefault();
-    const uInput = document.getElementById('login-user').value;
-    const pInput = document.getElementById('login-pass').value;
+    verifyAdminAccount(); // Pastikan database up-to-date sebelum cek
+    
+    const uInput = document.getElementById('login-user').value.toLowerCase().trim();
+    const pInput = document.getElementById('login-pass').value.trim();
 
-    const userFound = db_users.find(u => u.user === uInput && u.pass === pInput);
+    const userFound = db_users.find(u => u.user.toLowerCase() === uInput && u.pass === pInput);
 
     if(userFound) {
         currentUser = userFound;
@@ -190,7 +204,7 @@ function handleLogin(e) {
         document.getElementById('main-app').classList.remove('d-none');
         document.getElementById('current-user-display').innerText = userFound.satuan;
         
-        // Atur Menu Berdasarkan Hak Akses
+        // Cek hak akses menu SLOG
         if(userFound.user !== 'slog') {
             document.getElementById('slog-special-menu').classList.add('d-none');
         } else {
@@ -212,7 +226,7 @@ function logout() {
     }
 }
 
-// NAVIGASI (Hampir tidak berubah)
+// NAVIGASI
 function switchView(e, viewId) {
     if(e) e.preventDefault();
     document.querySelectorAll('.view-section').forEach(v => v.classList.add('d-none'));
@@ -231,7 +245,7 @@ function switchView(e, viewId) {
     if(viewId === 'manage-users') renderUserTable();
 }
 
-// FUNGSI MASTER & USER (Sesuai kode sebelumnya tanpa rubah fungsi)
+// MASTER ITEM LOGIC (HILANGKAN STRIP)
 function generateAutoCode(base) {
     if(!base) return document.getElementById('m-kode').value = "";
     let prefix = (base === "SENMU") ? "SM-" : (base === "ALPALSUS") ? "AP-" : "RM-";
@@ -243,13 +257,18 @@ function handleSaveMasterItem(e) {
     e.preventDefault();
     const idx = document.getElementById('master-idx').value;
     const data = {
-        base: document.getElementById('m-base').value, kode: document.getElementById('m-kode').value,
-        nama: document.getElementById('m-nama').value, sub: document.getElementById('m-sub').value.trim(),
-        spec: document.getElementById('m-spec').value.trim(), satuan: document.getElementById('m-satuan').value
+        base: document.getElementById('m-base').value,
+        kode: document.getElementById('m-kode').value,
+        nama: document.getElementById('m-nama').value,
+        sub: document.getElementById('m-sub').value.trim(),
+        spec: document.getElementById('m-spec').value.trim(),
+        satuan: document.getElementById('m-satuan').value
     };
     if(idx === "") db_master.push(data); else db_master[idx] = data;
     localStorage.setItem('db_master_items', JSON.stringify(db_master));
-    renderMasterTable(); resetMasterItemForm(); alert("Data Disimpan");
+    renderMasterTable();
+    resetMasterItemForm();
+    alert("Data Master Disimpan");
 }
 
 function renderMasterTable() {
@@ -260,14 +279,19 @@ function renderMasterTable() {
     db_master.forEach((item, i) => {
         if(fBase !== 'ALL' && item.base !== fBase) return;
         if(!(item.nama+item.kode+item.spec).toLowerCase().includes(sKey)) return;
+        
+        // HILANGKAN STRIP JIKA KOSONG
+        const subTxt = item.sub ? `<br><small style="color:#a3b899">${item.sub}</small>` : '';
+        const specTxt = item.spec ? item.spec : '';
+
         tbody.innerHTML += `<tr>
             <td class="text-center"><span class="badge ${item.base==='SENMU'?'bg-danger':'bg-primary'}">${item.base}</span></td>
             <td class="text-warning fw-bold text-center">${item.kode}</td>
-            <td><strong>${item.nama}</strong>${item.sub ? '<br><small style="color:#a3b899">'+item.sub+'</small>':''}</td>
-            <td>${item.spec}</td><td class="text-center">${item.satuan}</td>
+            <td><strong>${item.nama}</strong>${subTxt}</td>
+            <td>${specTxt}</td><td class="text-center">${item.satuan}</td>
             <td class="text-center">
-                <button class="btn btn-sm btn-outline-warning p-1" onclick="editMaster(${i})"><i class="fa-solid fa-edit"></i></button>
-                <button class="btn btn-sm btn-outline-danger p-1" onclick="db_master.splice(${i},1);renderMasterTable()"><i class="fa-solid fa-trash"></i></button>
+                <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editMaster(${i})"><i class="fa-solid fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger p-1" onclick="if(confirm('Hapus item?')){db_master.splice(${i},1);localStorage.setItem('db_master_items',JSON.stringify(db_master));renderMasterTable();}"><i class="fa-solid fa-trash"></i></button>
             </td></tr>`;
     });
 }
@@ -297,10 +321,11 @@ function renderCategoryView(base) {
     const tbody = document.getElementById('tbody-category');
     tbody.innerHTML = '';
     db_master.filter(i => i.base === base).forEach((item, index) => {
-        tbody.innerHTML += `<tr><td>${index+1}</td><td class="text-warning fw-bold">${item.kode}</td><td><strong>${item.nama}</strong></td><td>${item.spec}</td><td class="text-center">${item.satuan}</td></tr>`;
+        tbody.innerHTML += `<tr><td class="text-center">${index+1}</td><td class="text-warning fw-bold">${item.kode}</td><td><strong>${item.nama}</strong></td><td>${item.spec}</td><td class="text-center">${item.satuan}</td></tr>`;
     });
 }
 
+// USER LOGIC
 function handleSaveUser(e) {
     e.preventDefault();
     const idx = document.getElementById('u-idx').value;
@@ -324,11 +349,11 @@ function renderUserTable() {
     db_users.forEach((u, i) => {
         tbody.innerHTML += `<tr>
             <td><strong>${u.satuan}</strong></td>
-            <td class="text-warning">${u.user}</td>
+            <td class="text-warning font-monospace">${u.user}</td>
             <td>${u.nama}</td><td>${u.pangkat}</td><td>${u.nrp}</td><td>${u.telp}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-warning p-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
-                <button class="btn btn-sm btn-outline-danger p-1" onclick="db_users.splice(${i},1);renderUserTable()"><i class="fa-solid fa-trash"></i></button>
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger p-1" onclick="if(confirm('Hapus User?')){db_users.splice(${i},1);localStorage.setItem('db_users',JSON.stringify(db_users));renderUserTable();}"><i class="fa-solid fa-trash"></i></button>
             </td></tr>`;
     });
 }
@@ -363,7 +388,7 @@ function updateDashboard() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Memastikan app tersembunyi diawal
+    verifyAdminAccount(); // Langsung suntik akun admin slog:123
     document.getElementById('main-app').classList.add('d-none');
 });
 </script>
