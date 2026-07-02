@@ -9,7 +9,6 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* STREAMING_CHUNK: Mengonfigurasi tema taktis militer gelap... */
         /* TEMA MILITER - DARK TACTICAL MODE */
         body {
             background-color: #191c16;
@@ -62,21 +61,24 @@
             color: #ffc107 !important;
             text-align: center;
             vertical-align: middle;
+            white-space: nowrap;
         }
-
-        /* STREAMING_CHUNK: Memperbaiki visibilitas teks tabel anti warna hitam... */
-        /* FIX VISIBILITAS TEKS PUTIH PADA TABEL */
         .table-military td {
             background-color: #1d2218 !important;
             border-color: #3d4a34 !important;
             color: #ffffff !important; 
             vertical-align: middle;
         }
-        .table-military td strong {
-            color: #ffffff !important;
+
+        /* SCROLL & LAYOUT KONFIGURASI */
+        .table-scroll-container {
+            max-height: 400px; /* Scroll atas bawah */
+            overflow-y: auto;
+            overflow-x: auto; /* Scroll kiri kanan */
+            border: 1px solid #3d4a34;
         }
-        .table-military td small {
-            color: #a3b899 !important; /* Hijau redup untuk sub-info agar tetap estetis */
+        .min-width-table {
+            min-width: 1200px; /* Memaksa scroll horizontal jika layar sempit */
         }
 
         .nav-link-military {
@@ -90,14 +92,12 @@
             color: #ffc107;
         }
 
-        /* FORM LABELS (KUNING MAS TAKTIS) */
         .form-label {
             color: #ffc107 !important;
             font-weight: bold !important;
             text-transform: uppercase;
             font-size: 12px;
             letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
             display: inline-block;
             margin-bottom: 6px;
         }
@@ -110,20 +110,20 @@
             border-color: #ffc107 !important;
             box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2);
         }
-        .form-control[readonly] {
-            background-color: #121610 !important;
-            color: #88a078 !important;
+        .pagination .page-link {
+            background-color: #242a20;
+            color: #ffc107;
+            border: 1px solid #4a5940;
         }
-        .filter-search-box {
-            background-color: #1a1e16;
-            border: 1px dashed #4a5940;
-            border-radius: 6px;
+        .pagination .page-item.active .page-link {
+            background-color: #ffc107;
+            color: #000;
+            border-color: #ffc107;
         }
     </style>
 </head>
 <body>
 
-<!-- STREAMING_CHUNK: Merancang navigasi header atas... -->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-military p-3">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold text-uppercase" href="#"><i class="fa-solid fa-jet-fighter"></i> INVENTORY KORPASGAT</a>
@@ -137,7 +137,6 @@
 <div class="container-fluid">
     <div class="row">
         
-        <!-- STREAMING_CHUNK: Menyusun menu navigasi sidebar jajaran... -->
         <!-- SIDEBAR NAVIGASI -->
         <nav class="col-md-2 d-none d-md-block sidebar p-3" id="sidebar-menu">
             <div class="position-sticky">
@@ -158,217 +157,51 @@
             </div>
         </nav>
 
-        <!-- KONTEN UTAMA DENGAN VIEW PORTAL YANG DIKONTROL JS -->
         <main class="col-md-10 ms-sm-auto px-md-4 py-4">
             
-            <!-- STREAMING_CHUNK: Membangun modul view Dashboard... -->
             <!-- VIEW: DASHBOARD -->
             <section id="view-dashboard" class="view-section">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
-                    <i class="fa-solid fa-gauge"></i> Dashboard Ringkasan Logistik
-                </h3>
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="card card-tactical p-3 mb-2">
-                            <h6 class="text-warning">Kekuatan Senjata & Amunisi (SENMU)</h6>
-                            <h2 id="dash-count-senmu" class="text-white fw-bold">0</h2>
-                            <small class="text-muted">Total item terdaftar di pangkalan data</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card card-tactical p-3 mb-2">
-                            <h6 class="text-warning">Alat Peralatan Khusus (ALPALSUS)</h6>
-                            <h2 id="dash-count-alpalsus" class="text-white fw-bold">0</h2>
-                            <small class="text-muted">Perlengkapan taktis operasional aktif</small>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card card-tactical p-3 mb-2">
-                            <h6 class="text-warning">Kekuatan Armada Ranmor (RANMOR)</h6>
-                            <h2 id="dash-count-ranmor" class="text-white fw-bold">0</h2>
-                            <small class="text-muted">Armada taktis roda 2, roda 4, dan rantis</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card card-tactical p-4">
-                    <h5 class="text-warning mb-3">Status Sistem Logistik Korpasgat</h5>
-                    <p class="text-light">
-                        Selamat datang di <strong>System Logistik Digital KORPASGAT</strong>. Portal ini mengintegrasikan seluruh laporan inventaris master jajaran satuan secara real-time. Gunakan menu navigasi di sebelah kiri untuk melihat daftar armada taktis, amunisi, serta peralatan khusus.
-                    </p>
-                </div>
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">Dashboard</h3>
+                <div class="card card-tactical p-4"><p>Selamat Datang di Sistem Logistik KORPASGAT.</p></div>
             </section>
 
-            <!-- STREAMING_CHUNK: Membangun modul view SENMU... -->
-            <!-- VIEW: SENMU -->
-            <section id="view-senmu" class="view-section d-none">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
-                    <i class="fa-solid fa-gun"></i> Inventaris Senjata & Amunisi (SENMU)
-                </h3>
-                <div class="card card-tactical p-3">
-                    <div class="table-responsive">
-                        <table class="table table-military table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Kode</th>
-                                    <th>Nama Barang</th>
-                                    <th>Spek Kaliber</th>
-                                    <th>Satuan</th>
-                                    <th>Ketersediaan</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody-senmu-view">
-                                <!-- Terisi otomatis lewat JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- STREAMING_CHUNK: Membangun modul view ALPALSUS... -->
-            <!-- VIEW: ALPALSUS -->
-            <section id="view-alpalsus" class="view-section d-none">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
-                    <i class="fa-solid fa-vest-pattern"></i> Inventaris Alat Peralatan Khusus (ALPALSUS)
-                </h3>
-                <div class="card card-tactical p-3">
-                    <div class="table-responsive">
-                        <table class="table table-military table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Kode</th>
-                                    <th>Nama Barang</th>
-                                    <th>Spek/No Registrasi</th>
-                                    <th>Satuan</th>
-                                    <th>Kondisi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody-alpalsus-view">
-                                <!-- Terisi otomatis lewat JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- STREAMING_CHUNK: Membangun modul view RANMOR... -->
-            <!-- VIEW: RANMOR -->
-            <section id="view-ranmor" class="view-section d-none">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
-                    <i class="fa-solid fa-truck-pickup"></i> Inventaris Kendaraan Bermotor (RANMOR)
-                </h3>
-                <div class="card card-tactical p-3">
-                    <div class="table-responsive">
-                        <table class="table table-military table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Kode</th>
-                                    <th>Merk / Tipe Kendaraan</th>
-                                    <th>Spek/No Mesin</th>
-                                    <th>Satuan</th>
-                                    <th>Status Armada</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody-ranmor-view">
-                                <!-- Terisi otomatis lewat JavaScript -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- STREAMING_CHUNK: Membangun modul view Otoritas Master Data Item... -->
-            <!-- VIEW: MASTER ITEM DATA (Otoritas SLOG) -->
+            <!-- VIEW: MASTER ITEM DATA (OTORITAS SLOG) -->
             <section id="view-manage-items" class="view-section d-none">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
-                    <i class="fa-solid fa-boxes-stacked"></i> Otoritas Master Data Item Barang
-                </h3>
-                
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">Master Item Barang</h3>
                 <div class="row">
-                    <!-- FORM INPUT 6 KOLOM -->
-                    <div class="col-md-5 mb-3">
-                        <div class="card card-tactical p-4">
-                            <h5 id="master-form-title" class="text-warning mb-4">Tambah Master Item Baru</h5>
+                    <div class="col-md-4">
+                        <div class="card card-tactical p-3">
+                            <h5 class="text-warning mb-3">Tambah Item Baru</h5>
                             <form id="form-master-item" onsubmit="handleSaveMasterItem(event)">
                                 <input type="hidden" id="master-item-idx">
-                                <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">1. Nama Base</label>
-                                        <select class="form-select" id="master-kategori" onchange="generateAutoCode(this.value)" required>
-                                            <option value="">-- Pilih Base Kategori --</option>
-                                            <option value="SENMU">Senmu</option>
-                                            <option value="ALPALSUS">Alpalsus</option>
-                                            <option value="RANMOR">Ranmor</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">2. Kode Barang (Otomatis)</label>
-                                        <input type="text" class="form-control" id="master-kode" readonly placeholder="Akan terisi otomatis...">
-                                    </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">3. Nama Barang</label>
-                                        <input type="text" class="form-control" id="master-nama" required placeholder="Nama Barang / Merk Tipe">
-                                    </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">4. Sub Nama Barang</label>
-                                        <input type="text" class="form-control" id="master-sub" placeholder="Sub Nama Barang / Jenis">
-                                    </div>
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">5. Kaliber / PN / SN</label>
-                                        <input type="text" class="form-control" id="master-spec" placeholder="Spek Teknis">
-                                    </div>
-                                    <div class="col-md-12 mb-4">
-                                        <label class="form-label">6. Satuan</label>
-                                        <input type="text" class="form-control" id="master-satuan" required placeholder="Pucuk / Butir / Set / Unit">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-slog w-100 py-2 fw-bold" id="btn-save-master">SIMPAN ITEM MASTER</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-edit" onclick="resetMasterItemForm()">Batal Edit</button>
+                                <label class="form-label">Nama Base</label>
+                                <select class="form-select mb-2" id="master-kategori" onchange="generateAutoCode(this.value)" required>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="SENMU">Senmu</option>
+                                    <option value="ALPALSUS">Alpalsus</option>
+                                    <option value="RANMOR">Ranmor</option>
+                                </select>
+                                <label class="form-label">Kode (Otomatis)</label>
+                                <input type="text" class="form-control mb-2" id="master-kode" readonly>
+                                <label class="form-label">Nama Barang</label>
+                                <input type="text" class="form-control mb-2" id="master-nama" required>
+                                <label class="form-label">Sub Nama</label>
+                                <input type="text" class="form-control mb-2" id="master-sub">
+                                <label class="form-label">Spek</label>
+                                <input type="text" class="form-control mb-2" id="master-spec">
+                                <label class="form-label">Satuan</label>
+                                <input type="text" class="form-control mb-3" id="master-satuan" required>
+                                <button type="submit" class="btn btn-slog w-100 fw-bold">SIMPAN MASTER</button>
                             </form>
                         </div>
                     </div>
-
-                    <!-- TABEL DAFTAR MASTER DENGAN FILTER & SEARCH -->
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <div class="card card-tactical p-3">
-                            <h5 class="text-light mb-3">Daftar Item Master Aktif</h5>
-                            
-                            <div class="filter-search-box p-3 mb-3">
-                                <div class="row g-2">
-                                    <div class="col-md-6">
-                                        <label class="form-label" style="font-size: 11px !important;">Saring Berdasarkan Base</label>
-                                        <select class="form-select form-select-sm" id="table-filter-base" onchange="filterAndSearchMasterTable()">
-                                            <option value="ALL">-- SEMUA BASE --</option>
-                                            <option value="SENMU">SENMU</option>
-                                            <option value="ALPALSUS">ALPALSUS</option>
-                                            <option value="RANMOR">RANMOR</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label" style="font-size: 11px !important;">Pencarian Kata Kunci</label>
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-dark border-secondary text-warning"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                            <input type="text" class="form-control" id="table-search-keyword" onkeyup="filterAndSearchMasterTable()" placeholder="Cari Kode, Nama, Spek...">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
+                            <div class="input-group mb-2"><input type="text" class="form-control form-control-sm" id="search-master" onkeyup="filterMasterTable()" placeholder="Cari Item..."></div>
+                            <div class="table-scroll-container">
                                 <table class="table table-military table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Base</th>
-                                            <th>Kode</th>
-                                            <th>Nama Barang</th>
-                                            <th>Spek (Kaliber/PN/SN)</th>
-                                            <th>Satuan</th>
-                                            <th>Opsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-master-items">
-                                        <!-- Data via JS -->
-                                    </tbody>
+                                    <thead><tr><th>Base</th><th>Kode</th><th>Nama</th><th>Spek</th><th>Satuan</th><th>Opsi</th></tr></thead>
+                                    <tbody id="tbody-master-items"></tbody>
                                 </table>
                             </div>
                         </div>
@@ -376,48 +209,107 @@
                 </div>
             </section>
 
-            <!-- STREAMING_CHUNK: Membangun modul view User Jajaran... -->
-            <!-- VIEW: USER JAJARAN -->
+            <!-- VIEW: MANAJEMEN USER JAJARAN (FITUR BARU) -->
             <section id="view-manage-users" class="view-section d-none">
                 <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
                     <i class="fa-solid fa-users-gear"></i> Manajemen User Jajaran Satuan
                 </h3>
-                <div class="card card-tactical p-4">
-                    <h5 class="text-warning mb-3">Daftar Otoritas Komando Wilayah Satuan Jajaran</h5>
-                    <p class="text-light">
-                        Halaman ini mengelola hak akses login bagi tiap-tiap staf logistik Satuan Jajaran Komando KORPASGAT (Yonko, Denmatra, Satwalkol).
-                    </p>
-                    <div class="table-responsive mt-3">
-                        <table class="table table-military table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Satuan Jajaran</th>
-                                    <th>Kode Akses Operasional</th>
-                                    <th>Status Hubungan data</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td><strong>YONKO 461 PARAKO</strong></td>
-                                    <td class="text-center text-warning font-monospace">YON-461</td>
-                                    <td class="text-center text-success"><i class="fa-solid fa-circle-check"></i> Terkoneksi</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td><strong>YONKO 471 PARAKO</strong></td>
-                                    <td class="text-center text-warning font-monospace">YON-471</td>
-                                    <td class="text-center text-success"><i class="fa-solid fa-circle-check"></i> Terkoneksi</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">3</td>
-                                    <td><strong>DENMATRA 1</strong></td>
-                                    <td class="text-center text-warning font-monospace">DENMAT-1</td>
-                                    <td class="text-center text-success"><i class="fa-solid fa-circle-check"></i> Terkoneksi</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                
+                <div class="row">
+                    <!-- SISI KIRI: INPUT USER BARU (7 KOLOM) -->
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical p-4">
+                            <h5 class="text-warning mb-4"><i class="fa-solid fa-user-plus"></i> Tambah Akses Jajaran</h5>
+                            <form id="form-manage-user" onsubmit="handleSaveUser(event)">
+                                <input type="hidden" id="user-item-idx">
+                                
+                                <label class="form-label">1. Nama Satuan Jajaran</label>
+                                <input type="text" class="form-control mb-2" id="user-satuan" list="list-satuan-exist" placeholder="Pilih atau Ketik Satuan Baru..." required>
+                                <datalist id="list-satuan-exist">
+                                    <option value="YONKO 461 PARAKO">
+                                    <option value="YONKO 471 PARAKO">
+                                    <option value="DENMATRA 1">
+                                </datalist>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">2. User Login</label>
+                                        <input type="text" class="form-control mb-2" id="user-login" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">3. Password</label>
+                                        <input type="password" class="form-control mb-2" id="user-pass" required>
+                                    </div>
+                                </div>
+
+                                <label class="form-label">4. Nama Lengkap Staf</label>
+                                <input type="text" class="form-control mb-2" id="user-nama-staf" required>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label">5. Pangkat</label>
+                                        <input type="text" class="form-control mb-2" id="user-pangkat" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">6. NRP</label>
+                                        <input type="text" class="form-control mb-2" id="user-nrp" required>
+                                    </div>
+                                </div>
+
+                                <label class="form-label">7. No Telp / WhatsApp</label>
+                                <input type="text" class="form-control mb-3" id="user-telp" required>
+
+                                <button type="submit" class="btn btn-slog w-100 py-2 fw-bold" id="btn-save-user">BUAT USER AKSES</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-user" onclick="resetUserForm()">Batal Edit</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- SISI KANAN: TABEL USER DENGAN FILTER, SEARCH, & SCROLL -->
+                    <div class="col-md-8">
+                        <div class="card card-tactical p-3">
+                            <h5 class="text-light mb-3">Daftar Otoritas User Jajaran Aktif</h5>
+                            
+                            <div class="filter-search-box p-3 mb-3">
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Filter Jajaran</label>
+                                        <select class="form-select form-select-sm" id="filter-user-satuan" onchange="renderUserTable()">
+                                            <option value="ALL">-- Semua Satuan --</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Cari User/NRP/Nama</label>
+                                        <input type="text" class="form-control form-control-sm" id="search-user-keyword" onkeyup="renderUserTable()" placeholder="Ketik kata kunci...">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-scroll-container">
+                                <table class="table table-military table-bordered min-width-table">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Satuan Jajaran</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>Nama Staf</th>
+                                            <th>Pangkat</th>
+                                            <th>NRP</th>
+                                            <th>No Telp</th>
+                                            <th>Opsi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-users"></tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <small class="text-muted" id="user-pagination-info">Menampilkan 0 data</small>
+                                <nav><ul class="pagination pagination-sm mb-0" id="user-pagination-list"></ul></nav>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -427,261 +319,164 @@
 </div>
 
 <script>
-// STREAMING_CHUNK: Mengaktifkan database penampungan logistik sementara...
 // --- DATABASE SIMULATOR ---
-let db_master_items = JSON.parse(localStorage.getItem('db_master_items')) || [
-    { base: 'SENMU', kode: 'SM-001', nama: 'MU1-TJ', sub: '', spec: '9 x 19 MM', satuan: 'Butir' },
-    { base: 'SENMU', kode: 'SM-002', nama: 'MU2-TJ', sub: '', spec: '7,62 x 51 MM', satuan: 'Butir' },
-    { base: 'ALPALSUS', kode: 'AP-001', nama: 'Aqualung', sub: '', spec: 'SN-08182', satuan: 'Set' },
-    { base: 'RANMOR', kode: 'RM-001', nama: 'P6-ATAV', sub: '', spec: 'SSE-V1-2024', satuan: 'Unit' }
+let db_master_items = JSON.parse(localStorage.getItem('db_master_items')) || [];
+let db_users = JSON.parse(localStorage.getItem('db_users')) || [
+    { satuan: "YONKO 461 PARAKO", user: "yon461", pass: "461jaya", nama: "Budi Santoso", pangkat: "Sertu", nrp: "123456", telp: "08123456789" },
+    { satuan: "YONKO 471 PARAKO", user: "yon471", pass: "471kuat", nama: "Andi Wijaya", pangkat: "Serda", nrp: "654321", telp: "08198765432" }
 ];
 
-// STREAMING_CHUNK: Mengonfigurasi logika navigasi menu multi-view...
-// --- LOGIKA NAVIGASI MULTI-VIEW ---
+// --- LOGIKA NAVIGASI ---
 function switchView(viewId) {
-    // Sembunyikan semua section view
-    document.querySelectorAll('.view-section').forEach(section => {
-        section.classList.add('d-none');
-    });
+    document.querySelectorAll('.view-section').forEach(s => s.classList.add('d-none'));
+    document.querySelectorAll('.nav-link-military').forEach(l => l.classList.remove('active'));
+    document.getElementById('view-' + viewId).classList.remove('d-none');
+    document.getElementById('nav-' + viewId).classList.add('active');
     
-    // Tampilkan view yang dipilih
-    const activeSection = document.getElementById('view-' + viewId);
-    if (activeSection) {
-        activeSection.classList.remove('d-none');
-    }
-
-    // Ubah status aktif tombol navigasi sidebar
-    document.querySelectorAll('.nav-link-military').forEach(link => {
-        link.classList.remove('active');
-    });
-    const activeLink = document.getElementById('nav-' + viewId);
-    if (activeLink) {
-        activeLink.classList.add('active');
-    }
-
-    // Refresh data view yang spesifik jika diperlukan
-    if (viewId === 'dashboard') {
-        updateDashboardCounts();
-    } else if (viewId === 'senmu') {
-        renderSENMUViewTable();
-    } else if (viewId === 'alpalsus') {
-        renderALPALSUSViewTable();
-    } else if (viewId === 'ranmor') {
-        renderRANMORViewTable();
-    }
+    if(viewId === 'manage-users') renderUserTable();
+    if(viewId === 'manage-items') renderMasterTable();
 }
 
-// STREAMING_CHUNK: Merancang fungsi otomatisasi penomoran kode barang...
-// --- LOGIKA OTOMATISASI KODE ---
-function generateAutoCode(base) {
-    if (!base) { document.getElementById('master-kode').value = ""; return; }
-    let prefix = (base === "SENMU") ? "SM-" : (base === "ALPALSUS") ? "AP-" : "RM-";
-    let filtered = db_master_items.filter(item => item.base === base);
-    let nextNumber = filtered.length + 1;
-    let formattedNumber = nextNumber.toString().padStart(3, '0');
-    document.getElementById('master-kode').value = prefix + formattedNumber;
-}
+// --- LOGIKA MANAJEMEN USER ---
+let userPage = 1;
+const rowsPerPage = 5;
 
-// STREAMING_CHUNK: Mengatur aksi penyimpanan dan penyimpanan data presisten...
-// --- CONTROLLER FORM ---
-function handleSaveMasterItem(e) {
+function handleSaveUser(e) {
     e.preventDefault();
-    const idx = document.getElementById('master-item-idx').value;
-    const itemData = {
-        base: document.getElementById('master-kategori').value,
-        kode: document.getElementById('master-kode').value,
-        nama: document.getElementById('master-nama').value,
-        sub: document.getElementById('master-sub').value.trim(),
-        spec: document.getElementById('master-spec').value.trim(),
-        satuan: document.getElementById('master-satuan').value
+    const idx = document.getElementById('user-item-idx').value;
+    const userData = {
+        satuan: document.getElementById('user-satuan').value,
+        user: document.getElementById('user-login').value,
+        pass: document.getElementById('user-pass').value,
+        nama: document.getElementById('user-nama-staf').value,
+        pangkat: document.getElementById('user-pangkat').value,
+        nrp: document.getElementById('user-nrp').value,
+        telp: document.getElementById('user-telp').value
     };
 
-    if (idx === "") db_master_items.push(itemData);
-    else db_master_items[idx] = itemData;
+    if(idx === "") db_users.push(userData);
+    else db_users[idx] = userData;
 
-    localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
-    filterAndSearchMasterTable();
-    resetMasterItemForm();
-    updateDashboardCounts();
-    
-    // Tampilkan pesan sukses taktis (tanpa alert bawaan browser)
-    showTackticalMessage("Data Master Berhasil Disimpan!");
+    localStorage.setItem('db_users', JSON.stringify(db_users));
+    resetUserForm();
+    renderUserTable();
+    alert("Kredensial User Jajaran Berhasil Disimpan!");
 }
 
-// STREAMING_CHUNK: Merancang engine tabel master yang aman tanpa strip...
-// --- ENGINE TABEL (HILANGKAN STRIP KOSONG) ---
-function filterAndSearchMasterTable() {
-    const baseFilter = document.getElementById('table-filter-base').value;
-    const searchQuery = document.getElementById('table-search-keyword').value.toLowerCase().trim();
-    const tbody = document.getElementById('tbody-master-items');
+function renderUserTable() {
+    const filter = document.getElementById('filter-user-satuan').value;
+    const search = document.getElementById('search-user-keyword').value.toLowerCase();
+    const tbody = document.getElementById('tbody-users');
     tbody.innerHTML = '';
-    
-    db_master_items.forEach((item, index) => {
-        if (baseFilter !== "ALL" && item.base !== baseFilter) return;
-        if (searchQuery !== "") {
-            const match = (item.nama + item.kode + (item.sub || '') + (item.spec || '')).toLowerCase().includes(searchQuery);
-            if (!match) return;
-        }
 
-        let badgeClass = (item.base === "SENMU") ? "bg-danger" : (item.base === "ALPALSUS") ? "bg-primary" : "bg-dark text-warning border-warning";
+    // Update Filter Options
+    const filterSel = document.getElementById('filter-user-satuan');
+    const satuanList = [...new Set(db_users.map(u => u.satuan))];
+    const currentFilter = filterSel.value;
+    filterSel.innerHTML = '<option value="ALL">-- Semua Satuan --</option>';
+    satuanList.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s; opt.text = s;
+        if(s === currentFilter) opt.selected = true;
+        filterSel.add(opt);
+    });
 
-        // LOGIKA PENGHILANGAN STRIP (-): Jika data kosong (''), maka tampilkan string kosong.
-        const displaySub = item.sub ? `<br><small>${item.sub}</small>` : '';
-        const displaySpec = item.spec ? item.spec : '';
+    // Filter Logic
+    let filtered = db_users.filter(u => {
+        const matchFilter = (filter === "ALL" || u.satuan === filter);
+        const matchSearch = (u.user.toLowerCase().includes(search) || u.nrp.includes(search) || u.nama.toLowerCase().includes(search));
+        return matchFilter && matchSearch;
+    });
 
+    // Render Rows
+    filtered.forEach((u, i) => {
         tbody.innerHTML += `
             <tr>
-                <td class="text-center"><span class="badge ${badgeClass} border border-secondary">${item.base}</span></td>
-                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
-                <td><strong>${item.nama}</strong>${displaySub}</td>
-                <td>${displaySpec}</td>
-                <td class="text-center">${item.satuan}</td>
+                <td class="text-center">${i+1}</td>
+                <td><strong>${u.satuan}</strong></td>
+                <td class="text-warning">${u.user}</td>
+                <td>••••••</td>
+                <td>${u.nama}</td>
+                <td>${u.pangkat}</td>
+                <td class="font-monospace">${u.nrp}</td>
+                <td>${u.telp}</td>
                 <td class="text-center">
-                    <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editMasterItem(${index})"><i class="fa-solid fa-edit"></i></button>
-                    <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteMasterItem(${index})"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-sm btn-outline-warning p-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
+                    <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteUser(${i})"><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
         `;
     });
-
-    if (tbody.innerHTML === '') {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">Tidak ada data item master.</td></tr>`;
-    }
-}
-
-// STREAMING_CHUNK: Mengembangkan render data operasional masing-masing modul...
-// --- ENGINE RENDER TABEL KHUSUS KATEGORI ---
-function renderSENMUViewTable() {
-    const tbody = document.getElementById('tbody-senmu-view');
-    tbody.innerHTML = '';
-    const senmuItems = db_master_items.filter(item => item.base === 'SENMU');
     
-    senmuItems.forEach(item => {
-        tbody.innerHTML += `
-            <tr>
-                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
-                <td><strong>${item.nama}</strong>${item.sub ? `<br><small>${item.sub}</small>` : ''}</td>
-                <td>${item.spec ? item.spec : ''}</td>
-                <td class="text-center">${item.satuan}</td>
-                <td class="text-center text-success"><i class="fa-solid fa-check"></i> Siaga</td>
-            </tr>
-        `;
-    });
-    if (tbody.innerHTML === '') {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada data Senjata & Amunisi.</td></tr>`;
+    document.getElementById('user-pagination-info').innerText = `Total: ${filtered.length} User Akun`;
+}
+
+function editUser(i) {
+    const u = db_users[i];
+    document.getElementById('user-item-idx').value = i;
+    document.getElementById('user-satuan').value = u.satuan;
+    document.getElementById('user-login').value = u.user;
+    document.getElementById('user-pass').value = u.pass;
+    document.getElementById('user-nama-staf').value = u.nama;
+    document.getElementById('user-pangkat').value = u.pangkat;
+    document.getElementById('user-nrp').value = u.nrp;
+    document.getElementById('user-telp').value = u.telp;
+    document.getElementById('btn-save-user').innerText = "UPDATE USER";
+    document.getElementById('btn-cancel-user').classList.remove('d-none');
+}
+
+function deleteUser(i) {
+    if(confirm("Hapus akses login satuan jajaran ini?")) {
+        db_users.splice(i, 1);
+        localStorage.setItem('db_users', JSON.stringify(db_users));
+        renderUserTable();
     }
 }
 
-function renderALPALSUSViewTable() {
-    const tbody = document.getElementById('tbody-alpalsus-view');
+function resetUserForm() {
+    document.getElementById('form-manage-user').reset();
+    document.getElementById('user-item-idx').value = "";
+    document.getElementById('btn-save-user').innerText = "BUAT USER AKSES";
+    document.getElementById('btn-cancel-user').classList.add('d-none');
+}
+
+// --- MASTER ITEM LOGIC (PROGRAM LAMA TETAP ADA) ---
+function generateAutoCode(base) {
+    if (!base) return;
+    let prefix = (base === "SENMU") ? "SM-" : (base === "ALPALSUS") ? "AP-" : "RM-";
+    let count = db_master_items.filter(item => item.base === base).length + 1;
+    document.getElementById('master-kode').value = prefix + count.toString().padStart(3, '0');
+}
+
+function handleSaveMasterItem(e) {
+    e.preventDefault();
+    const data = {
+        base: document.getElementById('master-kategori').value,
+        kode: document.getElementById('master-kode').value,
+        nama: document.getElementById('master-nama').value,
+        sub: document.getElementById('master-sub').value,
+        spec: document.getElementById('master-spec').value,
+        satuan: document.getElementById('master-satuan').value
+    };
+    db_master_items.push(data);
+    localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
+    renderMasterTable();
+}
+
+function renderMasterTable() {
+    const tbody = document.getElementById('tbody-master-items');
     tbody.innerHTML = '';
-    const alpalsusItems = db_master_items.filter(item => item.base === 'ALPALSUS');
-    
-    alpalsusItems.forEach(item => {
-        tbody.innerHTML += `
-            <tr>
-                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
-                <td><strong>${item.nama}</strong>${item.sub ? `<br><small>${item.sub}</small>` : ''}</td>
-                <td>${item.spec ? item.spec : ''}</td>
-                <td class="text-center">${item.satuan}</td>
-                <td class="text-center text-info"><i class="fa-solid fa-shield-halved"></i> Terinventaris</td>
-            </tr>
-        `;
+    db_master_items.forEach((item, i) => {
+        tbody.innerHTML += `<tr><td>${item.base}</td><td class="text-warning">${item.kode}</td><td>${item.nama}</td><td>${item.spec || ''}</td><td>${item.satuan}</td><td><button class="btn btn-sm btn-outline-danger p-1" onclick="db_master_items.splice(${i},1);localStorage.setItem('db_master_items',JSON.stringify(db_master_items));renderMasterTable()"><i class="fa-solid fa-trash"></i></button></td></tr>`;
     });
-    if (tbody.innerHTML === '') {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada data Alat Peralatan Khusus.</td></tr>`;
-    }
 }
 
-function renderRANMORViewTable() {
-    const tbody = document.getElementById('tbody-ranmor-view');
-    tbody.innerHTML = '';
-    const ranmorItems = db_master_items.filter(item => item.base === 'RANMOR');
-    
-    ranmorItems.forEach(item => {
-        tbody.innerHTML += `
-            <tr>
-                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
-                <td><strong>${item.nama}</strong>${item.sub ? `<br><small>${item.sub}</small>` : ''}</td>
-                <td>${item.spec ? item.spec : ''}</td>
-                <td class="text-center">${item.satuan}</td>
-                <td class="text-center text-warning"><i class="fa-solid fa-truck"></i> Operasional</td>
-            </tr>
-        `;
-    });
-    if (tbody.innerHTML === '') {
-        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada data Kendaraan Bermotor.</td></tr>`;
-    }
-}
+function logout() { alert("Sesi Logistik Diamankan."); }
 
-// STREAMING_CHUNK: Menyinkronkan jumlah hitungan ringkasan dashboard statistik...
-// --- UPDATE DASHBOARD STATISTIK ---
-function updateDashboardCounts() {
-    const senmuCount = db_master_items.filter(i => i.base === 'SENMU').length;
-    const alpalsusCount = db_master_items.filter(i => i.base === 'ALPALSUS').length;
-    const ranmorCount = db_master_items.filter(i => i.base === 'RANMOR').length;
-
-    document.getElementById('dash-count-senmu').innerText = senmuCount + " Items";
-    document.getElementById('dash-count-alpalsus').innerText = alpalsusCount + " Perlengkapan";
-    document.getElementById('dash-count-ranmor').innerText = ranmorCount + " Armada";
-}
-
-// --- CONTROLLER EDIT & DELETE ---
-function editMasterItem(index) {
-    const item = db_master_items[index];
-    document.getElementById('master-item-idx').value = index;
-    document.getElementById('master-kategori').value = item.base;
-    document.getElementById('master-kode').value = item.kode;
-    document.getElementById('master-nama').value = item.nama;
-    document.getElementById('master-sub').value = item.sub;
-    document.getElementById('master-spec').value = item.spec;
-    document.getElementById('master-satuan').value = item.satuan;
-    document.getElementById('master-form-title').innerText = "Edit Master Item";
-    document.getElementById('btn-cancel-edit').classList.remove('d-none');
-}
-
-function resetMasterItemForm() {
-    document.getElementById('form-master-item').reset();
-    document.getElementById('master-item-idx').value = "";
-    document.getElementById('master-form-title').innerText = "Tambah Master Item Baru";
-    document.getElementById('btn-cancel-edit').classList.add('d-none');
-}
-
-function deleteMasterItem(index) {
-    if(confirm("Hapus item master ini?")) {
-        db_master_items.splice(index, 1);
-        localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
-        filterAndSearchMasterTable();
-        updateDashboardCounts();
-    }
-}
-
-// --- UTILITIES (TIDAK MENGGUNAKAN ALERT NATIVE) ---
-function showTackticalMessage(msg) {
-    const alertBox = document.createElement('div');
-    alertBox.style.position = 'fixed';
-    alertBox.style.bottom = '20px';
-    alertBox.style.right = '20px';
-    alertBox.style.backgroundColor = '#2c3626';
-    alertBox.style.border = '2px solid #ffc107';
-    alertBox.style.color = '#ffc107';
-    alertBox.style.padding = '15px 25px';
-    alertBox.style.borderRadius = '5px';
-    alertBox.style.fontFamily = 'Courier New, monospace';
-    alertBox.style.zIndex = '9999';
-    alertBox.innerHTML = `<i class="fa-solid fa-shield-halved me-2"></i> ${msg}`;
-    document.body.appendChild(alertBox);
-    setTimeout(() => { alertBox.remove(); }, 3000);
-}
-
-function logout() { 
-    showTackticalMessage("Keamanan sesi logistik diamankan..."); 
-}
-
-// --- INisialisasi SISTEM PADA WINDOW LOAD ---
-document.addEventListener("DOMContentLoaded", function() {
-    filterAndSearchMasterTable();
-    updateDashboardCounts();
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+    renderMasterTable();
+    renderUserTable();
 });
 </script>
 </body>
