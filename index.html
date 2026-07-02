@@ -1,421 +1,94 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INVENTORY KORPASGAT - MASTER ITEM</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* TEMA MILITER - DARK TACTICAL MODE */
-        body {
-            background-color: #191c16;
-            color: #e2e8f0;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .navbar-military {
-            background-color: #242b1f;
-            border-bottom: 3px solid #3d4a34;
-        }
-        .sidebar {
-            background-color: #20261b;
-            border-right: 2px solid #3d4a34;
-            min-height: calc(100vh - 73px);
-        }
-        .card-tactical {
-            background-color: #242a20;
-            border: 1px solid #4a5940;
-            border-left: 4px solid #7a9468;
-        }
-        .card-tactical-slog {
-            border-left: 4px solid #b38600;
-        }
-        .btn-army {
-            background-color: #3f4f37;
-            color: #ffffff;
-            border: 1px solid #566c4c;
-        }
-        .btn-army:hover {
-            background-color: #566c4c;
-            color: #ffffff;
-        }
-        .btn-slog {
-            background-color: #8c6b00;
-            color: #fff;
-            border: 1px solid #b38600;
-        }
-        .btn-slog:hover {
-            background-color: #b38600;
-            color: #fff;
-        }
-        .table-military {
-            background-color: #20261b !important;
-            color: #e2e8f0 !important;
-            border-color: #3d4a34 !important;
-            font-size: 12px;
-        }
-        .table-military th {
-            background-color: #2c3626 !important;
-            color: #ffc107 !important;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .table-military td {
-            background-color: #1d2218 !important;
-            border-color: #3d4a34 !important;
-        }
-        .nav-link-military {
-            color: #a3b899;
-            border-radius: 4px;
-            margin-bottom: 5px;
-        }
-        .nav-link-military:hover, .nav-link-military.active {
-            background-color: #343f2e;
-            color: #ffc107;
-        }
+-- 1. TABEL DATA SATUAN JAJARAN
+CREATE TABLE jajaran (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama_jajaran VARCHAR(100) NOT NULL UNIQUE,
+    kode_satuan VARCHAR(10) NULL
+);
 
-        /* DETAIL FORM LABELS KONTRASTING */
-        .form-label {
-            color: #ffc107 !important; /* Kuning Taktis Cerah */
-            font-weight: bold !important;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        .form-control, .form-select {
-            background-color: #1b2118 !important;
-            color: #ffffff !important;
-            border: 1px solid #4a5940 !important;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #ffc107 !important;
-            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2);
-        }
-        .form-control[readonly] {
-            background-color: #121610 !important;
-            color: #88a078 !important;
-        }
+-- 2. TABEL PENGGUNA (USERS & AUTH)
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('SLOG KORPASGAT', 'JAJARAN SATUAN') NOT NULL,
+    jajaran_id INT NULL, -- NULL jika role adalah SLOG KORPASGAT
+    FOREIGN KEY (jajaran_id) REFERENCES jajaran(id) ON DELETE SET NULL
+);
 
-        /* DESAIN PIN FILTER & INPUT SEARCH */
-        .filter-search-box {
-            background-color: #1a1e16;
-            border: 1px dashed #4a5940;
-            border-radius: 6px;
-        }
-    </style>
-</head>
-<body>
+-- 3. TABEL UTAMA BARANG (MASTER ITEM)
+CREATE TABLE master_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    base_kategori ENUM('SENMU', 'ALPALSUS', 'RANMOR') NOT NULL,
+    kode VARCHAR(50) UNIQUE NULL,
+    nama_barang VARCHAR(150) NOT NULL,
+    sub_nama_barang VARCHAR(150) NULL
+);
 
-<nav class="navbar navbar-expand-lg navbar-dark navbar-military p-3">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-uppercase" href="#"><i class="fa-solid fa-jet-fighter"></i> INVENTORY KORPASGAT</a>
-        <div class="d-flex align-items-center">
-            <span class="me-3 text-light">User: <strong id="current-user-display" class="text-warning">-</strong></span>
-            <button class="btn btn-sm btn-outline-danger" onclick="logout()"><i class="fa-solid fa-sign-out-alt"></i> Keluar</button>
-        </div>
-    </div>
-</nav>
+-- 4. TABEL STOK INVENTORY PER SATUAN (SENMU & ALPALSUS)
+CREATE TABLE inventory_base (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    jajaran_id INT NOT NULL,
+    item_id INT NOT NULL,
+    sn_pn VARCHAR(100) NULL, -- Khusus ALPALSUS
+    kaliber VARCHAR(50) NULL,  -- Khusus SENMU
+    satuan VARCHAR(30) NOT NULL,
+    jumlah_awal INT DEFAULT 0,
+    masuk INT DEFAULT 0,
+    keluar INT DEFAULT 0,
+    jumlah_akhir INT GENERATED ALWAYS AS (jumlah_awal + masuk - keluar) STORED,
+    kondisi_b INT DEFAULT 0,
+    kondisi_rr INT DEFAULT 0,
+    kondisi_rb INT DEFAULT 0,
+    keterangan TEXT NULL,
+    FOREIGN KEY (jajaran_id) REFERENCES jajaran(id) ON DELETE CASCADE,
+    FOREIGN KEY (item_id) REFERENCES master_items(id) ON DELETE CASCADE
+);
 
-<div class="container-fluid">
-    <div class="row">
-        
-        <!-- SIDEBAR NAVIGASI -->
-        <nav class="col-md-2 d-none d-md-block sidebar p-3" id="sidebar-menu">
-            <div class="position-sticky">
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('senmu')"><i class="fa-solid fa-gun me-2"></i> SENMU</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('alpalsus')"><i class="fa-solid fa-vest-pattern me-2"></i> ALPALSUS</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('ranmor')"><i class="fa-solid fa-truck-pickup me-2"></i> RANMOR</a></li>
-                </ul>
+-- 5. TABEL DETAIL INVENTORY (KHUSUS RANMOR)
+CREATE TABLE inventory_ranmor (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    jajaran_id INT NOT NULL,
+    no_reg VARCHAR(50) NULL,
+    no_lama VARCHAR(50) NULL,
+    no_baru VARCHAR(50) NULL,
+    merk_tipe VARCHAR(100) NOT NULL,
+    jenis VARCHAR(50) NULL,
+    tahun INT NULL,
+    no_rangka VARCHAR(100) NULL,
+    no_mesin VARCHAR(100) NULL,
+    kondisi_b INT DEFAULT 0,
+    kondisi_rr INT DEFAULT 0,
+    kondisi_rb INT DEFAULT 0,
+    kondisi_persen DECIMAL(5,2) NULL,
+    cc INT NULL,
+    bbm VARCHAR(30) NULL,
+    warna VARCHAR(30) NULL,
+    hak_pakai VARCHAR(100) NULL,
+    masa_kbnkb DATE NULL,
+    proses VARCHAR(100) NULL,
+    maju VARCHAR(50) NULL,
+    turun VARCHAR(50) NULL,
+    ukuran VARCHAR(50) NULL,
+    ban INT NULL,
+    aki INT NULL,
+    keterangan TEXT NULL,
+    FOREIGN KEY (jajaran_id) REFERENCES jajaran(id) ON DELETE CASCADE
+);
 
-                <div id="slog-special-menu" class="d-none">
-                    <h6 class="sidebar-heading px-3 mt-4 mb-2 text-warning text-uppercase">Otoritas SLOG</h6>
-                    <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link nav-link-military active" href="#" onclick="switchView('manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- KONTEN UTAMA -->
-        <main class="col-md-10 ms-sm-auto px-md-4 py-4">
-            
-            <!-- VIEW: MANAJEMEN MASTER BARANG -->
-            <section id="view-manage-items" class="view-section">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
-                    <i class="fa-solid fa-boxes-stacked"></i> Otoritas Master Data Item Barang
-                </h3>
-                
-                <div class="row">
-                    <!-- SISI KIRI: INPUT FORM -->
-                    <div class="col-md-5 mb-3">
-                        <div class="card card-tactical p-4">
-                            <h5 id="master-form-title" class="text-warning mb-4">Tambah Master Item Baru</h5>
-                            <form id="form-master-item" onsubmit="handleSaveMasterItem(event)">
-                                <input type="hidden" id="master-item-idx">
-                                
-                                <div class="row">
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">1. Nama Base</label>
-                                        <select class="form-select" id="master-kategori" onchange="generateAutoCode(this.value)" required>
-                                            <option value="">-- Pilih Base --</option>
-                                            <option value="SENMU">Senmu</option>
-                                            <option value="ALPALSUS">Alpalsus</option>
-                                            <option value="RANMOR">Ranmor</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">2. Kode Barang (Otomatis)</label>
-                                        <input type="text" class="form-control" id="master-kode" readonly placeholder="Terisi otomatis...">
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">3. Nama Barang</label>
-                                        <input type="text" class="form-control" id="master-nama" required placeholder="Contoh: SS2-V4">
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">4. Sub Nama Barang</label>
-                                        <input type="text" class="form-control" id="master-sub" placeholder="Contoh: Pindad">
-                                    </div>
-
-                                    <div class="col-md-12 mb-3">
-                                        <label class="form-label">5. Kaliber / PN / SN</label>
-                                        <input type="text" class="form-control" id="master-spec" placeholder="Contoh: 5.56mm / SN-12345">
-                                    </div>
-
-                                    <div class="col-md-12 mb-4">
-                                        <label class="form-label">6. Satuan</label>
-                                        <input type="text" class="form-control" id="master-satuan" required placeholder="Contoh: Pucuk / Pcs / Unit">
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-slog w-100 py-2 fw-bold" id="btn-save-master">SIMPAN ITEM MASTER</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-edit" onclick="resetMasterItemForm()">Batal Edit</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- SISI KANAN: TABEL DENGAN FILTER & SEARCH -->
-                    <div class="col-md-7">
-                        <div class="card card-tactical p-3">
-                            <h5 class="text-light mb-3">Daftar Item Master Aktif</h5>
-                            
-                            <!-- AREA FILTER & PENCARIAN BARU -->
-                            <div class="filter-search-box p-3 mb-3">
-                                <div class="row g-2">
-                                    <!-- 1. Filter Base -->
-                                    <div class="col-md-6">
-                                        <label class="form-label" style="font-size: 11px !important;">Saring Berdasarkan Base</label>
-                                        <select class="form-select form-select-sm" id="table-filter-base" onchange="filterAndSearchMasterTable()">
-                                            <option value="ALL">-- SEMUA BASE --</option>
-                                            <option value="SENMU">SENMU</option>
-                                            <option value="ALPALSUS">ALPALSUS</option>
-                                            <option value="RANMOR">RANMOR</option>
-                                        </select>
-                                    </div>
-                                    <!-- 2. Search Field -->
-                                    <div class="col-md-6">
-                                        <label class="form-label" style="font-size: 11px !important;">Pencarian Kata Kunci</label>
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-dark border-secondary text-warning"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                            <input type="text" class="form-control" id="table-search-keyword" onkeyup="filterAndSearchMasterTable()" placeholder="Cari Kode, Nama, Spek...">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-military table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>Base</th>
-                                            <th>Kode</th>
-                                            <th>Nama Barang</th>
-                                            <th>Spek</th>
-                                            <th>Satuan</th>
-                                            <th>Opsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-master-items">
-                                        <!-- Render via JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="view-dashboard" class="view-section d-none"><h3>Dashboard</h3></section>
-            <section id="view-senmu" class="view-section d-none"><h3>SENMU</h3></section>
-            <section id="view-alpalsus" class="view-section d-none"><h3>ALPALSUS</h3></section>
-            <section id="view-ranmor" class="view-section d-none"><h3>RANMOR</h3></section>
-            <section id="view-manage-users" class="view-section d-none"><h3>Manajemen User</h3></section>
-
-        </main>
-    </div>
-</div>
-
-<script>
-// --- DATABASE SIMULATOR (DENGAN SEED DATA AWAL) ---
-let db_master_items = JSON.parse(localStorage.getItem('db_master_items')) || [
-    { base: 'SENMU', kode: 'SM-001', nama: 'MU1-TJ', sub: 'Pindad', spec: '9 x 19 MM', satuan: 'Butir' },
-    { base: 'ALPALSUS', kode: 'AP-001', nama: 'Aqualung', sub: 'US Divers', spec: '-', satuan: 'Set' },
-    { base: 'RANMOR', kode: 'RM-001', nama: 'P6-ATAV', sub: 'SSE Aviation', spec: '-', satuan: 'Unit' }
-];
-
-// --- LOGIKA OTOMATISASI KODE ---
-function generateAutoCode(base) {
-    if (!base) {
-        document.getElementById('master-kode').value = "";
-        return;
-    }
-
-    let prefix = "";
-    if (base === "SENMU") prefix = "SM-";
-    else if (base === "ALPALSUS") prefix = "AP-";
-    else if (base === "RANMOR") prefix = "RM-";
-
-    let filtered = db_master_items.filter(item => item.base === base);
-    let nextNumber = filtered.length + 1;
-    let formattedNumber = nextNumber.toString().padStart(3, '0');
-    
-    document.getElementById('master-kode').value = prefix + formattedNumber;
-}
-
-// --- CONTROLLER FORM MASTER ---
-function handleSaveMasterItem(e) {
-    e.preventDefault();
-    
-    const idx = document.getElementById('master-item-idx').value;
-    const itemData = {
-        base: document.getElementById('master-kategori').value,
-        kode: document.getElementById('master-kode').value,
-        nama: document.getElementById('master-nama').value,
-        sub: document.getElementById('master-sub').value,
-        spec: document.getElementById('master-spec').value,
-        satuan: document.getElementById('master-satuan').value
-    };
-
-    if (idx === "") {
-        db_master_items.push(itemData);
-    } else {
-        db_master_items[idx] = itemData;
-    }
-
-    localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
-    filterAndSearchMasterTable(); // render ulang dengan filter aktif
-    resetMasterItemForm();
-    alert("Data Master Berhasil Disimpan!");
-}
-
-// --- ENGINE FILTER & SEARCH DINAMIS (DENGAN KLASIFIKASI BADGE WARNA TACTICAL) ---
-function filterAndSearchMasterTable() {
-    const baseFilter = document.getElementById('table-filter-base').value;
-    const searchQuery = document.getElementById('table-search-keyword').value.toLowerCase().trim();
-    
-    const tbody = document.getElementById('tbody-master-items');
-    tbody.innerHTML = '';
-    
-    db_master_items.forEach((item, index) => {
-        // 1. Validasi Filter Base
-        if (baseFilter !== "ALL" && item.base !== baseFilter) {
-            return;
-        }
-        
-        // 2. Validasi Search Query
-        if (searchQuery !== "") {
-            const matchesNama = item.nama ? item.nama.toLowerCase().includes(searchQuery) : false;
-            const matchesKode = item.kode ? item.kode.toLowerCase().includes(searchQuery) : false;
-            const matchesSub = item.sub ? item.sub.toLowerCase().includes(searchQuery) : false;
-            const matchesSpec = item.spec ? item.spec.toLowerCase().includes(searchQuery) : false;
-            
-            if (!matchesNama && !matchesKode && !matchesSub && !matchesSpec) {
-                return;
-            }
-        }
-
-        // Tentukan kelas warna badge untuk identitas base
-        let badgeClass = "bg-secondary";
-        if (item.base === "SENMU") badgeClass = "bg-danger";
-        else if (item.base === "ALPALSUS") badgeClass = "bg-primary";
-        else if (item.base === "RANMOR") badgeClass = "bg-dark text-warning border-warning";
-
-        tbody.innerHTML += `
-            <tr>
-                <td class="text-center"><span class="badge ${badgeClass} border border-secondary">${item.base}</span></td>
-                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
-                <td><strong>${item.nama}</strong> <br><small class="text-muted">${item.sub || '-'}</small></td>
-                <td>${item.spec || '-'}</td>
-                <td class="text-center">${item.satuan}</td>
-                <td class="text-center">
-                    <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editMasterItem(${index})"><i class="fa-solid fa-edit"></i></button>
-                    <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteMasterItem(${index})"><i class="fa-solid fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    });
-
-    if (tbody.innerHTML === '') {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">Tidak ada data item master yang cocok dengan kriteria pencarian.</td></tr>`;
-    }
-}
-
-function editMasterItem(index) {
-    const item = db_master_items[index];
-    document.getElementById('master-item-idx').value = index;
-    document.getElementById('master-kategori').value = item.base;
-    document.getElementById('master-kode').value = item.kode;
-    document.getElementById('master-nama').value = item.nama;
-    document.getElementById('master-sub').value = item.sub;
-    document.getElementById('master-spec').value = item.spec;
-    document.getElementById('master-satuan').value = item.satuan;
-
-    document.getElementById('master-form-title').innerText = "Edit Master Item";
-    document.getElementById('btn-save-master').innerText = "Update Item";
-    document.getElementById('btn-cancel-edit').classList.remove('d-none');
-}
-
-function resetMasterItemForm() {
-    document.getElementById('form-master-item').reset();
-    document.getElementById('master-item-idx').value = "";
-    document.getElementById('master-form-title').innerText = "Tambah Master Item Baru";
-    document.getElementById('btn-save-master').innerText = "SIMPAN ITEM MASTER";
-    document.getElementById('btn-cancel-edit').classList.add('d-none');
-}
-
-function deleteMasterItem(index) {
-    if(confirm("Apakah Anda yakin ingin menghapus item master ini dari database?")) {
-        db_master_items.splice(index, 1);
-        localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
-        filterAndSearchMasterTable();
-    }
-}
-
-// --- INIT APP ---
-let currentUser = { role: 'SLOG KORPASGAT' }; 
-document.addEventListener("DOMContentLoaded", () => {
-    if(currentUser.role === 'SLOG KORPASGAT') {
-        document.getElementById('slog-special-menu').classList.remove('d-none');
-    }
-    document.getElementById('current-user-display').innerText = currentUser.role;
-    filterAndSearchMasterTable(); // Inisialisasi awal tabel master
-});
-
-function switchView(viewId) {
-    document.querySelectorAll('.view-section').forEach(s => s.classList.add('d-none'));
-    document.getElementById('view-' + viewId).classList.remove('d-none');
-}
-
-function logout() { alert("Logout dari Sistem Keamanan Logistik..."); }
-</script>
-
-</body>
-</html>
+-- 6. TABEL TRANSAKSI MUTASI / ALOKASI BARANG
+CREATE TABLE alokasi_logistik (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    jajaran_asal_id INT NOT NULL,
+    jajaran_tujuan_id INT NOT NULL,
+    base_kategori ENUM('SENMU', 'ALPALSUS', 'RANMOR') NOT NULL,
+    item_id INT NULL,          -- Hubungan ke master_items jika SENMU/ALPALSUS
+    ranmor_id INT NULL,        -- Hubungan ke inventory_ranmor jika RANMOR
+    jumlah_dialokasikan INT NOT NULL,
+    status ENUM('PENDING', 'APPROVED', 'REJECTED') DEFAULT 'PENDING',
+    notifikasi_dibaca TINYINT(1) DEFAULT 0,
+    tanggal_pengajuan TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (jajaran_asal_id) REFERENCES jajaran(id),
+    FOREIGN KEY (jajaran_tujuan_id) REFERENCES jajaran(id),
+    FOREIGN KEY (item_id) REFERENCES master_items(id),
+    FOREIGN KEY (ranmor_id) REFERENCES inventory_ranmor(id)
+);
