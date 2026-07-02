@@ -4,108 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INVENTORY KORPASGAT - SYSTEM LOGISTIK</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* TEMA MILITER - DARK TACTICAL MODE */
-        body {
-            background-color: #191c16;
-            color: #e2e8f0;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .navbar-military {
-            background-color: #242b1f;
-            border-bottom: 3px solid #3d4a34;
-        }
-        .sidebar {
-            background-color: #20261b;
-            border-right: 2px solid #3d4a34;
-            min-height: calc(100vh - 73px);
-        }
-        .card-tactical {
-            background-color: #242a20;
-            border: 1px solid #4a5940;
-            border-left: 4px solid #7a9468;
-        }
-        .btn-slog {
-            background-color: #8c6b00;
-            color: #fff;
-            border: 1px solid #b38600;
-        }
-        .btn-slog:hover {
-            background-color: #b38600;
-            color: #fff;
-        }
-        .table-military {
-            background-color: #20261b !important;
-            color: #e2e8f0 !important;
-            border-color: #3d4a34 !important;
-            font-size: 12px;
-        }
-        .table-military th {
-            background-color: #2c3626 !important;
-            color: #ffc107 !important;
-            text-align: center;
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-        .table-military td {
-            background-color: #1d2218 !important;
-            border-color: #3d4a34 !important;
-            color: #ffffff !important; 
-            vertical-align: middle;
-        }
+        body { background-color: #191c16; color: #e2e8f0; font-family: 'Courier New', Courier, monospace; }
+        .navbar-military { background-color: #242b1f; border-bottom: 3px solid #3d4a34; }
+        .sidebar { background-color: #20261b; border-right: 2px solid #3d4a34; min-height: calc(100vh - 73px); }
+        .card-tactical { background-color: #242a20; border: 1px solid #4a5940; border-left: 4px solid #7a9468; }
+        .btn-slog { background-color: #8c6b00; color: #fff; border: 1px solid #b38600; font-weight: bold; }
+        .btn-slog:hover { background-color: #b38600; color: #fff; }
+        
+        /* TABEL STYLING - ANTI TEKS HITAM */
+        .table-military { background-color: #20261b !important; font-size: 12px; border-color: #3d4a34 !important; }
+        .table-military th { background-color: #2c3626 !important; color: #ffc107 !important; text-align: center; vertical-align: middle; white-space: nowrap; }
+        .table-military td { color: #ffffff !important; vertical-align: middle; border-color: #3d4a34 !important; background-color: #1d2218 !important; }
+        .table-military td strong { color: #ffffff !important; }
+        
+        .table-scroll-container { max-height: 500px; overflow: auto; border: 1px solid #3d4a34; }
+        .min-width-table { min-width: 1200px; }
 
-        /* FITUR SCROLL & LAYOUT */
-        .table-scroll-container {
-            max-height: 450px; /* Scroll atas bawah */
-            overflow-y: auto;
-            overflow-x: auto; /* Scroll kiri kanan */
-            border: 1px solid #3d4a34;
-            background-color: #1d2218;
-        }
-        .min-width-table {
-            min-width: 1400px; /* Memaksa scroll horizontal */
-        }
+        .form-label { color: #ffc107 !important; font-weight: bold !important; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; }
+        .form-control, .form-select { background-color: #1b2118 !important; color: #ffffff !important; border: 1px solid #4a5940 !important; font-size: 13px; }
+        .form-control:focus, .form-select:focus { border-color: #ffc107 !important; box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2); }
 
-        /* FORM STYLING */
-        .form-label {
-            color: #ffc107 !important;
-            font-weight: bold !important;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-        .form-control, .form-select {
-            background-color: #1b2118 !important;
-            color: #ffffff !important;
-            border: 1px solid #4a5940 !important;
-            font-size: 13px;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #ffc107 !important;
-            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2);
-        }
-
-        .nav-link-military {
-            color: #a3b899;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-        .nav-link-military:hover, .nav-link-military.active {
-            background-color: #343f2e;
-            color: #ffc107;
-        }
-
-        .filter-search-box {
-            background-color: #1a1e16;
-            border: 1px dashed #4a5940;
-            border-radius: 6px;
-        }
+        .nav-link-military { color: #a3b899; border-radius: 4px; margin-bottom: 5px; cursor: pointer; display: block; padding: 10px; text-decoration: none; }
+        .nav-link-military:hover, .nav-link-military.active { background-color: #343f2e; color: #ffc107; }
+        .filter-search-box { background-color: #1a1e16; border: 1px dashed #4a5940; border-radius: 6px; }
     </style>
 </head>
 <body>
@@ -122,268 +47,302 @@
 
 <div class="container-fluid">
     <div class="row">
-        
         <!-- SIDEBAR -->
         <nav class="col-md-2 d-none d-md-block sidebar p-3">
             <div class="position-sticky">
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link nav-link-military" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" onclick="switchView('manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military active" onclick="switchView('manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
+                    <li><a class="nav-link nav-link-military active" id="nav-dashboard" onclick="switchView(event, 'dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
+                    <li><a class="nav-link nav-link-military" id="nav-senmu" onclick="switchView(event, 'senmu')"><i class="fa-solid fa-gun me-2"></i> SENMU</a></li>
+                    <li><a class="nav-link nav-link-military" id="nav-alpalsus" onclick="switchView(event, 'alpalsus')"><i class="fa-solid fa-vest-pattern me-2"></i> ALPALSUS</a></li>
+                    <li><a class="nav-link nav-link-military" id="nav-ranmor" onclick="switchView(event, 'ranmor')"><i class="fa-solid fa-truck-pickup me-2"></i> RANMOR</a></li>
                 </ul>
+                <div id="slog-special-menu">
+                    <h6 class="sidebar-heading px-3 mt-4 mb-2 text-warning text-uppercase">Otoritas SLOG</h6>
+                    <ul class="nav flex-column">
+                        <li><a class="nav-link nav-link-military" id="nav-manage-items" onclick="switchView(event, 'manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
+                        <li><a class="nav-link nav-link-military" id="nav-manage-users" onclick="switchView(event, 'manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
         <main class="col-md-10 ms-sm-auto px-md-4 py-4">
             
-            <!-- VIEW: MANAJEMEN USER JAJARAN -->
-            <section id="view-manage-users" class="view-section">
-                <h3 class="border-bottom border-secondary pb-2 mb-4 text-uppercase text-warning">
-                    <i class="fa-solid fa-users-gear"></i> Manajemen User Jajaran Satuan
-                </h3>
-                
+            <!-- VIEW: DASHBOARD -->
+            <section id="view-dashboard" class="view-section">
+                <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Dashboard</h3>
                 <div class="row">
-                    <!-- KOLOM INPUT (7 KOLOM) -->
                     <div class="col-md-4 mb-3">
-                        <div class="card card-tactical p-4">
-                            <h5 class="text-warning mb-4"><i class="fa-solid fa-user-plus"></i> Tambah Akses Jajaran</h5>
-                            <form id="form-user-akses" onsubmit="handleCreateUser(event)">
-                                <input type="hidden" id="user-edit-idx">
-                                
-                                <div class="mb-2">
-                                    <label class="form-label">1. Nama Satuan Jajaran</label>
-                                    <input type="text" class="form-control" id="u-satuan" list="datalist-satuan" placeholder="Pilih atau Ketik Satuan Baru..." required>
-                                    <datalist id="datalist-satuan">
-                                        <!-- Terisi otomatis dari database -->
-                                    </datalist>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-2">
-                                        <label class="form-label">2. User Login</label>
-                                        <input type="text" class="form-control" id="u-login" required>
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <label class="form-label">3. Password</label>
-                                        <input type="password" class="form-control" id="u-pass" required>
-                                    </div>
-                                </div>
-
-                                <div class="mb-2">
-                                    <label class="form-label">4. Nama Lengkap Staf</label>
-                                    <input type="text" class="form-control" id="u-nama" required>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-2">
-                                        <label class="form-label">5. Pangkat</label>
-                                        <input type="text" class="form-control" id="u-pangkat" required>
-                                    </div>
-                                    <div class="col-md-6 mb-2">
-                                        <label class="form-label">6. NRP</label>
-                                        <input type="text" class="form-control" id="u-nrp" required>
-                                    </div>
-                                </div>
-
-                                <div class="mb-4">
-                                    <label class="form-label">7. No Telp / WhatsApp</label>
-                                    <input type="text" class="form-control" id="u-telp" placeholder="08xxxx" required>
-                                </div>
-
-                                <button type="submit" class="btn btn-slog w-100 fw-bold py-2" id="btn-submit-user">BUAT USER AKSES</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-user" onclick="resetUserForm()">Batal Edit</button>
-                            </form>
+                        <div class="card card-tactical p-4 text-center">
+                            <h1 id="count-senmu">0</h1>
+                            <p class="text-warning fw-bold">ITEM SENMU</p>
                         </div>
                     </div>
-
-                    <!-- KOLOM DAFTAR (TABEL AKTIF) -->
-                    <div class="col-md-8">
-                        <div class="card card-tactical p-3">
-                            <h5 class="text-light mb-3">Daftar Otoritas User Jajaran Aktif</h5>
-                            
-                            <div class="filter-search-box p-3 mb-3">
-                                <div class="row g-2">
-                                    <div class="col-md-5">
-                                        <label class="form-label" style="font-size: 10px !important;">Filter Jajaran</label>
-                                        <select class="form-select form-select-sm" id="f-user-satuan" onchange="renderUserTable()">
-                                            <option value="ALL">-- Semua Satuan --</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <label class="form-label" style="font-size: 10px !important;">Cari User/Nama/NRP</label>
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-text bg-dark border-secondary text-warning"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                            <input type="text" class="form-control" id="s-user-keyword" onkeyup="renderUserTable()" placeholder="Ketik kata kunci...">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="table-scroll-container">
-                                <table class="table table-military table-bordered min-width-table">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Satuan Jajaran</th>
-                                            <th>Username</th>
-                                            <th>Password</th>
-                                            <th>Nama Staf</th>
-                                            <th>Pangkat</th>
-                                            <th>NRP</th>
-                                            <th>No Telp</th>
-                                            <th>Opsi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-users">
-                                        <!-- Data Muncul Disini -->
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div id="pagination-info" class="mt-2 small text-muted"></div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical p-4 text-center">
+                            <h1 id="count-alpalsus">0</h1>
+                            <p class="text-warning fw-bold">ITEM ALPALSUS</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical p-4 text-center">
+                            <h1 id="count-ranmor">0</h1>
+                            <p class="text-warning fw-bold">ITEM RANMOR</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section id="view-dashboard" class="view-section d-none"><h3>Dashboard Aktif</h3></section>
-            <section id="view-manage-items" class="view-section d-none"><h3>Master Item Aktif</h3></section>
+            <!-- VIEW: CATEGORY VIEWS (SENMU, ALPALSUS, RANMOR) -->
+            <section id="view-category" class="view-section d-none">
+                <h3 id="category-title" class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Kategori</h3>
+                <div class="card card-tactical p-3">
+                    <div class="table-scroll-container">
+                        <table class="table table-military table-bordered w-100">
+                            <thead>
+                                <tr><th>No</th><th>Kode</th><th>Nama Barang</th><th>Spek</th><th>Satuan</th></tr>
+                            </thead>
+                            <tbody id="tbody-category"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: MASTER ITEM -->
+            <section id="view-manage-items" class="view-section d-none">
+                <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Master Item Barang</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-tactical p-4">
+                            <h5 class="text-warning mb-3">Input Item (6 Kolom)</h5>
+                            <form id="form-master-item" onsubmit="handleSaveMasterItem(event)">
+                                <input type="hidden" id="master-idx">
+                                <label class="form-label">1. Nama Base</label>
+                                <select class="form-select mb-2" id="m-base" onchange="generateAutoCode(this.value)" required>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="SENMU">Senmu</option>
+                                    <option value="ALPALSUS">Alpalsus</option>
+                                    <option value="RANMOR">Ranmor</option>
+                                </select>
+                                <label class="form-label">2. Kode (Otomatis)</label>
+                                <input type="text" class="form-control mb-2" id="m-kode" readonly>
+                                <label class="form-label">3. Nama Barang</label>
+                                <input type="text" class="form-control mb-2" id="m-nama" required>
+                                <label class="form-label">4. Sub Nama Barang</label>
+                                <input type="text" class="form-control mb-2" id="m-sub">
+                                <label class="form-label">5. Kaliber / PN / SN</label>
+                                <input type="text" class="form-control mb-2" id="m-spec">
+                                <label class="form-label">6. Satuan</label>
+                                <input type="text" class="form-control mb-3" id="m-satuan" required>
+                                <button type="submit" class="btn btn-slog w-100">SIMPAN MASTER</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card card-tactical p-3">
+                            <div class="filter-search-box p-3 mb-3">
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <select class="form-select form-select-sm" id="f-base" onchange="renderMasterTable()">
+                                            <option value="ALL">Semua Base</option>
+                                            <option value="SENMU">SENMU</option>
+                                            <option value="ALPALSUS">ALPALSUS</option>
+                                            <option value="RANMOR">RANMOR</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control form-control-sm" id="s-master" onkeyup="renderMasterTable()" placeholder="Cari Nama/Kode/Spek...">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-scroll-container">
+                                <table class="table table-military table-bordered min-width-table">
+                                    <thead><tr><th>Base</th><th>Kode</th><th>Nama Barang</th><th>Spek</th><th>Satuan</th><th>Opsi</th></tr></thead>
+                                    <tbody id="tbody-master"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: USER JAJARAN -->
+            <section id="view-manage-users" class="view-section d-none">
+                <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">User Jajaran</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-tactical p-4">
+                            <h5 class="text-warning mb-3">Buat Akses (7 Kolom)</h5>
+                            <form onsubmit="handleSaveUser(event)">
+                                <input type="hidden" id="u-idx">
+                                <label class="form-label">1. Nama Satuan</label>
+                                <input type="text" class="form-control mb-2" id="u-satuan" required>
+                                <div class="row">
+                                    <div class="col-md-6"><label class="form-label">2. User</label><input type="text" class="form-control mb-2" id="u-user" required></div>
+                                    <div class="col-md-6"><label class="form-label">3. Pass</label><input type="password" class="form-control mb-2" id="u-pass" required></div>
+                                </div>
+                                <label class="form-label">4. Nama Staf</label>
+                                <input type="text" class="form-control mb-2" id="u-nama" required>
+                                <div class="row">
+                                    <div class="col-md-6"><label class="form-label">5. Pangkat</label><input type="text" class="form-control mb-2" id="u-pangkat" required></div>
+                                    <div class="col-md-6"><label class="form-label">6. NRP</label><input type="text" class="form-control mb-2" id="u-nrp" required></div>
+                                </div>
+                                <label class="form-label">7. No Telp</label>
+                                <input type="text" class="form-control mb-3" id="u-telp" required>
+                                <button type="submit" class="btn btn-slog w-100">BUAT USER AKSES</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card card-tactical p-3">
+                            <div class="table-scroll-container">
+                                <table class="table table-military table-bordered min-width-table">
+                                    <thead><tr><th>No</th><th>Satuan</th><th>User</th><th>Nama</th><th>Pangkat</th><th>NRP</th><th>Telp</th><th>Opsi</th></tr></thead>
+                                    <tbody id="tbody-users"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </main>
     </div>
 </div>
 
 <script>
-// --- DATABASE SIMULATOR (USER) ---
-let db_users = JSON.parse(localStorage.getItem('db_users')) || [
-    { satuan: "YONKO 461 PARAKO", user: "yonko461", pass: "461jaya", nama: "Budi Santoso", pangkat: "Sertu", nrp: "123456", telp: "08123456789" },
-    { satuan: "YONKO 471 PARAKO", user: "yonko471", pass: "471kuat", nama: "Andi Wijaya", pangkat: "Serda", nrp: "654321", telp: "08198765432" },
-    { satuan: "DENMATRA 1", user: "denmatra1", pass: "dm1solid", nama: "Rahmat Hidayat", pangkat: "Kopda", nrp: "998877", telp: "0852112233" }
+// DATABASE
+let db_master = JSON.parse(localStorage.getItem('db_master_items')) || [
+    { base: 'SENMU', kode: 'SM-001', nama: 'MU1-TJ', sub: '', spec: '9 x 19 MM', satuan: 'Butir' },
+    { base: 'ALPALSUS', kode: 'AP-001', nama: 'Aqualung', sub: '', spec: 'SN-08182', satuan: 'Set' },
+    { base: 'RANMOR', kode: 'RM-001', nama: 'P6-ATAV', sub: '', spec: 'SSE-V1', satuan: 'Unit' }
 ];
+let db_users = JSON.parse(localStorage.getItem('db_users')) || [];
 
-// --- LOGIKA HALAMAN & TABEL ---
-function renderUserTable() {
-    const filterSatuan = document.getElementById('f-user-satuan').value;
-    const keyword = document.getElementById('s-user-keyword').value.toLowerCase();
-    const tbody = document.getElementById('tbody-users');
-    tbody.innerHTML = '';
-
-    // Update Datalist Satuan & Filter Dropdown
-    const datalist = document.getElementById('datalist-satuan');
-    const filterSelect = document.getElementById('f-user-satuan');
-    const uniqueSatuan = [...new Set(db_users.map(u => u.satuan))];
+// NAVIGASI
+function switchView(e, viewId) {
+    if(e) e.preventDefault();
+    document.querySelectorAll('.view-section').forEach(v => v.classList.add('d-none'));
+    document.querySelectorAll('.nav-link-military').forEach(n => n.classList.remove('active'));
     
-    datalist.innerHTML = '';
-    const currentFilter = filterSelect.value;
-    filterSelect.innerHTML = '<option value="ALL">-- Semua Satuan --</option>';
+    if(['senmu', 'alpalsus', 'ranmor'].includes(viewId)) {
+        document.getElementById('view-category').classList.remove('d-none');
+        renderCategoryView(viewId.toUpperCase());
+    } else {
+        document.getElementById('view-' + viewId).classList.remove('d-none');
+    }
     
-    uniqueSatuan.forEach(s => {
-        datalist.innerHTML += `<option value="${s}">`;
-        filterSelect.innerHTML += `<option value="${s}" ${s === currentFilter ? 'selected' : ''}>${s}</option>`;
-    });
-
-    // Filtering Data
-    const filteredData = db_users.filter(u => {
-        const matchFilter = (filterSatuan === "ALL" || u.satuan === filterSatuan);
-        const matchSearch = (u.user.toLowerCase().includes(keyword) || u.nama.toLowerCase().includes(keyword) || u.nrp.includes(keyword));
-        return matchFilter && matchSearch;
-    });
-
-    // Rendering Baris Tabel
-    filteredData.forEach((u, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="text-center">${i + 1}</td>
-            <td><strong>${u.satuan}</strong></td>
-            <td class="text-warning font-monospace">${u.user}</td>
-            <td>••••••</td>
-            <td>${u.nama}</td>
-            <td class="text-center">${u.pangkat}</td>
-            <td class="text-center font-monospace">${u.nrp}</td>
-            <td class="text-center">${u.telp}</td>
-            <td class="text-center">
-                <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
-                <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteUser(${i})"><i class="fa-solid fa-trash"></i></button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-
-    document.getElementById('pagination-info').innerText = `Menampilkan ${filteredData.length} User Akun Jajaran.`;
+    if(document.getElementById('nav-' + viewId)) document.getElementById('nav-' + viewId).classList.add('active');
+    if(viewId === 'dashboard') updateDashboard();
+    if(viewId === 'manage-items') renderMasterTable();
+    if(viewId === 'manage-users') renderUserTable();
 }
 
-// --- AKSI BUAT USER AKSES ---
-function handleCreateUser(e) {
+// MASTER ITEM LOGIC
+function generateAutoCode(base) {
+    if(!base) return document.getElementById('m-kode').value = "";
+    let prefix = (base === "SENMU") ? "SM-" : (base === "ALPALSUS") ? "AP-" : "RM-";
+    let count = db_master.filter(i => i.base === base).length + 1;
+    document.getElementById('m-kode').value = prefix + count.toString().padStart(3, '0');
+}
+
+function handleSaveMasterItem(e) {
     e.preventDefault();
-    const editIdx = document.getElementById('user-edit-idx').value;
-    
-    const newUser = {
+    const idx = document.getElementById('master-idx').value;
+    const data = {
+        base: document.getElementById('m-base').value,
+        kode: document.getElementById('m-kode').value,
+        nama: document.getElementById('m-nama').value,
+        sub: document.getElementById('m-sub').value.trim(),
+        spec: document.getElementById('m-spec').value.trim(),
+        satuan: document.getElementById('m-satuan').value
+    };
+    if(idx === "") db_master.push(data); else db_master[idx] = data;
+    localStorage.setItem('db_master_items', JSON.stringify(db_master));
+    renderMasterTable();
+    e.target.reset();
+    document.getElementById('master-idx').value = "";
+    alert("Data Master Disimpan");
+}
+
+function renderMasterTable() {
+    const fBase = document.getElementById('f-base').value;
+    const sKey = document.getElementById('s-master').value.toLowerCase();
+    const tbody = document.getElementById('tbody-master');
+    tbody.innerHTML = '';
+    db_master.forEach((item, i) => {
+        if(fBase !== 'ALL' && item.base !== fBase) return;
+        if(!(item.nama+item.kode+item.spec).toLowerCase().includes(sKey)) return;
+        tbody.innerHTML += `<tr>
+            <td><span class="badge ${item.base==='SENMU'?'bg-danger':'bg-primary'}">${item.base}</span></td>
+            <td class="text-warning fw-bold">${item.kode}</td>
+            <td><strong>${item.nama}</strong>${item.sub ? '<br><small>'+item.sub+'</small>':''}</td>
+            <td>${item.spec}</td><td>${item.satuan}</td>
+            <td><button class="btn btn-sm btn-outline-warning p-1" onclick="editMaster(${i})"><i class="fa-solid fa-edit"></i></button></td></tr>`;
+    });
+}
+
+function editMaster(i) {
+    const item = db_master[i];
+    document.getElementById('master-idx').value = i;
+    document.getElementById('m-base').value = item.base;
+    document.getElementById('m-kode').value = item.kode;
+    document.getElementById('m-nama').value = item.nama;
+    document.getElementById('m-sub').value = item.sub;
+    document.getElementById('m-spec').value = item.spec;
+    document.getElementById('m-satuan').value = item.satuan;
+}
+
+// CATEGORY VIEW LOGIC
+function renderCategoryView(base) {
+    document.getElementById('category-title').innerText = "INVENTARIS " + base;
+    const tbody = document.getElementById('tbody-category');
+    tbody.innerHTML = '';
+    db_master.filter(i => i.base === base).forEach((item, index) => {
+        tbody.innerHTML += `<tr>
+            <td class="text-center">${index+1}</td>
+            <td class="text-warning fw-bold">${item.kode}</td>
+            <td><strong>${item.nama}</strong>${item.sub ? '<br><small>'+item.sub+'</small>':''}</td>
+            <td>${item.spec}</td>
+            <td class="text-center">${item.satuan}</td>
+        </tr>`;
+    });
+}
+
+// USER LOGIC
+function handleSaveUser(e) {
+    e.preventDefault();
+    const data = {
         satuan: document.getElementById('u-satuan').value.toUpperCase(),
-        user: document.getElementById('u-login').value,
+        user: document.getElementById('u-user').value,
         pass: document.getElementById('u-pass').value,
         nama: document.getElementById('u-nama').value,
         pangkat: document.getElementById('u-pangkat').value,
         nrp: document.getElementById('u-nrp').value,
         telp: document.getElementById('u-telp').value
     };
-
-    if (editIdx === "") {
-        // Cek duplikasi username
-        if(db_users.some(u => u.user === newUser.user)) {
-            alert("Username sudah digunakan!"); return;
-        }
-        db_users.push(newUser);
-        alert("Akses Jajaran Baru Berhasil Dibuat!");
-    } else {
-        db_users[editIdx] = newUser;
-        alert("Data Akses Berhasil Diperbarui!");
-    }
-
+    db_users.push(data);
     localStorage.setItem('db_users', JSON.stringify(db_users));
-    resetUserForm();
     renderUserTable();
+    e.target.reset();
 }
 
-function deleteUser(idx) {
-    if(confirm("Hapus otoritas akses jajaran ini?")) {
-        db_users.splice(idx, 1);
-        localStorage.setItem('db_users', JSON.stringify(db_users));
-        renderUserTable();
-    }
+function renderUserTable() {
+    const tbody = document.getElementById('tbody-users');
+    tbody.innerHTML = '';
+    db_users.forEach((u, i) => {
+        tbody.innerHTML += `<tr><td>${i+1}</td><td>${u.satuan}</td><td class="text-warning">${u.user}</td><td>${u.nama}</td><td>${u.pangkat}</td><td>${u.nrp}</td><td>${u.telp}</td><td><button class="btn btn-sm btn-outline-danger" onclick="db_users.splice(${i},1);renderUserTable()"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+    });
 }
 
-function editUser(idx) {
-    const u = db_users[idx];
-    document.getElementById('user-edit-idx').value = idx;
-    document.getElementById('u-satuan').value = u.satuan;
-    document.getElementById('u-login').value = u.user;
-    document.getElementById('u-pass').value = u.pass;
-    document.getElementById('u-nama').value = u.nama;
-    document.getElementById('u-pangkat').value = u.pangkat;
-    document.getElementById('u-nrp').value = u.nrp;
-    document.getElementById('u-telp').value = u.telp;
-    
-    document.getElementById('btn-submit-user').innerText = "UPDATE DATA AKSES";
-    document.getElementById('btn-cancel-user').classList.remove('d-none');
+function updateDashboard() {
+    document.getElementById('count-senmu').innerText = db_master.filter(i => i.base === 'SENMU').length;
+    document.getElementById('count-alpalsus').innerText = db_master.filter(i => i.base === 'ALPALSUS').length;
+    document.getElementById('count-ranmor').innerText = db_master.filter(i => i.base === 'RANMOR').length;
 }
 
-function resetUserForm() {
-    document.getElementById('form-user-akses').reset();
-    document.getElementById('user-edit-idx').value = "";
-    document.getElementById('btn-submit-user').innerText = "BUAT USER AKSES";
-    document.getElementById('btn-cancel-user').classList.add('d-none');
-}
-
-// --- NAVIGASI VIEW ---
-function switchView(viewId) {
-    document.querySelectorAll('.view-section').forEach(v => v.classList.add('d-none'));
-    document.querySelectorAll('.nav-link-military').forEach(n => n.classList.remove('active'));
-    document.getElementById('view-' + viewId).classList.remove('d-none');
-    event.currentTarget.classList.add('active');
-}
-
-function logout() { alert("Keamanan Sesi Logistik Diamankan."); }
-
-document.addEventListener("DOMContentLoaded", renderUserTable);
+function logout() { alert("Sesi diamankan."); }
+document.addEventListener("DOMContentLoaded", () => { updateDashboard(); renderMasterTable(); });
 </script>
 </body>
 </html>
