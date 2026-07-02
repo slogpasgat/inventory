@@ -4,76 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INVENTORY KORPASGAT - SYSTEM LOGISTIK</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 1. THE SETUP - MILITARY TACTICAL DESIGN */
-        * { box-sizing: border-box; }
+        /* STREAMING_CHUNK: Mengatur tema dasar taktis militer gelap... */
+        /* TEMA MILITER - DARK TACTICAL MODE */
         body {
             background-color: #0d0e0b;
-            margin: 0;
-            display: grid;
-            place-items: center;
-            min-height: 100vh;
-            font-family: 'Urbanist', sans-serif;
             color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            min-height: 100vh;
         }
-
-        .slide-container {
-            width: 1280px;
-            height: 720px;
+        .navbar-military {
+            background-color: #141712;
+            border-bottom: 2px solid #3d4a34;
+        }
+        .sidebar {
+            background-color: #141712;
+            border-right: 2px solid #3d4a34;
+            min-height: calc(100vh - 73px);
+            padding: 30px 20px;
+        }
+        .card-tactical {
             background-color: #191c16;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
+            border: 1px solid #3d4a34;
+            border-left: 4px solid #ffc107;
+        }
+        .btn-army {
+            background-color: #3f4f37;
+            color: #ffffff;
+            border: 1px solid #566c4c;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .btn-army:hover {
+            background-color: #566c4c;
+            color: #ffc107;
+        }
+        .btn-gold {
+            background-color: #8c6b00;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+        }
+        .btn-gold:hover {
+            background-color: #b38600;
+        }
+        .table-military {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background-color: #1d2218;
+        }
+        .table-military th {
+            background-color: #2c3626;
+            color: #ffc107 !important;
+            padding: 12px;
+            text-align: center;
             border: 1px solid #3d4a34;
         }
 
-        /* Abstract Military Background Background */
-        .slide-container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 10% 20%, rgba(63, 79, 55, 0.1) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 80%, rgba(255, 193, 7, 0.05) 0%, transparent 40%);
-            z-index: 0;
-            pointer-events: none;
+        /* STREAMING_CHUNK: Mengamankan kecerahan warna teks tabel... */
+        .table-military td {
+            padding: 10px;
+            border: 1px solid #3d4a34;
+            color: #ffffff !important; /* Proteksi teks putih anti-gelap */
+            background-color: #1d2218 !important;
+            vertical-align: middle;
+        }
+        .table-military td strong {
+            color: #ffffff !important;
+        }
+        .table-military td small {
+            color: #a3b899 !important; /* Sub-nama hijau redup */
         }
 
-        /* 2. TYPOGRAPHY */
-        h1, h2, h3 { font-weight: 700; margin: 0; text-transform: uppercase; }
-        .slide-title {
-            font-size: 32px;
+        /* STREAMING_CHUNK: Menata kontrol input form... */
+        .form-tactical input, .form-tactical select {
+            width: 100%;
+            background-color: #1b2118;
+            border: 1px solid #4a5940;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+        .form-tactical input:focus, .form-tactical select:focus {
+            border-color: #ffc107;
+            outline: none;
+        }
+        .form-label {
             color: #ffc107;
-            padding: 40px 60px 20px;
-            border-bottom: 1px solid rgba(255, 193, 7, 0.2);
-            z-index: 2;
-        }
-
-        /* 3. LAYOUTS */
-        .content-area {
-            flex-grow: 1;
-            padding: 20px 60px 40px;
-            display: flex;
-            flex-direction: column;
-            z-index: 2;
-        }
-
-        /* Navigation Sidebar (Functional for Web-App feel) */
-        .app-layout {
-            display: grid;
-            grid-template-columns: 240px 1fr;
-            height: 100%;
-        }
-
-        .sidebar {
-            background-color: #141712;
-            border-right: 1px solid #3d4a34;
-            padding: 30px 20px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
+            text-transform: uppercase;
         }
 
         .nav-btn {
@@ -90,63 +125,51 @@
             cursor: pointer;
         }
         .nav-btn i { width: 25px; font-size: 16px; }
-        .nav-btn:hover, .nav-btn.active { background-color: #343f2e; color: #ffc107; }
-        .nav-section-title { font-size: 11px; color: #566c4c; margin: 25px 0 10px 15px; letter-spacing: 2px; }
-
-        /* Tables & Forms */
-        .table-military {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            background-color: #1d2218;
-        }
-        .table-military th {
-            background-color: #2c3626;
+        .nav-btn:hover, .nav-btn.active {
+            background-color: #343f2e;
             color: #ffc107;
-            padding: 12px;
-            text-align: center;
-            border: 1px solid #3d4a34;
         }
-        .table-military td {
-            padding: 10px;
-            border: 1px solid #3d4a34;
-            color: #ffffff !important; /* Forces white text visibility */
-        }
-
-        .form-tactical input, .form-tactical select {
-            width: 100%;
-            background-color: #1b2118;
-            border: 1px solid #4a5940;
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            font-family: inherit;
-        }
-        .form-label { color: #ffc107; font-size: 11px; font-weight: 700; margin-bottom: 5px; display: block; }
-        
-        .btn-gold {
-            background-color: #8c6b00;
-            color: #fff;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
+        .nav-section-title {
+            font-size: 11px;
+            color: #566c4c;
+            margin: 25px 0 10px 15px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
-        .btn-gold:hover { background-color: #b38600; }
 
-        /* Login Overlay */
+        /* STREAMING_CHUNK: Mengatur scroll vertikal dan horizontal jajaran... */
+        /* SCROLL CONTAINER UNTUK MEMBATASI TINGGI & LEBAR TABEL */
+        .scroll-v {
+            overflow-y: auto;
+            max-height: 380px;
+        }
+        .scroll-h {
+            overflow-x: auto;
+            width: 100%;
+        }
+        .table-scrolled {
+            min-width: 950px; /* Memaksa scroll horizontal bekerja jika lebar kontainer menyusut */
+        }
+
+        /* STYLING PAGINATION */
+        .pagination-tactical {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #a3b899;
+        }
+
+        /* LOGIN SCREEN DESIGN */
         #login-screen {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(13, 14, 11, 0.95);
+            background: #0d0e0b;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 10000;
         }
         .login-box {
             width: 450px;
@@ -157,241 +180,485 @@
             text-align: center;
         }
 
-        .scroll-v { overflow-y: auto; max-height: 400px; }
-        .scroll-h { overflow-x: auto; width: 100%; }
-
         .d-none { display: none !important; }
     </style>
 </head>
 <body>
 
-<div class="slide-container" id="main-container">
-    
-    <!-- LOGIN OVERLAY -->
-    <div id="login-screen">
-        <div class="login-box">
-            <i class="fa-solid fa-jet-fighter fa-4x text-warning mb-4"></i>
-            <h2 style="color: #ffffff; margin-bottom: 5px;">MASUK SISTEM</h2>
-            <p style="color: #ffc107; font-size: 14px; margin-bottom: 30px;">INVENTORY KORPASGAT</p>
-            
-            <form id="login-form">
-                <div style="text-align: left;">
-                    <label class="form-label">USERNAME</label>
-                    <input type="text" id="user-input" style="width: 100%; padding: 12px; background: #0d0e0b; border: 1px solid #4a5940; color: #fff; margin-bottom: 20px;">
-                    
-                    <label class="form-label">PASSWORD</label>
-                    <input type="password" id="pass-input" style="width: 100%; padding: 12px; background: #0d0e0b; border: 1px solid #4a5940; color: #fff; margin-bottom: 30px;">
-                </div>
-                <button type="button" class="btn-gold" onclick="performLogin()">MASUK <i class="fa-solid fa-right-to-bracket"></i></button>
-            </form>
-            <p id="login-error" style="color: #ff4444; font-size: 12px; margin-top: 15px; display: none;">Username atau Password Salah!</p>
+<!-- STREAMING_CHUNK: Menyediakan penampung notifikasi taktis kustom... -->
+<!-- TOAST CONTAINER KHUSUS UNTUK ALERTS (MENGGANTIKAN NATIVE BROWSER ALERT) -->
+<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 10001;"></div>
+
+<!-- CONFIRMATION BOX KHUSUS (MENGGANTIKAN NATIVE BROWSER CONFIRM) -->
+<div id="confirm-modal" class="d-none" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10002; display: flex; align-items: center; justify-content: center;">
+    <div class="card card-tactical p-4" style="max-width: 400px; width: 90%; text-align: center; border-left: 4px solid #dc3545;">
+        <h5 class="text-warning mb-3" id="confirm-title">KONFIRMASI</h5>
+        <p id="confirm-msg" class="text-white small mb-4"></p>
+        <div class="d-flex gap-2 justify-content-center">
+            <button class="btn btn-sm btn-secondary px-4" onclick="closeConfirmModal(false)">BATAL</button>
+            <button class="btn btn-sm btn-danger px-4" onclick="closeConfirmModal(true)">YAKIN</button>
         </div>
     </div>
+</div>
 
-    <!-- MAIN APP INTERFACE -->
-    <div id="app-content" class="app-layout d-none">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <i class="fa-solid fa-jet-fighter fa-2x text-warning"></i>
-                <div style="font-size: 10px; color: #ffc107; margin-top: 5px; font-weight: bold;">KORPASGAT</div>
-            </div>
+<!-- STREAMING_CHUNK: Menyusun modul login taktis awal... -->
+<!-- LOGIN SCREEN OVERLAY -->
+<div id="login-screen">
+    <div class="login-box">
+        <i class="fa-solid fa-jet-fighter fa-4x text-warning mb-4"></i>
+        <h2 style="color: #ffffff; margin-bottom: 5px;">MASUK SISTEM</h2>
+        <p style="color: #ffc107; font-size: 14px; margin-bottom: 30px;">INVENTORY KORPASGAT</p>
+        
+        <div style="text-align: left;" class="form-tactical">
+            <label class="form-label">USERNAME</label>
+            <input type="text" id="login-user" placeholder="Masukkan Username" autocomplete="off">
+            
+            <label class="form-label">PASSWORD</label>
+            <input type="password" id="login-pass" placeholder="Masukkan Password">
+        </div>
+        <button type="button" class="btn-gold" onclick="performLogin()">MASUK <i class="fa-solid fa-right-to-bracket"></i></button>
+    </div>
+</div>
 
-            <div class="nav-btn active" onclick="navTo('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</div>
-            <div class="nav-btn" onclick="navTo('senmu')"><i class="fa-solid fa-gun"></i> SENMU</div>
-            <div class="nav-btn" onclick="navTo('alpalsus')"><i class="fa-solid fa-vest-pattern"></i> ALPALSUS</div>
-            <div class="nav-btn" onclick="navTo('ranmor')"><i class="fa-solid fa-truck-pickup"></i> RANMOR</div>
-
-            <div id="slog-menu">
-                <div class="nav-section-title">OTORITAS SLOG</div>
-                <div class="nav-btn" onclick="navTo('master')"><i class="fa-solid fa-boxes-stacked"></i> Master Item</div>
-                <div class="nav-btn" onclick="navTo('users')"><i class="fa-solid fa-users-gear"></i> User Jajaran</div>
-            </div>
-
-            <div style="position: absolute; bottom: 30px; width: 200px;">
-                <div style="font-size: 11px; color: #566c4c; margin-bottom: 10px;">AKTIF: <span id="current-user-label" style="color: #ffc107;">-</span></div>
-                <button class="nav-btn" onclick="performLogout()" style="width: 100%; border: 1px solid #ff4444; color: #ff4444; background: transparent;">
-                    <i class="fa-solid fa-sign-out-alt"></i> KELUAR
-                </button>
+<!-- STREAMING_CHUNK: Menyusun kerangka antarmuka aplikasi utama... -->
+<!-- MAIN APP INTERFACE -->
+<div id="app-content" class="d-none">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-military p-3">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-uppercase" href="#"><i class="fa-solid fa-jet-fighter"></i> INVENTORY KORPASGAT</a>
+            <div class="d-flex align-items-center">
+                <span class="me-3 text-light">User: <strong id="current-user-label" class="text-warning">-</strong></span>
+                <button class="btn btn-sm btn-outline-danger" onclick="confirmLogout()"><i class="fa-solid fa-sign-out-alt"></i> Keluar</button>
             </div>
         </div>
+    </nav>
 
-        <!-- Main Workspace -->
-        <div id="workspace" style="display: flex; flex-direction: column;">
+    <div class="container-fluid">
+        <div class="row">
             
-            <!-- Dashboard View -->
-            <div id="view-dashboard" class="view">
-                <h2 class="slide-title">DASHBOARD RINGKASAN</h2>
-                <div class="content-area">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
-                        <div class="card-tactical" style="padding: 30px; text-align: center; border-left: 4px solid #ffc107;">
-                            <h1 id="stat-senmu" style="font-size: 60px;">0</h1>
-                            <div style="color: #ffc107; font-weight: bold; margin-top: 10px;">ITEM SENMU</div>
+            <!-- STREAMING_CHUNK: Merancang menu sidebar dinamis... -->
+            <!-- Sidebar -->
+            <nav class="col-md-2 sidebar">
+                <div class="nav-btn active" id="btn-dash" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge"></i> Dashboard</div>
+                <div class="nav-btn" id="btn-senmu" onclick="switchView('senmu')"><i class="fa-solid fa-gun"></i> SENMU</div>
+                <div class="nav-btn" id="btn-alpalsus" onclick="switchView('alpalsus')"><i class="fa-solid fa-vest-pattern"></i> ALPALSUS</div>
+                <div class="nav-btn" id="btn-ranmor" onclick="switchView('ranmor')"><i class="fa-solid fa-truck-pickup"></i> RANMOR</div>
+
+                <div id="slog-menu">
+                    <div class="nav-section-title">OTORITAS SLOG</div>
+                    <div class="nav-btn" id="btn-master" onclick="switchView('master')"><i class="fa-solid fa-boxes-stacked"></i> Master Item</div>
+                    <div class="nav-btn" id="btn-users" onclick="switchView('users')"><i class="fa-solid fa-users-gear"></i> User Jajaran</div>
+                </div>
+            </nav>
+
+            <!-- Workspace Konten -->
+            <main class="col-md-10 py-4 px-4" style="background-color: #0d0e0b; min-height: calc(100vh - 73px);">
+                
+                <!-- STREAMING_CHUNK: Menyusun panel Dashboard... -->
+                <!-- VIEW: DASHBOARD -->
+                <div id="view-dashboard" class="view">
+                    <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Dashboard Ringkasan</h3>
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card card-tactical p-4 text-center">
+                                <h1 id="stat-senmu" style="font-size: 48px;">0</h1>
+                                <div style="color: #ffc107; font-weight: bold; margin-top: 10px;">ITEM SENMU</div>
+                            </div>
                         </div>
-                        <div class="card-tactical" style="padding: 30px; text-align: center; border-left: 4px solid #ffc107;">
-                            <h1 id="stat-alpalsus" style="font-size: 60px;">0</h1>
-                            <div style="color: #ffc107; font-weight: bold; margin-top: 10px;">ITEM ALPALSUS</div>
+                        <div class="col-md-4">
+                            <div class="card card-tactical p-4 text-center" style="border-left-color: #0d6efd;">
+                                <h1 id="stat-alpalsus" style="font-size: 48px;">0</h1>
+                                <div style="color: #ffc107; font-weight: bold; margin-top: 10px;">ITEM ALPALSUS</div>
+                            </div>
                         </div>
-                        <div class="card-tactical" style="padding: 30px; text-align: center; border-left: 4px solid #ffc107;">
-                            <h1 id="stat-ranmor" style="font-size: 60px;">0</h1>
-                            <div style="color: #ffc107; font-weight: bold; margin-top: 10px;">ITEM RANMOR</div>
+                        <div class="col-md-4">
+                            <div class="card card-tactical p-4 text-center" style="border-left-color: #198754;">
+                                <h1 id="stat-ranmor" style="font-size: 48px;">0</h1>
+                                <div style="color: #ffc107; font-weight: bold; margin-top: 10px;">ITEM RANMOR</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-tactical" style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.02);">
-                        <p style="color: #a3b899; line-height: 1.6;">Portal Inventaris Logistik Korpasgat. Gunakan menu navigasi untuk mengelola data material, amunisi, dan armada taktis jajaran jajaran.</p>
+                    <div class="card card-tactical p-4">
+                        <h5 class="text-warning mb-3">Selamat Datang di Portal Logistik Digital</h5>
+                        <p class="text-light m-0">Portal Inventaris Logistik Korpasgat. Gunakan menu navigasi di sebelah kiri untuk mengelola master material barang, amunisi, armada taktis jajaran, serta manajemen akses logistik.</p>
                     </div>
                 </div>
-            </div>
 
-            <!-- Master Item View -->
-            <div id="view-master" class="view d-none">
-                <h2 class="slide-title">MASTER ITEM BARANG</h2>
-                <div class="content-area">
-                    <div style="display: grid; grid-template-columns: 400px 1fr; gap: 30px; height: 100%;">
-                        <div class="card-tactical" style="padding: 25px;">
-                            <h4 style="color: #ffc107; margin-bottom: 20px;">INPUT ITEM BARANG</h4>
-                            <div class="form-tactical">
-                                <label class="form-label">1. NAMA BASE</label>
-                                <select id="m-base" onchange="autoCode()"><option value="">-- PILIH --</option><option value="SENMU">SENMU</option><option value="ALPALSUS">ALPALSUS</option><option value="RANMOR">RANMOR</option></select>
-                                <label class="form-label">2. KODE (OTOMATIS)</label>
-                                <input type="text" id="m-kode" readonly style="background: #141712;">
-                                <label class="form-label">3. NAMA BARANG</label>
-                                <input type="text" id="m-nama">
-                                <label class="form-label">4. SUB NAMA BARANG</label>
-                                <input type="text" id="m-sub">
-                                <label class="form-label">5. KALIBER / PN / SN</label>
-                                <input type="text" id="m-spec">
-                                <label class="form-label">6. SATUAN</label>
-                                <input type="text" id="m-satuan">
-                                <button class="btn-gold" onclick="saveMaster()">SIMPAN MASTER</button>
+                <!-- STREAMING_CHUNK: Menyusun modul Master Item... -->
+                <!-- VIEW: MASTER ITEM -->
+                <div id="view-master" class="view d-none">
+                    <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Master Item Barang</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card card-tactical p-4">
+                                <h5 class="text-warning mb-3" id="master-title">Input Item Barang</h5>
+                                <form id="form-master" class="form-tactical" onsubmit="saveMaster(event)">
+                                    <input type="hidden" id="m-index">
+                                    <label class="form-label">1. Nama Base</label>
+                                    <select id="m-base" onchange="autoGenerateCode(this.value)" required>
+                                        <option value="">-- PILIH BASE --</option>
+                                        <option value="SENMU">SENMU</option>
+                                        <option value="ALPALSUS">ALPALSUS</option>
+                                        <option value="RANMOR">RANMOR</option>
+                                    </select>
+                                    <label class="form-label">2. Kode (Otomatis)</label>
+                                    <input type="text" id="m-kode" readonly style="background-color: #11140f;">
+                                    <label class="form-label">3. Nama Barang</label>
+                                    <input type="text" id="m-nama" required placeholder="Contoh: MU1-TJ">
+                                    <label class="form-label">4. Sub Nama Barang</label>
+                                    <input type="text" id="m-sub" placeholder="Contoh: Pindad">
+                                    <label class="form-label">5. Kaliber / PN / SN</label>
+                                    <input type="text" id="m-spec" placeholder="Contoh: 9 x 19 MM">
+                                    <label class="form-label">6. Satuan</label>
+                                    <input type="text" id="m-satuan" required placeholder="Contoh: Butir">
+                                    <button type="submit" class="btn-gold" id="btn-master-submit">SIMPAN MASTER</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-master-cancel" onclick="resetMasterForm()">BATAL</button>
+                                </form>
                             </div>
                         </div>
-                        <div class="card-tactical" style="padding: 20px;">
-                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                                <input type="text" id="search-m" placeholder="CARI ITEM..." style="flex-grow: 1; padding: 8px; background: #0d0e0b; border: 1px solid #4a5940; color: #fff;">
-                            </div>
-                            <div class="scroll-v">
-                                <table class="table-military">
-                                    <thead><tr><th>Base</th><th>Kode</th><th>Nama</th><th>Spek</th><th>Satuan</th><th>Opsi</th></tr></thead>
-                                    <tbody id="table-master-body"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- User Management View -->
-            <div id="view-users" class="view d-none">
-                <h2 class="slide-title">MANAJEMEN USER JAJARAN</h2>
-                <div class="content-area">
-                    <div style="display: grid; grid-template-columns: 400px 1fr; gap: 30px; height: 100%;">
-                        <div class="card-tactical" style="padding: 25px;">
-                            <h4 id="user-title" style="color: #ffc107; margin-bottom: 20px;">BUAT AKSES (7 KOLOM)</h4>
-                            <div class="form-tactical">
-                                <input type="hidden" id="u-id">
-                                <label class="form-label">1. NAMA SATUAN</label>
-                                <input type="text" id="u-satuan">
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                    <div><label class="form-label">2. USER</label><input type="text" id="u-user"></div>
-                                    <div><label class="form-label">3. PASS</label><input type="text" id="u-pass"></div>
+                        <div class="col-md-8">
+                            <div class="card card-tactical p-3">
+                                <div class="filter-search-box p-3 mb-3">
+                                    <div class="row g-2">
+                                        <div class="col-md-4">
+                                            <select class="form-select bg-dark text-white border-secondary" id="filter-master-base" onchange="renderMasterTable()">
+                                                <option value="ALL">Semua Base</option>
+                                                <option value="SENMU">SENMU</option>
+                                                <option value="ALPALSUS">ALPALSUS</option>
+                                                <option value="RANMOR">RANMOR</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control bg-dark text-white border-secondary" id="search-master" placeholder="Cari Nama / Kode / Spek..." onkeyup="renderMasterTable()">
+                                        </div>
+                                    </div>
                                 </div>
-                                <label class="form-label">4. NAMA STAF</label>
-                                <input type="text" id="u-nama">
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                                    <div><label class="form-label">5. PANGKAT</label><input type="text" id="u-pangkat"></div>
-                                    <div><label class="form-label">6. NRP</label><input type="text" id="u-nrp"></div>
-                                </div>
-                                <label class="form-label">7. NO TELP</label>
-                                <input type="text" id="u-telp">
-                                <button class="btn-gold" id="u-btn" onclick="saveUser()">BUAT USER AKSES</button>
-                                <button class="nav-btn d-none" id="u-cancel" onclick="resetUserForm()" style="width: 100%; margin-top: 10px;">BATAL</button>
-                            </div>
-                        </div>
-                        <div class="card-tactical" style="padding: 20px;">
-                            <div class="scroll-h">
                                 <div class="scroll-v">
-                                    <table class="table-military" style="min-width: 1000px;">
-                                        <thead><tr><th>Satuan</th><th>User</th><th>Nama Staf</th><th>Pangkat</th><th>NRP</th><th>Telp</th><th>Opsi</th></tr></thead>
-                                        <tbody id="table-user-body"></tbody>
+                                    <table class="table-military">
+                                        <thead>
+                                            <tr>
+                                                <th>Base</th><th>Kode</th><th>Nama Barang</th><th>Spek (Kaliber/PN/SN)</th><th>Satuan</th><th>Opsi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-master"></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Generic Category View -->
-            <div id="view-cat-generic" class="view d-none">
-                <h2 class="slide-title" id="cat-title-text">INVENTARIS</h2>
-                <div class="content-area">
-                    <div class="card-tactical" style="padding: 25px;">
+                <!-- STREAMING_CHUNK: Menyusun modul Manajemen User Jajaran... -->
+                <!-- VIEW: USER JAJARAN (SCROLL GANDA DENGAN EDIT DAN HAPUS AKUN) -->
+                <div id="view-users" class="view d-none">
+                    <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Manajemen User Jajaran Satuan</h3>
+                    <div class="row">
+                        
+                        <!-- PANEL FORM KIRI: BUAT AKSES 7 KOLOM -->
+                        <div class="col-md-4">
+                            <div class="card card-tactical p-4">
+                                <h5 class="text-warning mb-3" id="user-form-title">Buat Akses (7 Kolom)</h5>
+                                <form id="form-user" class="form-tactical" onsubmit="saveUser(event)">
+                                    <input type="hidden" id="u-index">
+                                    
+                                    <!-- 1. NAMA SATUAN JAJARAN (Bisa pilih dari list / ketik baru) -->
+                                    <label class="form-label">1. Nama Satuan Jajaran</label>
+                                    <input type="text" id="u-satuan" list="list-satuan-exist" placeholder="Pilih atau Ketik Satuan Baru..." required autocomplete="off">
+                                    <datalist id="list-satuan-exist">
+                                        <!-- Terisi secara otomatis lewat JS -->
+                                    </datalist>
+
+                                    <!-- 2 & 3. USER DAN PASSWORD -->
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label">2. User Login</label>
+                                            <input type="text" id="u-user" required autocomplete="off">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">3. Password</label>
+                                            <input type="password" id="u-pass" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- 4. NAMA STAF -->
+                                    <label class="form-label">4. Nama Lengkap Staf</label>
+                                    <input type="text" id="u-nama" required placeholder="Nama Lengkap Staf">
+
+                                    <!-- 5 & 6. PANGKAT DAN NRP -->
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <label class="form-label">5. Pangkat</label>
+                                            <input type="text" id="u-pangkat" required placeholder="Sertu/Kopda">
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label">6. NRP</label>
+                                            <input type="text" id="u-nrp" required placeholder="NRP">
+                                        </div>
+                                    </div>
+
+                                    <!-- 7. NO TELP -->
+                                    <label class="form-label">7. No Telp / Whatsapp</label>
+                                    <input type="text" id="u-telp" required placeholder="08xxxxxxxx">
+
+                                    <button type="submit" class="btn-gold" id="btn-user-submit">BUAT USER AKSES</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-user-cancel" onclick="resetUserForm()">BATAL EDIT</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- PANEL TABEL KANAN: DAFTAR USER DENGAN SCROLL HORIZONTAL & VERTIKAL -->
+                        <div class="col-md-8">
+                            <div class="card card-tactical p-3">
+                                <h5 class="text-white mb-3">Daftar Otoritas User Jajaran Aktif</h5>
+                                
+                                <!-- Search & Filter Panel -->
+                                <div class="filter-search-box p-3 mb-3">
+                                    <div class="row g-2">
+                                        <div class="col-md-5">
+                                            <label class="form-label" style="font-size: 10px;">Filter Jajaran</label>
+                                            <select class="form-select form-select-sm bg-dark text-white border-secondary" id="filter-user-jajaran" onchange="resetUserPagination(); renderUserTable();">
+                                                <option value="ALL">-- SEMUA SATUAN --</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <label class="form-label" style="font-size: 10px;">Cari User/NRP/Nama</label>
+                                            <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary" id="search-user" placeholder="Ketik kata kunci..." onkeyup="resetUserPagination(); renderUserTable();">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- DOUBLE SCROLLABLE CONTAINER: Horizontal and Vertical Scroll -->
+                                <div class="scroll-h">
+                                    <div class="scroll-v">
+                                        <table class="table-military table-scrolled">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 50px;">No</th>
+                                                    <th>Satuan Jajaran</th>
+                                                    <th>Username</th>
+                                                    <th>Password</th>
+                                                    <th>Nama Staf</th>
+                                                    <th>Pangkat</th>
+                                                    <th>NRP</th>
+                                                    <th>No Telp</th>
+                                                    <th style="width: 100px;">Opsi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody-users"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- PAGINATION CONTROL -->
+                                <div class="pagination-tactical">
+                                    <span id="page-info">Menampilkan 0 data</span>
+                                    <div class="d-flex gap-1">
+                                        <button class="btn btn-xs btn-army py-1 px-2" id="btn-user-prev" onclick="prevUserPage()">PREV</button>
+                                        <button class="btn btn-xs btn-army py-1 px-2" id="btn-user-next" onclick="nextUserPage()">NEXT</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- STREAMING_CHUNK: Menyusun modul Kategori Barang SENMU/ALPALSUS/RANMOR... -->
+                <!-- VIEW: KATEGORI BARANG (GENERIC CATEGORY VIEW) -->
+                <div id="view-cat" class="view d-none">
+                    <h3 class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4" id="view-cat-title">Inventaris</h3>
+                    <div class="card card-tactical p-3">
                         <div class="scroll-v">
                             <table class="table-military">
-                                <thead><tr><th>No</th><th>Kode</th><th>Nama Barang</th><th>Spek</th><th>Satuan</th></tr></thead>
-                                <tbody id="table-cat-body"></tbody>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;">No</th>
+                                        <th>Kode</th>
+                                        <th>Nama Barang</th>
+                                        <th>Spek (Kaliber/PN/SN)</th>
+                                        <th>Satuan</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody-cat"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </main>
         </div>
     </div>
 </div>
 
+<!-- STREAMING_CHUNK: Menyusun program pengendali logistik utama... -->
 <script>
-    let users = JSON.parse(localStorage.getItem('k_users')) || [{
-        satuan: 'ADMIN SLOG', user: 'admin', pass: 'admin', nama: 'SUPER USER', pangkat: 'KORPASGAT', nrp: '000', telp: '000'
-    }];
-    let masterData = JSON.parse(localStorage.getItem('k_master')) || [];
-    let currentUser = null;
+    // --- DATABASE STATE ---
+    let masterData = JSON.parse(localStorage.getItem('k_master_items')) || [
+        { base: 'SENMU', kode: 'SM-001', nama: 'MU1-TJ', sub: '', spec: '9 x 19 MM', satuan: 'Butir' },
+        { base: 'SENMU', kode: 'SM-002', nama: 'MU2-TJ', sub: '', spec: '7,62 x 51 MM', satuan: 'Butir' },
+        { base: 'ALPALSUS', kode: 'AP-001', nama: 'Aqualung', sub: '', spec: 'SN-08182', satuan: 'Set' },
+        { base: 'RANMOR', kode: 'RM-001', nama: 'P6-ATAV', sub: '', spec: 'SSE-V1-2024', satuan: 'Unit' }
+    ];
 
-    function performLogin() {
-        const u = document.getElementById('user-input').value;
-        const p = document.getElementById('pass-input').value;
-        const user = users.find(x => x.user === u && x.pass === p);
-        
-        if (user) {
-            currentUser = user;
-            document.getElementById('login-screen').classList.add('d-none');
-            document.getElementById('app-content').classList.remove('d-none');
-            document.getElementById('current-user-label').innerText = user.satuan;
-            if (user.user !== 'admin') document.getElementById('slog-menu').classList.add('d-none');
-            navTo('dashboard');
-        } else {
-            document.getElementById('login-error').style.display = 'block';
+    let users = JSON.parse(localStorage.getItem('k_users')) || [
+        { satuan: 'SLOG KORPASGAT', user: 'slog', pass: '123', nama: 'ADMIN LOGISTIK', pangkat: 'KORPASGAT', nrp: '111111', telp: '081234567890' },
+        { satuan: 'YONKO 461 PARAKO', user: 'yonko461', pass: '123', nama: 'KOIRIN', pangkat: 'KOPDA', nrp: '544444', telp: '083256782731' },
+        { satuan: 'YONKO 471 PARAKO', user: 'yonko471', pass: '123', nama: 'WARSO', pangkat: 'SERMA', nrp: '522221', telp: '081234567890' }
+    ];
+
+    let currentUser = null;
+    let userCurrentPage = 1;
+    const userPageSize = 5;
+
+    // Callback variabel untuk pengganti native confirm()
+    let confirmCallback = null;
+
+    // --- AUTORUN / REPAIR ADMIN ---
+    function ensureAdminExists() {
+        const adminIndex = users.findIndex(u => u.user.toLowerCase() === 'slog');
+        if (adminIndex === -1) {
+            users.push({
+                satuan: 'SLOG KORPASGAT',
+                user: 'slog',
+                pass: '123',
+                nama: 'ADMIN LOGISTIK',
+                pangkat: 'KORPASGAT',
+                nrp: '111111',
+                telp: '081234567890'
+            });
+            localStorage.setItem('k_users', JSON.stringify(users));
         }
     }
 
-    function performLogout() {
-        currentUser = null;
-        document.getElementById('login-screen').classList.remove('d-none');
-        document.getElementById('app-content').classList.add('d-none');
-        document.getElementById('user-input').value = '';
-        document.getElementById('pass-input').value = '';
+    // --- ALERTS & CONFIRM MODALS CUSTOM ---
+    function showTackticalToast(msg, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.style.backgroundColor = '#191c16';
+        toast.style.border = type === 'success' ? '2px solid #ffc107' : '2px solid #dc3545';
+        toast.style.color = '#ffffff';
+        toast.style.padding = '15px 20px';
+        toast.style.marginBottom = '10px';
+        toast.style.borderRadius = '5px';
+        toast.style.fontSize = '12px';
+        toast.style.boxShadow = '0 5px 15px rgba(0,0,0,0.5)';
+        toast.style.minWidth = '280px';
+        toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-shield-halved text-warning' : 'fa-triangle-exclamation text-danger'} me-2"></i> ${msg}`;
+        container.appendChild(toast);
+        setTimeout(() => { toast.remove(); }, 3500);
     }
 
-    function navTo(view) {
+    function askConfirmation(title, msg, callback) {
+        document.getElementById('confirm-title').innerText = title.toUpperCase();
+        document.getElementById('confirm-msg').innerText = msg;
+        document.getElementById('confirm-modal').classList.remove('d-none');
+        confirmCallback = callback;
+    }
+
+    function closeConfirmModal(result) {
+        document.getElementById('confirm-modal').classList.add('d-none');
+        if (confirmCallback && typeof confirmCallback === 'function') {
+            confirmCallback(result);
+        }
+        confirmCallback = null;
+    }
+
+    // STREAMING_CHUNK: Menyusun pengolah sistem login masuk...
+    // --- AUTENTIKASI ---
+    function performLogin() {
+        ensureAdminExists();
+        const u = document.getElementById('login-user').value.toLowerCase().trim();
+        const p = document.getElementById('login-pass').value.trim();
+
+        if (u === "" || p === "") {
+            showTackticalToast("Harap isi Username dan Password!", "danger");
+            return;
+        }
+
+        const userFound = users.find(x => x.user.toLowerCase() === u && x.pass === p);
+        if (userFound) {
+            currentUser = userFound;
+            document.getElementById('login-screen').classList.add('d-none');
+            document.getElementById('app-content').classList.remove('d-none');
+            document.getElementById('current-user-label').innerText = userFound.satuan;
+            
+            // Otoritas Menu SLOG
+            if (userFound.user.toLowerCase() === 'slog') {
+                document.getElementById('slog-menu').classList.remove('d-none');
+            } else {
+                document.getElementById('slog-menu').classList.add('d-none');
+            }
+
+            switchView('dashboard');
+            showTackticalToast("Berhasil masuk ke pusat data logistik.");
+        } else {
+            showTackticalToast("Username atau Password Salah!", "danger");
+        }
+    }
+
+    function confirmLogout() {
+        askConfirmation("Keluar Sistem", "Apakah Anda yakin ingin keluar dari sesi logistik saat ini?", function(approved) {
+            if (approved) {
+                currentUser = null;
+                document.getElementById('login-screen').classList.remove('d-none');
+                document.getElementById('app-content').classList.add('d-none');
+                document.getElementById('login-user').value = '';
+                document.getElementById('login-pass').value = '';
+                showTackticalToast("Sesi logistik berhasil diamankan.");
+            }
+        });
+    }
+
+    // STREAMING_CHUNK: Mengatur multi-views navigasi sidebar...
+    // --- NAVIGASI ---
+    function switchView(viewId) {
         document.querySelectorAll('.view').forEach(v => v.classList.add('d-none'));
-        document.getElementById('view-' + view).classList.remove('d-none');
-        
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        // In a real app, you would add logic here to mark active button
-        
-        if (view === 'dashboard') updateDashboard();
-        if (view === 'master') renderMaster();
-        if (view === 'users') renderUsers();
+
+        if (['senmu', 'alpalsus', 'ranmor'].includes(viewId)) {
+            document.getElementById('view-cat').classList.remove('d-none');
+            document.getElementById('btn-' + viewId).classList.add('active');
+            renderCategoryView(viewId.toUpperCase());
+        } else {
+            document.getElementById('view-' + viewId).classList.remove('d-none');
+            document.getElementById('btn-' + viewId).classList.add('active');
+        }
+
+        if (viewId === 'dashboard') updateDashboard();
+        if (viewId === 'master') renderMasterTable();
+        if (viewId === 'users') {
+            resetUserForm();
+            resetUserPagination();
+            populateSatuanDatalist();
+            populateSatuanFilter();
+            renderUserTable();
+        }
     }
 
+    // STREAMING_CHUNK: Pengolah statistik di Dashboard...
+    // --- DASHBOARD ---
     function updateDashboard() {
         document.getElementById('stat-senmu').innerText = masterData.filter(i => i.base === 'SENMU').length;
         document.getElementById('stat-alpalsus').innerText = masterData.filter(i => i.base === 'ALPALSUS').length;
         document.getElementById('stat-ranmor').innerText = masterData.filter(i => i.base === 'RANMOR').length;
     }
 
-    function saveMaster() {
+    // STREAMING_CHUNK: Pengolah modul Master Item (Kode Otomatis, Render dll)...
+    // --- MASTER ITEM ---
+    function autoGenerateCode(base) {
+        if (!base) {
+            document.getElementById('m-kode').value = '';
+            return;
+        }
+        const prefix = base === 'SENMU' ? 'SM-' : base === 'ALPALSUS' ? 'AP-' : 'RM-';
+        const count = masterData.filter(item => item.base === base).length + 1;
+        document.getElementById('m-kode').value = prefix + count.toString().padStart(3, '0');
+    }
+
+    function saveMaster(e) {
+        e.preventDefault();
+        const index = document.getElementById('m-index').value;
         const item = {
             base: document.getElementById('m-base').value,
             kode: document.getElementById('m-kode').value,
@@ -400,52 +667,298 @@
             spec: document.getElementById('m-spec').value,
             satuan: document.getElementById('m-satuan').value
         };
-        masterData.push(item);
-        localStorage.setItem('k_master', JSON.stringify(masterData));
-        alert('Data tersimpan');
-        renderMaster();
+
+        if (index === "") {
+            masterData.push(item);
+            showTackticalToast("Data Master Baru berhasil disimpan.");
+        } else {
+            masterData[index] = item;
+            showTackticalToast("Data Master berhasil diperbarui.");
+        }
+
+        localStorage.setItem('k_master_items', JSON.stringify(masterData));
+        resetMasterForm();
+        renderMasterTable();
     }
 
-    function renderMaster() {
-        const tbody = document.getElementById('table-master-body');
-        tbody.innerHTML = masterData.map((i, idx) => `
-            <tr>
-                <td>${i.base}</td><td>${i.kode}</td><td>${i.nama}</td><td>${i.spec}</td><td>${i.satuan}</td>
-                <td><button onclick="masterData.splice(${idx},1);renderMaster();" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></td>
-            </tr>
-        `).join('');
+    function renderMasterTable() {
+        const filterBase = document.getElementById('filter-master-base').value;
+        const searchVal = document.getElementById('search-master').value.toLowerCase().trim();
+        const tbody = document.getElementById('tbody-master');
+        tbody.innerHTML = '';
+
+        masterData.forEach((item, index) => {
+            if (filterBase !== 'ALL' && item.base !== filterBase) return;
+            if (searchVal !== "") {
+                const queryMatch = (item.nama + item.kode + (item.sub || '') + (item.spec || '')).toLowerCase().includes(searchVal);
+                if (!queryMatch) return;
+            }
+
+            // HILANGKAN STRIP JIKA KOSONG
+            const displaySub = item.sub ? `<br><small>${item.sub}</small>` : '';
+            const displaySpec = item.spec ? item.spec : '';
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="text-center font-monospace text-warning">${item.base}</td>
+                    <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
+                    <td><strong>${item.nama}</strong>${displaySub}</td>
+                    <td>${displaySpec}</td>
+                    <td class="text-center">${item.satuan}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editMaster(${index})"><i class="fa-solid fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteMaster(${index})"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
     }
 
-    function autoCode() {
-        const base = document.getElementById('m-base').value;
-        const prefix = base.substring(0, 2);
-        document.getElementById('m-kode').value = prefix + '-' + (masterData.length + 1).toString().padStart(3, '0');
+    function editMaster(idx) {
+        const item = masterData[idx];
+        document.getElementById('m-index').value = idx;
+        document.getElementById('m-base').value = item.base;
+        document.getElementById('m-kode').value = item.kode;
+        document.getElementById('m-nama').value = item.nama;
+        document.getElementById('m-sub').value = item.sub;
+        document.getElementById('m-spec').value = item.spec;
+        document.getElementById('m-satuan').value = item.satuan;
+
+        document.getElementById('master-title').innerText = "Edit Item Barang";
+        document.getElementById('btn-master-submit').innerText = "UPDATE MASTER";
+        document.getElementById('btn-master-cancel').classList.remove('d-none');
     }
 
-    function saveUser() {
+    function resetMasterForm() {
+        document.getElementById('form-master').reset();
+        document.getElementById('m-index').value = '';
+        document.getElementById('master-title').innerText = "Input Item Barang";
+        document.getElementById('btn-master-submit').innerText = "SIMPAN MASTER";
+        document.getElementById('btn-master-cancel').classList.add('d-none');
+    }
+
+    function deleteMaster(idx) {
+        askConfirmation("Hapus Master Item", "Apakah Anda yakin ingin menghapus data master ini dari database?", function(approved) {
+            if (approved) {
+                masterData.splice(idx, 1);
+                localStorage.setItem('k_master_items', JSON.stringify(masterData));
+                renderMasterTable();
+                showTackticalToast("Data Master Berhasil Dihapus.");
+            }
+        });
+    }
+
+    // STREAMING_CHUNK: Pengolah Kategori View (SENMU/ALPALSUS/RANMOR)...
+    // --- KATEGORI VIEW ---
+    function renderCategoryView(base) {
+        document.getElementById('view-cat-title').innerText = "Inventaris " + base;
+        const tbody = document.getElementById('tbody-cat');
+        tbody.innerHTML = '';
+
+        let count = 1;
+        masterData.forEach(item => {
+            if (item.base !== base) return;
+            const displaySub = item.sub ? `<br><small>${item.sub}</small>` : '';
+            const displaySpec = item.spec ? item.spec : '';
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="text-center">${count++}</td>
+                    <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
+                    <td><strong>${item.nama}</strong>${displaySub}</td>
+                    <td>${displaySpec}</td>
+                    <td class="text-center">${item.satuan}</td>
+                </tr>
+            `;
+        });
+
+        if (tbody.innerHTML === '') {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">Belum ada item untuk kategori ${base}</td></tr>`;
+        }
+    }
+
+    // STREAMING_CHUNK: Modul Manajemen User Jajaran (Scroll, Pencarian, Filter, edit & hapus)...
+    // --- MANAJEMEN USER ---
+    function populateSatuanDatalist() {
+        const datalist = document.getElementById('list-satuan-exist');
+        datalist.innerHTML = '';
+        const distinctSatuan = [...new Set(users.map(u => u.satuan))];
+        distinctSatuan.forEach(sat => {
+            datalist.innerHTML += `<option value="${sat}">`;
+        });
+    }
+
+    function populateSatuanFilter() {
+        const filterSel = document.getElementById('filter-user-jajaran');
+        const selectedVal = filterSel.value;
+        filterSel.innerHTML = '<option value="ALL">-- SEMUA SATUAN --</option>';
+        const distinctSatuan = [...new Set(users.map(u => u.satuan))];
+        distinctSatuan.forEach(sat => {
+            filterSel.innerHTML += `<option value="${sat}">${sat}</option>`;
+        });
+        filterSel.value = selectedVal;
+    }
+
+    function saveUser(e) {
+        e.preventDefault();
+        const index = document.getElementById('u-index').value;
         const user = {
-            satuan: document.getElementById('u-satuan').value,
-            user: document.getElementById('u-user').value,
+            satuan: document.getElementById('u-satuan').value.toUpperCase().trim(),
+            user: document.getElementById('u-user').value.trim(),
             pass: document.getElementById('u-pass').value,
-            nama: document.getElementById('u-nama').value,
-            pangkat: document.getElementById('u-pangkat').value,
-            nrp: document.getElementById('u-nrp').value,
-            telp: document.getElementById('u-telp').value
+            nama: document.getElementById('u-nama').value.toUpperCase().trim(),
+            pangkat: document.getElementById('u-pangkat').value.toUpperCase().trim(),
+            nrp: document.getElementById('u-nrp').value.trim(),
+            telp: document.getElementById('u-telp').value.trim()
         };
-        users.push(user);
+
+        if (index === "") {
+            // Cek duplikasi username
+            const isExist = users.some(u => u.user.toLowerCase() === user.user.toLowerCase());
+            if (isExist) {
+                showTackticalToast("Username '" + user.user + "' sudah terdaftar!", "danger");
+                return;
+            }
+            users.push(user);
+            showTackticalToast("User Jajaran Baru berhasil didaftarkan.");
+        } else {
+            users[index] = user;
+            showTackticalToast("Akses User Jajaran berhasil diperbarui.");
+        }
+
         localStorage.setItem('k_users', JSON.stringify(users));
-        alert('User berhasil dibuat');
-        renderUsers();
+        resetUserForm();
+        populateSatuanDatalist();
+        populateSatuanFilter();
+        renderUserTable();
     }
 
-    function renderUsers() {
-        const tbody = document.getElementById('table-user-body');
-        tbody.innerHTML = users.map((u, idx) => `
-            <tr>
-                <td>${u.satuan}</td><td>${u.user}</td><td>${u.nama}</td><td>${u.pangkat}</td><td>${u.nrp}</td><td>${u.telp}</td>
-                <td><button onclick="users.splice(${idx},1);renderUsers();" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></td>
-            </tr>
-        `).join('');
+    function renderUserTable() {
+        const filterJajaran = document.getElementById('filter-user-jajaran').value;
+        const searchVal = document.getElementById('search-user').value.toLowerCase().trim();
+        const tbody = document.getElementById('tbody-users');
+        tbody.innerHTML = '';
+
+        // Filter & Search data
+        let filteredUsers = users;
+        if (filterJajaran !== 'ALL') {
+            filteredUsers = filteredUsers.filter(u => u.satuan === filterJajaran);
+        }
+        if (searchVal !== "") {
+            filteredUsers = filteredUsers.filter(u => 
+                (u.user + u.nama + u.nrp).toLowerCase().includes(searchVal)
+            );
+        }
+
+        // Pagination calculations
+        const totalItems = filteredUsers.length;
+        const totalPages = Math.ceil(totalItems / userPageSize);
+        if (userCurrentPage > totalPages) userCurrentPage = Math.max(1, totalPages);
+
+        const startIdx = (userCurrentPage - 1) * userPageSize;
+        const endIdx = startIdx + userPageSize;
+        const pageItems = filteredUsers.slice(startIdx, endIdx);
+
+        pageItems.forEach((u, pageIdx) => {
+            const actualIdx = users.indexOf(u);
+            const absoluteNo = startIdx + pageIdx + 1;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td class="text-center">${absoluteNo}</td>
+                    <td><strong>${u.satuan}</strong></td>
+                    <td class="font-monospace text-warning">${u.user}</td>
+                    <td class="font-monospace text-muted">${u.pass}</td>
+                    <td>${u.nama}</td>
+                    <td>${u.pangkat}</td>
+                    <td>${u.nrp}</td>
+                    <td>${u.telp}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editUser(${actualIdx})"><i class="fa-solid fa-edit"></i></button>
+                        <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteUser(${actualIdx})"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        // Update pagination labels & buttons
+        document.getElementById('page-info').innerText = `Menampilkan ${startIdx + 1}-${Math.min(endIdx, totalItems)} dari ${totalItems} data`;
+        document.getElementById('btn-user-prev').disabled = (userCurrentPage === 1);
+        document.getElementById('btn-user-next').disabled = (userCurrentPage >= totalPages);
+
+        if (tbody.innerHTML === '') {
+            tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-3">Tidak ada data user jajaran.</td></tr>`;
+            document.getElementById('page-info').innerText = "Menampilkan 0 data";
+            document.getElementById('btn-user-prev').disabled = true;
+            document.getElementById('btn-user-next').disabled = true;
+        }
     }
+
+    function prevUserPage() {
+        if (userCurrentPage > 1) {
+            userCurrentPage--;
+            renderUserTable();
+        }
+    }
+
+    function nextUserPage() {
+        userCurrentPage++;
+        renderUserTable();
+    }
+
+    function resetUserPagination() {
+        userCurrentPage = 1;
+    }
+
+    function editUser(idx) {
+        const u = users[idx];
+        document.getElementById('u-index').value = idx;
+        document.getElementById('u-satuan').value = u.satuan;
+        document.getElementById('u-user').value = u.user;
+        document.getElementById('u-pass').value = u.pass;
+        document.getElementById('u-nama').value = u.nama;
+        document.getElementById('u-pangkat').value = u.pangkat;
+        document.getElementById('u-nrp').value = u.nrp;
+        document.getElementById('u-telp').value = u.telp;
+
+        document.getElementById('user-form-title').innerText = "Edit Akses Jajaran";
+        document.getElementById('btn-user-submit').innerText = "SIMPAN EDIT USER";
+        document.getElementById('btn-user-cancel').classList.remove('d-none');
+    }
+
+    function resetUserForm() {
+        document.getElementById('form-user').reset();
+        document.getElementById('u-index').value = '';
+        document.getElementById('user-form-title').innerText = "Buat Akses (7 Kolom)";
+        document.getElementById('btn-user-submit').innerText = "BUAT USER AKSES";
+        document.getElementById('btn-user-cancel').classList.add('d-none');
+    }
+
+    function deleteUser(idx) {
+        const u = users[idx];
+        if (u.user.toLowerCase() === 'slog') {
+            showTackticalToast("Akun super admin 'slog' tidak boleh dihapus!", "danger");
+            return;
+        }
+
+        askConfirmation("Hapus Akses Jajaran", "Apakah Anda yakin ingin menghapus izin masuk '" + u.user + "' untuk " + u.satuan + "?", function(approved) {
+            if (approved) {
+                users.splice(idx, 1);
+                localStorage.setItem('k_users', JSON.stringify(users));
+                populateSatuanDatalist();
+                populateSatuanFilter();
+                renderUserTable();
+                showTackticalToast("Data Akses User Berhasil Dihapus.");
+            }
+        });
+    }
+
+    // --- INSTANSTIASI PERTAMA KALI ---
+    document.addEventListener("DOMContentLoaded", () => {
+        ensureAdminExists();
+        document.getElementById('app-content').classList.add('d-none');
+        document.getElementById('login-screen').classList.remove('d-none');
+    });
 </script>
-</body></html>
+</body>
+</html>
