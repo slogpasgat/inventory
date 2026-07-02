@@ -29,18 +29,6 @@
             border: 1px solid #4a5940;
             border-left: 4px solid #7a9468;
         }
-        .card-tactical-slog {
-            border-left: 4px solid #b38600;
-        }
-        .btn-army {
-            background-color: #3f4f37;
-            color: #ffffff;
-            border: 1px solid #566c4c;
-        }
-        .btn-army:hover {
-            background-color: #566c4c;
-            color: #ffffff;
-        }
         .btn-slog {
             background-color: #8c6b00;
             color: #fff;
@@ -70,15 +58,36 @@
             vertical-align: middle;
         }
 
-        /* SCROLL & LAYOUT KONFIGURASI */
+        /* FITUR SCROLL & LAYOUT */
         .table-scroll-container {
-            max-height: 400px; /* Scroll atas bawah */
+            max-height: 450px; /* Scroll atas bawah */
             overflow-y: auto;
             overflow-x: auto; /* Scroll kiri kanan */
             border: 1px solid #3d4a34;
+            background-color: #1d2218;
         }
         .min-width-table {
-            min-width: 1200px; /* Memaksa scroll horizontal jika layar sempit */
+            min-width: 1400px; /* Memaksa scroll horizontal */
+        }
+
+        /* FORM STYLING */
+        .form-label {
+            color: #ffc107 !important;
+            font-weight: bold !important;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .form-control, .form-select {
+            background-color: #1b2118 !important;
+            color: #ffffff !important;
+            border: 1px solid #4a5940 !important;
+            font-size: 13px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #ffc107 !important;
+            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2);
         }
 
         .nav-link-military {
@@ -92,33 +101,10 @@
             color: #ffc107;
         }
 
-        .form-label {
-            color: #ffc107 !important;
-            font-weight: bold !important;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 1px;
-            display: inline-block;
-            margin-bottom: 6px;
-        }
-        .form-control, .form-select {
-            background-color: #1b2118 !important;
-            color: #ffffff !important;
-            border: 1px solid #4a5940 !important;
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: #ffc107 !important;
-            box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.2);
-        }
-        .pagination .page-link {
-            background-color: #242a20;
-            color: #ffc107;
-            border: 1px solid #4a5940;
-        }
-        .pagination .page-item.active .page-link {
-            background-color: #ffc107;
-            color: #000;
-            border-color: #ffc107;
+        .filter-search-box {
+            background-color: #1a1e16;
+            border: 1px dashed #4a5940;
+            border-radius: 6px;
         }
     </style>
 </head>
@@ -137,150 +123,98 @@
 <div class="container-fluid">
     <div class="row">
         
-        <!-- SIDEBAR NAVIGASI -->
-        <nav class="col-md-2 d-none d-md-block sidebar p-3" id="sidebar-menu">
+        <!-- SIDEBAR -->
+        <nav class="col-md-2 d-none d-md-block sidebar p-3">
             <div class="position-sticky">
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link nav-link-military active" id="nav-dashboard" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" id="nav-senmu" onclick="switchView('senmu')"><i class="fa-solid fa-gun me-2"></i> SENMU</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" id="nav-alpalsus" onclick="switchView('alpalsus')"><i class="fa-solid fa-vest-pattern me-2"></i> ALPALSUS</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" id="nav-ranmor" onclick="switchView('ranmor')"><i class="fa-solid fa-truck-pickup me-2"></i> RANMOR</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military" onclick="switchView('manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military active" onclick="switchView('manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
                 </ul>
-
-                <div id="slog-special-menu" class="">
-                    <h6 class="sidebar-heading px-3 mt-4 mb-2 text-warning text-uppercase">Otoritas SLOG</h6>
-                    <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link nav-link-military" id="nav-manage-items" onclick="switchView('manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-military" id="nav-manage-users" onclick="switchView('manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
-                    </ul>
-                </div>
             </div>
         </nav>
 
         <main class="col-md-10 ms-sm-auto px-md-4 py-4">
             
-            <!-- VIEW: DASHBOARD -->
-            <section id="view-dashboard" class="view-section">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">Dashboard</h3>
-                <div class="card card-tactical p-4"><p>Selamat Datang di Sistem Logistik KORPASGAT.</p></div>
-            </section>
-
-            <!-- VIEW: MASTER ITEM DATA (OTORITAS SLOG) -->
-            <section id="view-manage-items" class="view-section d-none">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">Master Item Barang</h3>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card card-tactical p-3">
-                            <h5 class="text-warning mb-3">Tambah Item Baru</h5>
-                            <form id="form-master-item" onsubmit="handleSaveMasterItem(event)">
-                                <input type="hidden" id="master-item-idx">
-                                <label class="form-label">Nama Base</label>
-                                <select class="form-select mb-2" id="master-kategori" onchange="generateAutoCode(this.value)" required>
-                                    <option value="">-- Pilih --</option>
-                                    <option value="SENMU">Senmu</option>
-                                    <option value="ALPALSUS">Alpalsus</option>
-                                    <option value="RANMOR">Ranmor</option>
-                                </select>
-                                <label class="form-label">Kode (Otomatis)</label>
-                                <input type="text" class="form-control mb-2" id="master-kode" readonly>
-                                <label class="form-label">Nama Barang</label>
-                                <input type="text" class="form-control mb-2" id="master-nama" required>
-                                <label class="form-label">Sub Nama</label>
-                                <input type="text" class="form-control mb-2" id="master-sub">
-                                <label class="form-label">Spek</label>
-                                <input type="text" class="form-control mb-2" id="master-spec">
-                                <label class="form-label">Satuan</label>
-                                <input type="text" class="form-control mb-3" id="master-satuan" required>
-                                <button type="submit" class="btn btn-slog w-100 fw-bold">SIMPAN MASTER</button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card card-tactical p-3">
-                            <div class="input-group mb-2"><input type="text" class="form-control form-control-sm" id="search-master" onkeyup="filterMasterTable()" placeholder="Cari Item..."></div>
-                            <div class="table-scroll-container">
-                                <table class="table table-military table-bordered">
-                                    <thead><tr><th>Base</th><th>Kode</th><th>Nama</th><th>Spek</th><th>Satuan</th><th>Opsi</th></tr></thead>
-                                    <tbody id="tbody-master-items"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- VIEW: MANAJEMEN USER JAJARAN (FITUR BARU) -->
-            <section id="view-manage-users" class="view-section d-none">
-                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
+            <!-- VIEW: MANAJEMEN USER JAJARAN -->
+            <section id="view-manage-users" class="view-section">
+                <h3 class="border-bottom border-secondary pb-2 mb-4 text-uppercase text-warning">
                     <i class="fa-solid fa-users-gear"></i> Manajemen User Jajaran Satuan
                 </h3>
                 
                 <div class="row">
-                    <!-- SISI KIRI: INPUT USER BARU (7 KOLOM) -->
+                    <!-- KOLOM INPUT (7 KOLOM) -->
                     <div class="col-md-4 mb-3">
                         <div class="card card-tactical p-4">
                             <h5 class="text-warning mb-4"><i class="fa-solid fa-user-plus"></i> Tambah Akses Jajaran</h5>
-                            <form id="form-manage-user" onsubmit="handleSaveUser(event)">
-                                <input type="hidden" id="user-item-idx">
+                            <form id="form-user-akses" onsubmit="handleCreateUser(event)">
+                                <input type="hidden" id="user-edit-idx">
                                 
-                                <label class="form-label">1. Nama Satuan Jajaran</label>
-                                <input type="text" class="form-control mb-2" id="user-satuan" list="list-satuan-exist" placeholder="Pilih atau Ketik Satuan Baru..." required>
-                                <datalist id="list-satuan-exist">
-                                    <option value="YONKO 461 PARAKO">
-                                    <option value="YONKO 471 PARAKO">
-                                    <option value="DENMATRA 1">
-                                </datalist>
+                                <div class="mb-2">
+                                    <label class="form-label">1. Nama Satuan Jajaran</label>
+                                    <input type="text" class="form-control" id="u-satuan" list="datalist-satuan" placeholder="Pilih atau Ketik Satuan Baru..." required>
+                                    <datalist id="datalist-satuan">
+                                        <!-- Terisi otomatis dari database -->
+                                    </datalist>
+                                </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mb-2">
                                         <label class="form-label">2. User Login</label>
-                                        <input type="text" class="form-control mb-2" id="user-login" required>
+                                        <input type="text" class="form-control" id="u-login" required>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mb-2">
                                         <label class="form-label">3. Password</label>
-                                        <input type="password" class="form-control mb-2" id="user-pass" required>
+                                        <input type="password" class="form-control" id="u-pass" required>
                                     </div>
                                 </div>
 
-                                <label class="form-label">4. Nama Lengkap Staf</label>
-                                <input type="text" class="form-control mb-2" id="user-nama-staf" required>
+                                <div class="mb-2">
+                                    <label class="form-label">4. Nama Lengkap Staf</label>
+                                    <input type="text" class="form-control" id="u-nama" required>
+                                </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mb-2">
                                         <label class="form-label">5. Pangkat</label>
-                                        <input type="text" class="form-control mb-2" id="user-pangkat" required>
+                                        <input type="text" class="form-control" id="u-pangkat" required>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 mb-2">
                                         <label class="form-label">6. NRP</label>
-                                        <input type="text" class="form-control mb-2" id="user-nrp" required>
+                                        <input type="text" class="form-control" id="u-nrp" required>
                                     </div>
                                 </div>
 
-                                <label class="form-label">7. No Telp / WhatsApp</label>
-                                <input type="text" class="form-control mb-3" id="user-telp" required>
+                                <div class="mb-4">
+                                    <label class="form-label">7. No Telp / WhatsApp</label>
+                                    <input type="text" class="form-control" id="u-telp" placeholder="08xxxx" required>
+                                </div>
 
-                                <button type="submit" class="btn btn-slog w-100 py-2 fw-bold" id="btn-save-user">BUAT USER AKSES</button>
+                                <button type="submit" class="btn btn-slog w-100 fw-bold py-2" id="btn-submit-user">BUAT USER AKSES</button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-user" onclick="resetUserForm()">Batal Edit</button>
                             </form>
                         </div>
                     </div>
 
-                    <!-- SISI KANAN: TABEL USER DENGAN FILTER, SEARCH, & SCROLL -->
+                    <!-- KOLOM DAFTAR (TABEL AKTIF) -->
                     <div class="col-md-8">
                         <div class="card card-tactical p-3">
                             <h5 class="text-light mb-3">Daftar Otoritas User Jajaran Aktif</h5>
                             
                             <div class="filter-search-box p-3 mb-3">
                                 <div class="row g-2">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Filter Jajaran</label>
-                                        <select class="form-select form-select-sm" id="filter-user-satuan" onchange="renderUserTable()">
+                                    <div class="col-md-5">
+                                        <label class="form-label" style="font-size: 10px !important;">Filter Jajaran</label>
+                                        <select class="form-select form-select-sm" id="f-user-satuan" onchange="renderUserTable()">
                                             <option value="ALL">-- Semua Satuan --</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Cari User/NRP/Nama</label>
-                                        <input type="text" class="form-control form-control-sm" id="search-user-keyword" onkeyup="renderUserTable()" placeholder="Ketik kata kunci...">
+                                    <div class="col-md-7">
+                                        <label class="form-label" style="font-size: 10px !important;">Cari User/Nama/NRP</label>
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-dark border-secondary text-warning"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                            <input type="text" class="form-control" id="s-user-keyword" onkeyup="renderUserTable()" placeholder="Ketik kata kunci...">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -300,184 +234,156 @@
                                             <th>Opsi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tbody-users"></tbody>
+                                    <tbody id="tbody-users">
+                                        <!-- Data Muncul Disini -->
+                                    </tbody>
                                 </table>
                             </div>
-
-                            <!-- Pagination -->
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <small class="text-muted" id="user-pagination-info">Menampilkan 0 data</small>
-                                <nav><ul class="pagination pagination-sm mb-0" id="user-pagination-list"></ul></nav>
-                            </div>
+                            <div id="pagination-info" class="mt-2 small text-muted"></div>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <section id="view-dashboard" class="view-section d-none"><h3>Dashboard Aktif</h3></section>
+            <section id="view-manage-items" class="view-section d-none"><h3>Master Item Aktif</h3></section>
 
         </main>
     </div>
 </div>
 
 <script>
-// --- DATABASE SIMULATOR ---
-let db_master_items = JSON.parse(localStorage.getItem('db_master_items')) || [];
+// --- DATABASE SIMULATOR (USER) ---
 let db_users = JSON.parse(localStorage.getItem('db_users')) || [
-    { satuan: "YONKO 461 PARAKO", user: "yon461", pass: "461jaya", nama: "Budi Santoso", pangkat: "Sertu", nrp: "123456", telp: "08123456789" },
-    { satuan: "YONKO 471 PARAKO", user: "yon471", pass: "471kuat", nama: "Andi Wijaya", pangkat: "Serda", nrp: "654321", telp: "08198765432" }
+    { satuan: "YONKO 461 PARAKO", user: "yonko461", pass: "461jaya", nama: "Budi Santoso", pangkat: "Sertu", nrp: "123456", telp: "08123456789" },
+    { satuan: "YONKO 471 PARAKO", user: "yonko471", pass: "471kuat", nama: "Andi Wijaya", pangkat: "Serda", nrp: "654321", telp: "08198765432" },
+    { satuan: "DENMATRA 1", user: "denmatra1", pass: "dm1solid", nama: "Rahmat Hidayat", pangkat: "Kopda", nrp: "998877", telp: "0852112233" }
 ];
 
-// --- LOGIKA NAVIGASI ---
-function switchView(viewId) {
-    document.querySelectorAll('.view-section').forEach(s => s.classList.add('d-none'));
-    document.querySelectorAll('.nav-link-military').forEach(l => l.classList.remove('active'));
-    document.getElementById('view-' + viewId).classList.remove('d-none');
-    document.getElementById('nav-' + viewId).classList.add('active');
+// --- LOGIKA HALAMAN & TABEL ---
+function renderUserTable() {
+    const filterSatuan = document.getElementById('f-user-satuan').value;
+    const keyword = document.getElementById('s-user-keyword').value.toLowerCase();
+    const tbody = document.getElementById('tbody-users');
+    tbody.innerHTML = '';
+
+    // Update Datalist Satuan & Filter Dropdown
+    const datalist = document.getElementById('datalist-satuan');
+    const filterSelect = document.getElementById('f-user-satuan');
+    const uniqueSatuan = [...new Set(db_users.map(u => u.satuan))];
     
-    if(viewId === 'manage-users') renderUserTable();
-    if(viewId === 'manage-items') renderMasterTable();
+    datalist.innerHTML = '';
+    const currentFilter = filterSelect.value;
+    filterSelect.innerHTML = '<option value="ALL">-- Semua Satuan --</option>';
+    
+    uniqueSatuan.forEach(s => {
+        datalist.innerHTML += `<option value="${s}">`;
+        filterSelect.innerHTML += `<option value="${s}" ${s === currentFilter ? 'selected' : ''}>${s}</option>`;
+    });
+
+    // Filtering Data
+    const filteredData = db_users.filter(u => {
+        const matchFilter = (filterSatuan === "ALL" || u.satuan === filterSatuan);
+        const matchSearch = (u.user.toLowerCase().includes(keyword) || u.nama.toLowerCase().includes(keyword) || u.nrp.includes(keyword));
+        return matchFilter && matchSearch;
+    });
+
+    // Rendering Baris Tabel
+    filteredData.forEach((u, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="text-center">${i + 1}</td>
+            <td><strong>${u.satuan}</strong></td>
+            <td class="text-warning font-monospace">${u.user}</td>
+            <td>••••••</td>
+            <td>${u.nama}</td>
+            <td class="text-center">${u.pangkat}</td>
+            <td class="text-center font-monospace">${u.nrp}</td>
+            <td class="text-center">${u.telp}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteUser(${i})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('pagination-info').innerText = `Menampilkan ${filteredData.length} User Akun Jajaran.`;
 }
 
-// --- LOGIKA MANAJEMEN USER ---
-let userPage = 1;
-const rowsPerPage = 5;
-
-function handleSaveUser(e) {
+// --- AKSI BUAT USER AKSES ---
+function handleCreateUser(e) {
     e.preventDefault();
-    const idx = document.getElementById('user-item-idx').value;
-    const userData = {
-        satuan: document.getElementById('user-satuan').value,
-        user: document.getElementById('user-login').value,
-        pass: document.getElementById('user-pass').value,
-        nama: document.getElementById('user-nama-staf').value,
-        pangkat: document.getElementById('user-pangkat').value,
-        nrp: document.getElementById('user-nrp').value,
-        telp: document.getElementById('user-telp').value
+    const editIdx = document.getElementById('user-edit-idx').value;
+    
+    const newUser = {
+        satuan: document.getElementById('u-satuan').value.toUpperCase(),
+        user: document.getElementById('u-login').value,
+        pass: document.getElementById('u-pass').value,
+        nama: document.getElementById('u-nama').value,
+        pangkat: document.getElementById('u-pangkat').value,
+        nrp: document.getElementById('u-nrp').value,
+        telp: document.getElementById('u-telp').value
     };
 
-    if(idx === "") db_users.push(userData);
-    else db_users[idx] = userData;
+    if (editIdx === "") {
+        // Cek duplikasi username
+        if(db_users.some(u => u.user === newUser.user)) {
+            alert("Username sudah digunakan!"); return;
+        }
+        db_users.push(newUser);
+        alert("Akses Jajaran Baru Berhasil Dibuat!");
+    } else {
+        db_users[editIdx] = newUser;
+        alert("Data Akses Berhasil Diperbarui!");
+    }
 
     localStorage.setItem('db_users', JSON.stringify(db_users));
     resetUserForm();
     renderUserTable();
-    alert("Kredensial User Jajaran Berhasil Disimpan!");
 }
 
-function renderUserTable() {
-    const filter = document.getElementById('filter-user-satuan').value;
-    const search = document.getElementById('search-user-keyword').value.toLowerCase();
-    const tbody = document.getElementById('tbody-users');
-    tbody.innerHTML = '';
-
-    // Update Filter Options
-    const filterSel = document.getElementById('filter-user-satuan');
-    const satuanList = [...new Set(db_users.map(u => u.satuan))];
-    const currentFilter = filterSel.value;
-    filterSel.innerHTML = '<option value="ALL">-- Semua Satuan --</option>';
-    satuanList.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s; opt.text = s;
-        if(s === currentFilter) opt.selected = true;
-        filterSel.add(opt);
-    });
-
-    // Filter Logic
-    let filtered = db_users.filter(u => {
-        const matchFilter = (filter === "ALL" || u.satuan === filter);
-        const matchSearch = (u.user.toLowerCase().includes(search) || u.nrp.includes(search) || u.nama.toLowerCase().includes(search));
-        return matchFilter && matchSearch;
-    });
-
-    // Render Rows
-    filtered.forEach((u, i) => {
-        tbody.innerHTML += `
-            <tr>
-                <td class="text-center">${i+1}</td>
-                <td><strong>${u.satuan}</strong></td>
-                <td class="text-warning">${u.user}</td>
-                <td>••••••</td>
-                <td>${u.nama}</td>
-                <td>${u.pangkat}</td>
-                <td class="font-monospace">${u.nrp}</td>
-                <td>${u.telp}</td>
-                <td class="text-center">
-                    <button class="btn btn-sm btn-outline-warning p-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
-                    <button class="btn btn-sm btn-outline-danger p-1" onclick="deleteUser(${i})"><i class="fa-solid fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    });
-    
-    document.getElementById('user-pagination-info').innerText = `Total: ${filtered.length} User Akun`;
-}
-
-function editUser(i) {
-    const u = db_users[i];
-    document.getElementById('user-item-idx').value = i;
-    document.getElementById('user-satuan').value = u.satuan;
-    document.getElementById('user-login').value = u.user;
-    document.getElementById('user-pass').value = u.pass;
-    document.getElementById('user-nama-staf').value = u.nama;
-    document.getElementById('user-pangkat').value = u.pangkat;
-    document.getElementById('user-nrp').value = u.nrp;
-    document.getElementById('user-telp').value = u.telp;
-    document.getElementById('btn-save-user').innerText = "UPDATE USER";
-    document.getElementById('btn-cancel-user').classList.remove('d-none');
-}
-
-function deleteUser(i) {
-    if(confirm("Hapus akses login satuan jajaran ini?")) {
-        db_users.splice(i, 1);
+function deleteUser(idx) {
+    if(confirm("Hapus otoritas akses jajaran ini?")) {
+        db_users.splice(idx, 1);
         localStorage.setItem('db_users', JSON.stringify(db_users));
         renderUserTable();
     }
 }
 
+function editUser(idx) {
+    const u = db_users[idx];
+    document.getElementById('user-edit-idx').value = idx;
+    document.getElementById('u-satuan').value = u.satuan;
+    document.getElementById('u-login').value = u.user;
+    document.getElementById('u-pass').value = u.pass;
+    document.getElementById('u-nama').value = u.nama;
+    document.getElementById('u-pangkat').value = u.pangkat;
+    document.getElementById('u-nrp').value = u.nrp;
+    document.getElementById('u-telp').value = u.telp;
+    
+    document.getElementById('btn-submit-user').innerText = "UPDATE DATA AKSES";
+    document.getElementById('btn-cancel-user').classList.remove('d-none');
+}
+
 function resetUserForm() {
-    document.getElementById('form-manage-user').reset();
-    document.getElementById('user-item-idx').value = "";
-    document.getElementById('btn-save-user').innerText = "BUAT USER AKSES";
+    document.getElementById('form-user-akses').reset();
+    document.getElementById('user-edit-idx').value = "";
+    document.getElementById('btn-submit-user').innerText = "BUAT USER AKSES";
     document.getElementById('btn-cancel-user').classList.add('d-none');
 }
 
-// --- MASTER ITEM LOGIC (PROGRAM LAMA TETAP ADA) ---
-function generateAutoCode(base) {
-    if (!base) return;
-    let prefix = (base === "SENMU") ? "SM-" : (base === "ALPALSUS") ? "AP-" : "RM-";
-    let count = db_master_items.filter(item => item.base === base).length + 1;
-    document.getElementById('master-kode').value = prefix + count.toString().padStart(3, '0');
+// --- NAVIGASI VIEW ---
+function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(v => v.classList.add('d-none'));
+    document.querySelectorAll('.nav-link-military').forEach(n => n.classList.remove('active'));
+    document.getElementById('view-' + viewId).classList.remove('d-none');
+    event.currentTarget.classList.add('active');
 }
 
-function handleSaveMasterItem(e) {
-    e.preventDefault();
-    const data = {
-        base: document.getElementById('master-kategori').value,
-        kode: document.getElementById('master-kode').value,
-        nama: document.getElementById('master-nama').value,
-        sub: document.getElementById('master-sub').value,
-        spec: document.getElementById('master-spec').value,
-        satuan: document.getElementById('master-satuan').value
-    };
-    db_master_items.push(data);
-    localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
-    renderMasterTable();
-}
+function logout() { alert("Keamanan Sesi Logistik Diamankan."); }
 
-function renderMasterTable() {
-    const tbody = document.getElementById('tbody-master-items');
-    tbody.innerHTML = '';
-    db_master_items.forEach((item, i) => {
-        tbody.innerHTML += `<tr><td>${item.base}</td><td class="text-warning">${item.kode}</td><td>${item.nama}</td><td>${item.spec || ''}</td><td>${item.satuan}</td><td><button class="btn btn-sm btn-outline-danger p-1" onclick="db_master_items.splice(${i},1);localStorage.setItem('db_master_items',JSON.stringify(db_master_items));renderMasterTable()"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-    });
-}
-
-function logout() { alert("Sesi Logistik Diamankan."); }
-
-// Initialize
-document.addEventListener("DOMContentLoaded", () => {
-    renderMasterTable();
-    renderUserTable();
-});
+document.addEventListener("DOMContentLoaded", renderUserTable);
 </script>
 </body>
 </html>
