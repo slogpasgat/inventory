@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVENTORY KORPASGAT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* TEMA MILITER - DARK TACTICAL MODE */
+        body {
+            background-color: #191c16;
+            color: #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .navbar-military {
+            background-color: #242b1f;
+            border-bottom: 3px solid #3d4a34;
+        }
+        .sidebar {
+            background-color: #20261b;
+            border-right: 2px solid #3d4a34;
+            min-height: calc(100vh - 73px);
+        }
+        .card-tactical {
+            background-color: #242a20;
+            border: 1px solid #4a5940;
+            border-left: 4px solid #7a9468;
+        }
+        .card-tactical-slog {
+            border-left: 4px solid #b38600;
+        }
+        .btn-army {
+            background-color: #3f4f37;
+            color: #ffffff;
+            border: 1px solid #566c4c;
+        }
+        .btn-army:hover {
+            background-color: #566c4c;
+            color: #ffffff;
+        }
+        .btn-slog {
+            background-color: #8c6b00;
+            color: #fff;
+            border: 1px solid #b38600;
+        }
+        .btn-slog:hover {
+            background-color: #b38600;
+            color: #fff;
+        }
+        .table-military {
+            background-color: #20261b !important;
+            color: #e2e8f0 !important;
+            border-color: #3d4a34 !important;
+            font-size: 12px;
+        }
+        .table-military th {
+            background-color: #2c3626 !important;
+            color: #ffc107 !important;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .nav-link-military {
+            color: #a3b899;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .nav-link-military:hover, .nav-link-military.active {
+            background-color: #343f2e;
+            color: #ffc107;
+        }
+        .notif-badge {
+            position: relative;
+            top: -2px;
+        }
+        .status-pending { color: #ffc107; font-weight: bold; }
+        .status-approved { color: #28a745; font-weight: bold; }
+        .status-rejected { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-military p-3">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold text-uppercase" href="#"><i class="fa-solid fa-jet-fighter"></i> INVENTORY KORPASGAT</a>
+        <div class="d-flex align-items-center">
+            <span class="me-3 text-light">User: <strong id="current-user-display" class="text-warning">-</strong></span>
+            <button class="btn btn-sm btn-outline-danger" onclick="logout()"><i class="fa-solid fa-sign-out-alt"></i> Keluar</button>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        
+        <nav class="col-md-2 d-none d-md-block sidebar p-3" id="sidebar-menu">
+            <div class="position-sticky">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-2 mb-3 text-muted text-uppercase">
+                    <span>Menu Logistik</span>
+                </h6>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-military active" href="#" onclick="switchView('dashboard')">
+                            <i class="fa-solid fa-gauge me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-military" href="#" onclick="switchView('senmu')">
+                            <i class="fa-solid fa-gun me-2"></i> Kategori SENMU
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-military" href="#" onclick="switchView('alpalsus')">
+                            <i class="fa-solid fa-vest-pattern me-2"></i> Kategori ALPALSUS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-military" href="#" onclick="switchView('ranmor')">
+                            <i class="fa-solid fa-truck-pickup me-2"></i> Kategori RANMOR
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-military" href="#" onclick="switchView('alokasi')">
+                            <i class="fa-solid fa-truck-ramp-box me-2"></i> Transaksi Alokasi
+                            <span class="badge bg-danger notif-badge d-none" id="notif-count-badge">0</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div id="slog-special-menu" class="d-none">
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-2 text-warning text-uppercase">
+                        <span>Otoritas SLOG Lvl 1</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-military" href="#" onclick="switchView('manage-items')">
+                                <i class="fa-solid fa-boxes-stacked me-2"></i> Master Item Barang
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-military" href="#" onclick="switchView('manage-users')">
+                                <i class="fa-solid fa-users-gear me-2"></i> Manajemen User Jajaran
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <hr class="border-secondary">
+                <div class="p-2 card-tactical bg-dark text-center" style="font-size: 11px;">
+                    <strong>SIMULATOR LOGIN:</strong>
+                    <select class="form-select form-select-sm bg-secondary text-white border-0 mt-1" id="switch-user-sim" onchange="simulateUserSwitch(this.value)">
+                        </select>
+                </div>
+            </div>
+        </nav>
+
+        <main class="col-md-10 ms-sm-auto px-md-4 py-4" id="main-content">
+            
+            <section id="view-dashboard" class="view-section">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom border-secondary">
+                    <h1 class="h2 text-uppercase" id="dashboard-title">Dashboard Monitoring</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0" id="slog-download-area">
+                        </div>
+                </div>
+
+                <div class="row id-slog-stats d-none">
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical card-tactical-slog p-3">
+                            <h5>Total Item Master</h5>
+                            <h2 id="stat-total-master">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical card-tactical-slog p-3">
+                            <h5>Total Satuan Jajaran</h5>
+                            <h2 id="stat-total-jajaran">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical card-tactical-slog p-3">
+                            <h5>Transaksi Pending</h5>
+                            <h2 class="text-warning" id="stat-pending-alokasi">0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-tactical p-4 mt-3">
+                    <h5 class="text-warning border-bottom border-secondary pb-2"><i class="fa-solid fa-desktop"></i> Status Monitoring Logistik</h5>
+                    <p id="dashboard-desc">Memuat data...</p>
+                    <div id="satuan-filter-area" class="mb-3 d-none">
+                        <label class="form-label font-monospace">Pilih Laporan Kekuatan Jajaran Satuan:</label>
+                        <select id="filter-jajaran-dashboard" class="form-select bg-dark text-white border-secondary w-50" onchange="loadDashboardMonitorData(this.value)">
+                            </select>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped table-bordered text-center align-middle" style="font-size:12px;" id="table-dashboard-monitor">
+                            </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-senmu" class="view-section d-none">
+                <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
+                    <h3 class="text-uppercase text-warning"><i class="fa-solid fa-gun"></i> Data Kategori SENMU (Senjata & Amunisi)</h3>
+                    <div id="btn-input-senmu-group"></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-military table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>NOMOR</th><th>KODE</th><th>NAMA BARANG</th><th>SUB NAMA BARANG</th>
+                                <th>KALIBER</th><th>SATUAN</th><th>JUMLAH AWAL</th><th>MASUK</th>
+                                <th>KELUAR</th><th>JUMLAH AKHIR</th><th>B</th><th>RR</th><th>RB</th><th>KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-senmu"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="view-alpalsus" class="view-section d-none">
+                <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
+                    <h3 class="text-uppercase text-warning"><i class="fa-solid fa-vest-pattern"></i> Data Kategori ALPALSUS (Alat Peralatan Khusus)</h3>
+                    <div id="btn-input-alpalsus-group"></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-military table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>NOMOR</th><th>KODE</th><th>NAMA BARANG</th><th>SUB NAMA BARANG</th>
+                                <th>SN/PN</th><th>SATUAN</th><th>JUMLAH AWAL</th><th>MASUK</th>
+                                <th>KELUAR</th><th>JUMLAH AKHIR</th><th>B</th><th>RR</th><th>RB</th><th>KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-alpalsus"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="view-ranmor" class="view-section d-none">
+                <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
+                    <h3 class="text-uppercase text-warning"><i class="fa-solid fa-truck-pickup"></i> Data Kategori RANMOR (Kendaraan Bermotor)</h3>
+                    <div id="btn-input-ranmor-group"></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-military table-striped table-bordered" style="font-size: 11px;">
+                        <thead>
+                            <tr>
+                                <th>NOMOR</th><th>NO REG</th><th>NO LAMA</th><th>NO BARU</th><th>MERK TIPE</th>
+                                <th>JENIS</th><th>TAHUN</th><th>NO RANGKA</th><th>NO MESIN</th>
+                                <th>B</th><th>RR</th><th>RB</th><th>KONDISI (%)</th><th>CC</th><th>BBM</th>
+                                <th>WARNA</th><th>HAK PAKAI</th><th>MASA KBNKB</th><th>PROSES</th><th>MAJU</th>
+                                <th>TURUN</th><th>UKURAN BAN</th><th>AKI</th><th>KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-ranmor"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="view-alokasi" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning"><i class="fa-solid fa-truck-ramp-box"></i> Distribusi Alokasi & Realokasi Barang</h3>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card card-tactical p-3">
+                            <h5 class="text-warning"><i class="fa-solid fa-paper-plane"></i> Ajukan Alokasi / Realokasi</h5>
+                            <hr class="border-secondary">
+                            <form id="form-alokasi" onsubmit="handleKirimAlokasi(event)">
+                                <div class="mb-2">
+                                    <label class="form-label">Kategori Base</label>
+                                    <select class="form-select bg-dark text-white border-secondary" id="alokasi-kategori" onchange="updateAlokasiItemSelect(this.value)" required>
+                                        <option value="SENMU">SENMU</option>
+                                        <option value="ALPALSUS">ALPALSUS</option>
+                                        <option value="RANMOR">RANMOR</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Item Barang</label>
+                                    <select class="form-select bg-dark text-white border-secondary" id="alokasi-item" required></select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Satuan Jajaran Tujuan</label>
+                                    <select class="form-select bg-dark text-white border-secondary" id="alokasi-tujuan" required></select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Jumlah / Volume</label>
+                                    <input type="number" class="form-input form-control bg-dark text-white border-secondary" id="alokasi-jumlah" min="1" required>
+                                </div>
+                                <button type="submit" class="btn btn-army w-100"><i class="fa-solid fa-share-node"></i> Kirim Alokasi</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8 mb-4">
+                        <div class="card card-tactical p-3">
+                            <h5 class="text-warning"><i class="fa-solid fa-bell"></i> Log Alokasi & Notifikasi Jajaran</h5>
+                            <hr class="border-secondary">
+                            <div class="table-responsive">
+                                <table class="table table-dark table-striped table-bordered align-middle text-center" style="font-size: 11px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Asal</th><th>Tujuan</th><th>Kategori</th><th>Barang</th><th>Jumlah</th><th>Status</th><th>Aksi Validasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-log-alokasi"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-manage-items" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning"><i class="fa-solid fa-boxes-stacked"></i> Otoritas Master Data Item Barang</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical p-3">
+                            <h5 id="master-form-title" class="text-warning">Tambah Master Item Baru</h5>
+                            <form id="form-master-item" onsubmit="handleSaveMasterItem(event)">
+                                <input type="hidden" id="master-item-idx">
+                                <div class="mb-2">
+                                    <label class="form-label">Kategori Base</label>
+                                    <select class="form-select bg-dark text-white border-secondary" id="master-kategori" required>
+                                        <option value="SENMU">SENMU</option>
+                                        <option value="ALPALSUS">ALPALSUS</option>
+                                        <option value="RANMOR">RANMOR</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Kode Barang / No Reg</label>
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" id="master-kode" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Nama Barang / Merk Tipe</label>
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" id="master-nama" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Sub Nama Barang / Jenis</label>
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" id="master-sub">
+                                </div>
+                                <button type="submit" class="btn btn-slog w-100" id="btn-save-master">Simpan Item Master</button>
+                                <button type="button" class="btn btn-sm btn-link text-secondary w-100 mt-1 d-none" id="btn-cancel-edit-master" onclick="resetMasterItemForm()">Batal Edit</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <div class="card card-tactical p-3">
+                            <h5>Daftar Item Master Aktif</h5>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-striped table-bordered text-center align-middle" style="font-size: 12px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Base</th><th>Kode</th><th>Nama Barang / Merk</th><th>Sub/Jenis</th><th>Opsi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-master-items"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-manage-users" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning"><i class="fa-solid fa-users-gear"></i> Konfigurasi Akun Pengguna Jajaran Satuan</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card card-tactical p-3">
+                            <h5 id="user-form-title" class="text-warning">Buat Akun Jajaran Baru</h5>
+                            <form id="form-manage-user" onsubmit="handleSaveUser(event)">
+                                <input type="hidden" id="user-idx">
+                                <div class="mb-2">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control bg-dark text-white border-secondary" id="user-username" required>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control bg-dark text-white border-secondary" id="user-password" placeholder="Ketik password..." required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Otoritas Penempatan Komando / Satuan</label>
+                                    <select class="form-select bg-dark text-white border-secondary" id="user-jajaran" required>
+                                        </select>
+                                </div>
+                                <button type="submit" class="btn btn-slog w-100" id="btn-save-user">Simpan Kredensial Pengguna</button>
+                                <button type="button" class="btn btn-sm btn-link text-secondary w-100 mt-1 d-none" id="btn-cancel-edit-user" onclick="resetUserForm()">Batal</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <div class="card card-tactical p-3">
+                            <h5>Daftar Akun Kredensial Jajaran Aktif</h5>
+                            <div class="table-responsive">
+                                <table class="table table-dark table-striped table-bordered text-center align-middle" style="font-size: 12px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th><th>Otoritas Satuan</th><th>Level Otoritas</th><th>Opsi Penindakan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-users-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<div class="modal fade" id="modalInputData" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary navbar-military">
+                <h5 class="modal-title text-warning" id="modalInputTitle">Input Laporan Data</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs border-secondary mb-3" id="methodTab" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active text-warning bg-transparent border-0 border-bottom border-warning" id="manual-tab" data-bs-toggle="tab" data-bs-target="#panel-manual" type="button">Entri Manual Form</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link text-light bg-transparent border-0" id="excel-tab" data-bs-toggle="tab" data-bs-target="#panel-excel" type="button">Upload File Excel (.xlsx)</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="panel-manual">
+                        <form id="form-entri-manual" onsubmit="handleSaveManualData(event)">
+                            <input type="hidden" id="entry-kategori">
+                            <input type="hidden" id="entry-edit-id">
+                            <div id="dynamic-fields-area" class="row g-2">
+                                </div>
+                            <div class="mt-3 text-end">
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-shadow data-bs-dismiss="modal">Tutup</button>
+                                <button type="submit" class="btn btn-army btn-sm">Simpan Laporan</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="panel-excel">
+                        <div class="p-4 border border-dashed border-secondary text-center rounded bg-black">
+                            <i class="fa-regular fa-file-excel fa-3x text-success mb-2"></i>
+                            <h6>Simulasi Unggah Format Excel Berkas Korpasgat</h6>
+                            <p class="text-muted" style="font-size:11px;">Pastikan susunan kolom berkas excel (.xlsx) sudah sesuai dengan standarisasi regulasi administrasi logistik.</p>
+                            <input type="file" id="simulated-excel-file" class="form-control bg-dark text-white border-secondary w-70 mx-auto mt-2" accept=".xlsx">
+                            <button type="button" class="btn btn-success btn-sm mt-3" onclick="triggerSimulateExcelUpload()">Proses Ekstraksi & Unggah Data</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// --- DATA INITIALIZATION (SEED DATA) ---
+const LIST_JAJARAN = [
+    "SLOG KORPASGAT", "DIVISI PARAKO HLM", "DIVISI ARHANUD HND", "BRIGADE PARAKO 1 HLM", 
+    "BRIGADE PARAKO 2 ABD", "MEN HANUD 1 SWO", "MEN HANUD 2 HND", "MEN HANUD 3 MNA", 
+    "YON PARAKO 461 HLM", "YON PARAKO 471 IWY", "YON HANUD 11 RSN", "YON HANUD 21 PASGAT ADI", 
+    "YON HANUD 31 PASGAT MNA", "YON PARAKO 462 RSN", "YON PARAKO 472 ABD", "YON HANUD 12  HLM", 
+    "YON HANUD 22 PASGAT IWY", "YON HANUD 32 PASGAT ELI", "YON PARAKO 463 SWO", "YON PARAKO 473 HND", 
+    "DENMATRA 3 MNA", "YON HANUD 14 RSA", "YON HANUD 23 PASGAT HND", "YON PARAKO 464 BNY", 
+    "YON PARAKO 465 HLM", "YON PARAKO 466 SPO", "DENMATRA 2 ABD", "YON HANUD 15 SPO", 
+    "DENMATRA 1 HLM", "BRAVO 90 RUMPIN", "KIPAN C 461 SDM", "KIPAN C 461 ATS", 
+    "KIPAN B 463 LSE", "KIPAN C 463 SIM", "BRIGADE PARAKO 3 SPR", "YON PARAKO 481 SPR", 
+    "YON PARAKO 482 MNA", "KIPAN C 473 ELI", "DENMA SLM", "GUPUS KORPASGAT"
+];
+
+// Database State di LocalStorage / Memory
+let db_master_items = JSON.parse(localStorage.getItem('db_master_items')) || [
+    { id: 1, base: 'SENMU', kode: 'SM-001', nama: 'SS2-V4', sub: 'Pindad' },
+    { id: 2, base: 'SENMU', kode: 'SM-002', nama: 'Amunisi 5.56mm', sub: 'MU1-TJ' },
+    { id: 3, base: 'ALPALSUS', kode: 'AP-001', nama: 'Rompi Anti Peluru', sub: 'Level IV NII' },
+    { id: 4, base: 'RANMOR', kode: 'RM-001', nama: 'P6 ATAV', sub: 'Rantis Serbu' }
+];
+
+let db_users = JSON.parse(localStorage.getItem('db_users')) || [
+    { username: 'slog', role: 'SLOG KORPASGAT', jajaran: 'SLOG KORPASGAT' },
+    { username: 'yon461', role: 'JAJARAN SATUAN', jajaran: 'YON PARAKO 461 HLM' },
+    { username: 'yon471', role: 'JAJARAN SATUAN', jajaran: 'YON PARAKO 471 IWY' }
+];
+
+let db_inventory = JSON.parse(localStorage.getItem('db_inventory')) || [
+    { id: 1, jajaran: 'YON PARAKO 461 HLM', base: 'SENMU', kode: 'SM-001', nama_barang: 'SS2-V4', sub_nama_barang: 'Pindad', kaliber: '5.56 mm', satuan: 'Pucuk', awal: 100, masuk: 10, keluar: 5, akhir: 105, b: 100, rr: 5, rb: 0, keterangan: 'Siap Operasional' },
+    { id: 2, jajaran: 'YON PARAKO 461 HLM', base: 'ALPALSUS', kode: 'AP-001', nama_barang: 'Rompi Anti Peluru', sub_nama_barang: 'Level IV NII', sn_pn: 'SN-9921-X', satuan: 'Pcs', awal: 50, masuk: 0, keluar: 0, akhir: 50, b: 48, rr: 2, rb: 0, keterangan: 'Gudang Alfa' },
+    { id: 3, jajaran: 'YON PARAKO 471 IWY', base: 'RANMOR', no_reg: 'LA-01', no_lama: 'REG-102', no_baru: 'REG-471', merk_tipe: 'P6 ATAV', jenis: 'Rantis', tahun: 2021, no_rangka: 'RK-8821', no_mesin: 'MS-4412', b: 2, rr: 0, rb: 0, kondisi_persen: 100, cc: 2500, bbm: 'Pertadex', warna: 'Hijau TNI', hak_pakai: 'Denma', masa_kbnkb: '2028-12-12', proses: 'Lengkap', maju: 'Aktif', turun: '-', ukuran: 'R16', ban: 4, aki: 1, keterangan: 'Siaga tempur' }
+];
+
+let db_alokasi = JSON.parse(localStorage.getItem('db_alokasi')) || [];
+
+// Session User Aktif (Default Default Lvl 1 SLOG KORPASGAT)
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || db_users[0];
+
+// --- APP RUNTIME & CONTROLLER ---
+document.addEventListener("DOMContentLoaded", function() {
+    initUserSimulatorDropdown();
+    applyUserAccessRole();
+    renderAllTables();
+});
+
+function saveState() {
+    localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
+    localStorage.setItem('db_users', JSON.stringify(db_users));
+    localStorage.setItem('db_inventory', JSON.stringify(db_inventory));
+    localStorage.setItem('db_alokasi', JSON.stringify(db_alokasi));
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+}
+
+function initUserSimulatorDropdown() {
+    const simSel = document.getElementById('switch-user-sim');
+    simSel.innerHTML = '';
+    db_users.forEach(u => {
+        let opt = document.createElement('option');
+        opt.value = u.username;
+        opt.innerText = `${u.username} (${u.role === 'SLOG KORPASGAT' ? 'SLOG Lvl 1' : 'Satuan'})`;
+        if(u.username === currentUser.username) opt.selected = true;
+        simSel.appendChild(opt);
+    });
+}
+
+function simulateUserSwitch(username) {
+    const targetUser = db_users.find(u => u.username === username);
+    if(targetUser) {
+        currentUser = targetUser;
+        saveState();
+        applyUserAccessRole();
+        renderAllTables();
+        switchView('dashboard');
+    }
+}
+
+function applyUserAccessRole() {
+    document.getElementById('current-user-display').innerText = `${currentUser.jajaran} [${currentUser.role}]`;
+    const slogMenu = document.getElementById('slog-special-menu');
+    const satFilterArea = document.getElementById('satuan-filter-area');
+    const dlArea = document.getElementById('slog-download-area');
+
+    if(currentUser.role === 'SLOG KORPASGAT') {
+        slogMenu.classList.remove('d-none');
+        satFilterArea.classList.remove('d-none');
+        dlArea.innerHTML = `<button class="btn btn-sm btn-slog text-white" onclick="triggerSimulatedDownloadExcel()"><i class="fa-solid fa-file-excel"></i> Download Data Seluruh Jajaran (.xlsx)</button>`;
+        
+        // Populate filter jajaran di dashboard
+        const filterSel = document.getElementById('filter-jajaran-dashboard');
+        filterSel.innerHTML = '<option value="ALL">-- SEMUA JAJARAN SATUAN --</option>';
+        LIST_JAJARAN.forEach(j => {
+            if(j !== "SLOG KORPASGAT") filterSel.innerHTML += `<option value="${j}">${j}</option>`;
+        });
+        loadDashboardMonitorData("ALL");
+    } else {
+        slogMenu.classList.add('d-none');
+        satFilterArea.classList.add('d-none');
+        dlArea.innerHTML = '';
+        loadDashboardMonitorData(currentUser.jajaran);
+    }
+    
+    // Update Dropdown Pilihan Alokasi Satuan Tujuan
+    const alokasiTujuanSel = document.getElementById('alokasi-tujuan');
+    alokasiTujuanSel.innerHTML = '';
+    LIST_JAJARAN.forEach(j => {
+        if(j !== currentUser.jajaran) alokasiTujuanSel.innerHTML += `<option value="${j}">${j}</option>`;
+    });
+
+    updateAlokasiItemSelect(document.getElementById('alokasi-kategori').value);
+    updateNotificationBadges();
+    renderInputButtons();
+}
+
+function renderInputButtons() {
+    // Tombol Tambah Data Manual / Excel hanya muncul berdasarkan hak akses aturan korpasgat
+    const bSenmu = document.getElementById('btn-input-senmu-group');
+    const bAlpalsus = document.getElementById('btn-input-alpalsus-group');
+    const bRanmor = document.getElementById('btn-input-ranmor-group');
+    
+    const htmlBtn = (kat) => `
+        <button class="btn btn-sm btn-army me-2" onclick="openInputModal('${kat}')"><i class="fa-solid fa-plus"></i> Input Manual/Upload Excel</button>
+    `;
+
+    // Satuan Jajaran bisa menginput data manual atau excel miliknya sendiri
+    // SLOG KORPASGAT dapat mengedit data kekuatan laporan satuan jajaran
+    bSenmu.innerHTML = htmlBtn('SENMU');
+    bAlpalsus.innerHTML = htmlBtn('ALPALSUS');
+    bRanmor.innerHTML = htmlBtn('RANMOR');
+}
+
+function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(s => s.classList.add('d-none'));
+    document.querySelectorAll('.nav-link-military').forEach(l => l.classList.remove('active'));
+    
+    document.getElementById(`view-${viewId}`).classList.remove('d-none');
+    event?.currentTarget?.classList?.add('active');
+}
+
+// --- LOGIKA NOTIFIKASI & HITUNG ALOKASI ---
+function updateNotificationBadges() {
+    let pendingCount = 0;
+    if(currentUser.role === 'SLOG KORPASGAT') {
+        pendingCount = db_alokasi.filter(a => a.status === 'PENDING').length;
+    } else {
+        pendingCount = db_alokasi.filter(a => a.jajaran_tujuan === currentUser.jajaran && a.status === 'PENDING').length;
+    }
+    
+    const badge = document.getElementById('notif-count-badge');
+    if(pendingCount > 0) {
+        badge.innerText = pendingCount;
+        badge.classList.remove('d-none');
+    } else {
+        badge.classList.add('d-none');
+    }
+    document.getElementById('stat-pending-alokasi').innerText = db_alokasi.filter(a => a.status === 'PENDING').length;
+}
+
+// --- RENDER TABLES ENGINE ---
+function renderAllTables() {
+    renderSENMUTable();
+    renderALPALSUSTable();
+    renderRANMORTable();
+    renderAlokasiLog();
+    renderMasterItemsTable();
+    renderUsersTable();
+}
+
+function renderSENMUTable() {
+    const tbody = document.getElementById('tbody-senmu');
+    tbody.innerHTML = '';
+    
+    let filteredData = db_inventory.filter(i => i.base === 'SENMU');
+    if(currentUser.role !== 'SLOG KORPASGAT') {
+        filteredData = filteredData.filter(i => i.jajaran === currentUser.jajaran);
+    }
+    
+    filteredData.forEach((d, idx) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="text-center">${idx+1}</td>
+            <td class="text-center">${d.kode}</td>
+            <td>${d.nama_barang}</td>
+            <td>${d.sub_nama_barang || '-'}</td>
+            <td class="text-center">${d.kaliber || '-'}</td>
+            <td class="text-center">${d.satuan || ''}</td>
+            <td class="text-center font-monospace">${d.awal}</td>
+            <td class="text-center font-monospace text-success">+${d.masuk}</td>
+            <td class="text-center font-monospace text-danger">-${d.keluar}</td>
+            <td class="text-center font-monospace text-warning fw-bold">${d.akhir}</td>
+            <td class="text-center text-success">${d.b}</td>
+            <td class="text-center text-warning">${d.rr}</td>
+            <td class="text-center text-danger">${d.rb}</td>
+            <td>${d.keterangan || ''} ${currentUser.role === 'SLOG KORPASGAT' ? `<br><a href="#" class="text-info font-monospace" style="font-size:10px;" onclick="editLaporanSatuanDirect(${d.id}, 'SENMU')">[EDIT SLOG]</a>` : ''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderALPALSUSTable() {
+    const tbody = document.getElementById('tbody-alpalsus');
+    tbody.innerHTML = '';
+    
+    let filteredData = db_inventory.filter(i => i.base === 'ALPALSUS');
+    if(currentUser.role !== 'SLOG KORPASGAT') {
+        filteredData = filteredData.filter(i => i.jajaran === currentUser.jajaran);
+    }
+    
+    filteredData.forEach((d, idx) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="text-center">${idx+1}</td>
+            <td class="text-center">${d.kode}</td>
+            <td>${d.nama_barang}</td>
+            <td>${d.sub_nama_barang || '-'}</td>
+            <td class="text-center font-monospace">${d.sn_pn || '-'}</td>
+            <td class="text-center">${d.satuan || ''}</td>
+            <td class="text-center font-monospace">${d.awal}</td>
+            <td class="text-center font-monospace text-success">+${d.masuk}</td>
+            <td class="text-center font-monospace text-danger">-${d.keluar}</td>
+            <td class="text-center font-monospace text-warning fw-bold">${d.akhir}</td>
+            <td class="text-center text-success">${d.b}</td>
+            <td class="text-center text-warning">${d.rr}</td>
+            <td class="text-center text-danger">${d.rb}</td>
+            <td>${d.keterangan || ''} ${currentUser.role === 'SLOG KORPASGAT' ? `<br><a href="#" class="text-info font-monospace" style="font-size:10px;" onclick="editLaporanSatuanDirect(${d.id}, 'ALPALSUS')">[EDIT SLOG]</a>` : ''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderRANMORTable() {
+    const tbody = document.getElementById('tbody-ranmor');
+    tbody.innerHTML = '';
+    
+    let filteredData = db_inventory.filter(i => i.base === 'RANMOR');
+    if(currentUser.role !== 'SLOG KORPASGAT') {
+        filteredData = filteredData.filter(i => i.jajaran === currentUser.jajaran);
+    }
+    
+    filteredData.forEach((d, idx) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="text-center">${idx+1}</td>
+            <td>${d.no_reg || '-'}</td>
+            <td>${d.no_lama || '-'}</td>
+            <td>${d.no_baru || '-'}</td>
+            <td><strong>${d.merk_tipe}</strong></td>
+            <td>${d.jenis || '-'}</td>
+            <td>${d.tahun || '-'}</td>
+            <td>${d.no_rangka || '-'}</td>
+            <td>${d.no_mesin || '-'}</td>
+            <td class="text-center text-success">${d.b}</td>
+            <td class="text-center text-warning">${d.rr}</td>
+            <td class="text-center text-danger">${d.rb}</td>
+            <td class="text-center font-monospace fw-bold">${d.kondisi_persen}%</td>
+            <td>${d.cc || '-'}</td>
+            <td>${d.bbm || '-'}</td>
+            <td>${d.warna || '-'}</td>
+            <td>${d.hak_pakai || '-'}</td>
+            <td>${d.masa_kbnkb || '-'}</td>
+            <td>${d.proses || '-'}</td>
+            <td>${d.maju || '-'}</td>
+            <td>${d.turun || '-'}</td>
+            <td>${d.ukuran || '-'}</td>
+            <td>${d.ban || '-'}</td>
+            <td>${d.aki || '-'}</td>
+            <td>${d.keterangan || ''} ${currentUser.role === 'SLOG KORPASGAT' ? `<br><a href="#" class="text-info font-monospace" style="font-size:10px;" onclick="editLaporanSatuanDirect(${d.id}, 'RANMOR')">[EDIT SLOG]</a>` : ''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// --- LOG MONITORING DASHBOARD ---
+function loadDashboardMonitorData(targetJajaran) {
+    const desc = document.getElementById('dashboard-desc');
+    const tbl = document.getElementById('table-dashboard-monitor');
+    
+    document.getElementById('stat-total-master').innerText = db_master_items.length;
+    document.getElementById('stat-total-jajaran').innerText = LIST_JAJARAN.length - 1;
+    
+    if(currentUser.role === 'SLOG KORPASGAT') {
+        document.querySelector('.id-slog-stats').classList.remove('d-none');
+        desc.innerText = `Memantau logistik keluar/masuk seluruh jajaran komando satuan KORPASGAT.`;
+    } else {
+        document.querySelector('.id-slog-stats').classList.add('d-none');
+        desc.innerText = `Menampilkan Laporan Kekuatan internal logistik komando satuan sendiri. Anda tidak memiliki izin hak akses memonitoring laporan kekuatan jajaran satuan lain.`;
+    }
+
+    let filterInventory = db_inventory;
+    if(targetJajaran !== "ALL") {
+        filterInventory = db_inventory.filter(i => i.jajaran === targetJajaran);
+    }
+
+    tbl.innerHTML = `
+        <thead>
+            <tr>
+                <th>Penempatan Jajaran</th><th>Kategori Base</th><th>Identitas Barang</th><th>Volume Total Akhir</th><th>Kondisi (Baik / RR / RB)</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${filterInventory.length === 0 ? '<tr><td colspan="5">Belum ada data kekuatan laporan terinput.</td></tr>' : ''}
+            ${filterInventory.map(i => `
+                <tr>
+                    <td><strong>${i.jajaran}</strong></td>
+                    <td><span class="badge bg-secondary">${i.base}</span></td>
+                    <td class="text-start">${i.base === 'RANMOR' ? i.merk_tipe : i.nama_barang} (${i.kode || i.no_reg || '-'})</td>
+                    <td class="font-monospace fw-bold text-warning">${i.base === 'RANMOR' ? (i.b + i.rr + i.rb) : i.akhir}</td>
+                    <td><span class="text-success">${i.b} B</span> / <span class="text-warning">${i.rr} RR</span> / <span class="text-danger">${i.rb} RB</span></td>
+                </tr>
+            `).join('')}
+        </tbody>
+    `;
+}
+
+// --- MANAJEMEN MASTER BARANG (SLOG PRIVILEGES) ---
+function renderMasterItemsTable() {
+    const tbody = document.getElementById('tbody-master-items');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    db_master_items.forEach((m, idx) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td><span class="badge bg-success">${m.base}</span></td>
+            <td class="font-monospace">${m.kode}</td>
+            <td><strong>${m.nama}</strong></td>
+            <td>${m.sub || '-'}</td>
+            <td>
+                <button class="btn btn-xs btn-outline-warning py-0 px-1" onclick="editMasterItem(${idx})"><i class="fa-solid fa-edit"></i></button>
+                <button class="btn btn-xs btn-outline-danger py-0 px-1" onclick="deleteMasterItem(${idx})"><i class="fa-solid fa-trash"></i></button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function handleSaveMasterItem(e) {
+    e.preventDefault();
+    const idx = document.getElementById('master-item-idx').value;
+    const base = document.getElementById('master-kategori').value;
+    const kode = document.getElementById('master-kode').value;
+    const nama = document.getElementById('master-nama').value;
+    const sub = document.getElementById('master-sub').value;
+
+    if(idx === "") {
+        // Tambah master item barang baru
+        db_master_items.push({ id: Date.now(), base, kode, nama, sub });
+    } else {
+        // Edit item master
+        db_master_items[idx] = { ...db_master_items[idx], base, kode, nama, sub };
+    }
+    saveState();
+    renderAllTables();
+    resetMasterItemForm();
+    applyUserAccessRole();
+    alert("Data Master Item Berhasil Disimpan.");
+}
+
+function editMasterItem(idx) {
+    const item = db_master_items[idx];
+    document.getElementById('master-item-idx').value = idx;
+    document.getElementById('master-kategori').value = item.base;
+    document.getElementById('master-kode').value = item.kode;
+    document.getElementById('master-nama').value = item.nama;
+    document.getElementById('master-sub').value = item.sub;
+    
+    document.getElementById('master-form-title').innerText = "Edit Data Master Item";
+    document.getElementById('btn-save-master').innerText = "Simpan Perubahan";
+    document.getElementById('btn-cancel-edit-master').classList.remove('d-none');
+}
+
+function resetMasterItemForm() {
+    document.getElementById('form-master-item').reset();
+    document.getElementById('master-item-idx').value = "";
+    document.getElementById('master-form-title').innerText = "Tambah Master Item Baru";
+    document.getElementById('btn-save-master').innerText = "Simpan Item Master";
+    document.getElementById('btn-cancel-edit-master').classList.add('d-none');
+}
+
+function deleteMasterItem(idx) {
+    if(confirm("Apakah Anda yakin ingin menghapus master item barang ini?")) {
+        db_master_items.splice(idx, 1);
+        saveState();
+        renderAllTables();
+        applyUserAccessRole();
+    }
+}
+
+// --- MANAJEMEN PENGGUNA JAJARAN (SLOG PRIVILEGES) ---
+function renderUsersTable() {
+    const tbody = document.getElementById('tbody-users-list');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    
+    // Populate select jajaran di form user management
+    const usrJajaranSel = document.getElementById('user-jajaran');
+    usrJajaranSel.innerHTML = '';
+    LIST_JAJARAN.forEach(j => {
+        usrJajaranSel.innerHTML += `<option value="${j}">${j}</option>`;
+    });
+
+    db_users.forEach((u, idx) => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="font-monospace text-warning">${u.username}</td>
+            <td><strong>${u.jajaran}</strong></td>
+            <td><span class="badge ${u.role==='SLOG KORPASGAT'?'bg-danger':'bg-dark'}">${u.role}</span></td>
+            <td>
+                ${u.username === 'slog' ? '<span class="text-muted">Superadmin</span>' : `
+                    <button class="btn btn-xs btn-outline-warning py-0 px-1" onclick="editUserAccount(${idx})"><i class="fa-solid fa-key"></i> Edit</button>
+                    <button class="btn btn-xs btn-outline-danger py-0 px-1" onclick="deleteUserAccount(${idx})"><i class="fa-solid fa-trash"></i> Hapus</button>
+                `}
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function handleSaveUser(e) {
+    e.preventDefault();
+    const idx = document.getElementById('user-idx').value;
+    const user = document.getElementById('user-username').value;
+    const pass = document.getElementById('user-password').value;
+    const jaj = document.getElementById('user-jajaran').value;
+    const role = (jaj === "SLOG KORPASGAT") ? "SLOG KORPASGAT" : "JAJARAN SATUAN";
+
+    if(idx === "") {
+        // Buat username & password baru
+        if(db_users.some(u => u.username === user)) return alert("Username sudah terdaftar!");
+        db_users.push({ username: user, role, jajaran: jaj });
+    } else {
+        // Edit username/password kredensial
+        db_users[idx] = { ...db_users[idx], username: user, role, jajaran: jaj };
+    }
+    saveState();
+    initUserSimulatorDropdown();
+    renderAllTables();
+    resetUserForm();
+    alert("Kredensial Pengguna Jajaran Berhasil Diperbarui.");
+}
+
+function editUserAccount(idx) {
+    const u = db_users[idx];
+    document.getElementById('user-idx').value = idx;
+    document.getElementById('user-username').value = u.username;
+    document.getElementById('user-password').placeholder = "Ketik password baru...";
+    document.getElementById('user-jajaran').value = u.jajaran;
+    
+    document.getElementById('user-form-title').innerText = "Edit Kredensial User";
+    document.getElementById('btn-cancel-edit-user').classList.remove('d-none');
+}
+
+function resetUserForm() {
+    document.getElementById('form-manage-user').reset();
+    document.getElementById('user-idx').value = "";
+    document.getElementById('user-form-title').innerText = "Buat Akun Jajaran Baru";
+    document.getElementById('user-password').placeholder = "Ketik password...";
+    document.getElementById('btn-cancel-edit-user').classList.add('d-none');
+}
+
+function deleteUserAccount(idx) {
+    if(confirm("Hapus akun kredensial jajaran ini?")) {
+        db_users.splice(idx, 1);
+        saveState();
+        initUserSimulatorDropdown();
+        renderAllTables();
+    }
+}
+
+// --- INPUT LAPORAN MANUAL / EXCEL SATUAN ---
+function openInputModal(kategori) {
+    document.getElementById('entry-kategori').value = kategori;
+    document.getElementById('entry-edit-id').value = "";
+    document.getElementById('modalInputTitle').innerText = `Laporan Formulir Base Kategori: ${kategori}`;
+    
+    const fieldsArea = document.getElementById('dynamic-fields-area');
+    fieldsArea.innerHTML = '';
+
+    // Menampilkan susunan form manual sesuai standarisasi kolom inventaris Korpasgat
+    if(kategori === 'SENMU') {
+        fieldsArea.innerHTML = `
+            <div class="col-md-6"><label class="form-label">Master Item Barang</label><select class="form-select bg-dark text-white border-secondary" id="form-inp-item-id" onchange="autofillMasterData(this.value, 'SENMU')" required></select></div>
+            <div class="col-md-6"><label class="form-label">Kode</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-kode" readonly></div>
+            <div class="col-md-6"><label class="form-label">Nama Barang</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-nama" readonly></div>
+            <div class="col-md-6"><label class="form-label">Sub Nama Barang</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-sub" readonly></div>
+            <div class="col-md-4"><label class="form-label">Kaliber</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-kaliber" required></div>
+            <div class="col-md-4"><label class="form-label">Satuan</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-satuan" placeholder="Pucuk/Butir" required></div>
+            <div class="col-md-4"><label class="form-label">Jumlah Awal</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-awal" value="0" required></div>
+            <div class="col-md-4"><label class="form-label">Masuk</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-masuk" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Keluar</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-keluar" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Kondisi Baik (B)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-b" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Rusak Ringan (RR)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-rr" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Rusak Berat (RB)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-rb" value="0"></div>
+            <div class="col-md-12"><label class="form-label">Keterangan</label><textarea class="form-control bg-dark text-white border-secondary" id="inp-ket"></textarea></div>
+        `;
+    } else if(kategori === 'ALPALSUS') {
+        fieldsArea.innerHTML = `
+            <div class="col-md-6"><label class="form-label">Master Item Barang</label><select class="form-select bg-dark text-white border-secondary" id="form-inp-item-id" onchange="autofillMasterData(this.value, 'ALPALSUS')" required></select></div>
+            <div class="col-md-6"><label class="form-label">Kode</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-kode" readonly></div>
+            <div class="col-md-6"><label class="form-label">Nama Barang</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-nama" readonly></div>
+            <div class="col-md-6"><label class="form-label">Sub Nama Barang</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-sub" readonly></div>
+            <div class="col-md-4"><label class="form-label">SN / PN</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-sn" placeholder="Serial Number" required></div>
+            <div class="col-md-4"><label class="form-label">Satuan</label><input type="text" class="form-control bg-dark text-white border-secondary" id="inp-satuan" placeholder="Pcs/Set" required></div>
+            <div class="col-md-4"><label class="form-label">Jumlah Awal</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-awal" value="0" required></div>
+            <div class="col-md-4"><label class="form-label">Masuk</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-masuk" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Keluar</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-keluar" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Kondisi Baik (B)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-b" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Rusak Ringan (RR)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-rr" value="0"></div>
+            <div class="col-md-4"><label class="form-label">Rusak Berat (RB)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="inp-rb" value="0"></div>
+            <div class="col-md-12"><label class="form-label">Keterangan</label><textarea class="form-control bg-dark text-white border-secondary" id="inp-ket"></textarea></div>
+        `;
+    } else if(kategori === 'RANMOR') {
+        fieldsArea.innerHTML = `
+            <div class="col-md-3"><label class="form-label">No Reg</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-noreg" required></div>
+            <div class="col-md-3"><label class="form-label">No Lama</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-nolama"></div>
+            <div class="col-md-3"><label class="form-label">No Baru</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-nobaru"></div>
+            <div class="col-md-3"><label class="form-label">Merk Tipe</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-merktipe" placeholder="Contoh: P6 ATAV" required></div>
+            <div class="col-md-3"><label class="form-label">Jenis</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-jenis"></div>
+            <div class="col-md-2"><label class="form-label">Tahun</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-tahun" value="2026"></div>
+            <div class="col-md-3"><label class="form-label">No Rangka</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-rangka"></div>
+            <div class="col-md-4"><label class="form-label">No Mesin</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-mesin"></div>
+            <div class="col-md-2"><label class="form-label">Baik (B)</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-b" value="1"></div>
+            <div class="col-md-2"><label class="form-label">RR</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-rr" value="0"></div>
+            <div class="col-md-2"><label class="form-label">RB</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-rb" value="0"></div>
+            <div class="col-md-2"><label class="form-label">Kondisi %</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-persen" value="100"></div>
+            <div class="col-md-2"><label class="form-label">CC</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-cc"></div>
+            <div class="col-md-2"><label class="form-label">BBM</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-bbm" placeholder="Diesel/Bensin"></div>
+            <div class="col-md-2"><label class="form-label">Warna</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-warna" value="Hijau TNI"></div>
+            <div class="col-md-4"><label class="form-label">Hak Pakai</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-hakpakai"></div>
+            <div class="col-md-3"><label class="form-label">Masa KBNKB</label><input type="date" class="form-control bg-dark text-white border-secondary" id="rm-kbnkb"></div>
+            <div class="col-md-3"><label class="form-label">Proses</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-proses"></div>
+            <div class="col-md-2"><label class="form-label">Maju</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-maju"></div>
+            <div class="col-md-2"><label class="form-label">Turun</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-turun"></div>
+            <div class="col-md-3"><label class="form-label">Ukuran Ban</label><input type="text" class="form-control bg-dark text-white border-secondary" id="rm-banuk"></div>
+            <div class="col-md-2"><label class="form-label">Jml Ban</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-banjml" value="4"></div>
+            <div class="col-md-2"><label class="form-label">Aki</label><input type="number" class="form-control bg-dark text-white border-secondary" id="rm-aki" value="1"></div>
+            <div class="col-md-12"><label class="form-label">Keterangan</label><textarea class="form-control bg-dark text-white border-secondary" id="rm-ket"></textarea></div>
+        `;
+    }
+
+    // Populate dropdown opsi item master barang
+    if(kategori !== 'RANMOR') {
+        const itemSel = document.getElementById('form-inp-item-id');
+        itemSel.innerHTML = '<option value="">-- PILIH BARANG MASTER --</option>';
+        db_master_items.filter(m => m.base === kategori).forEach(m => {
+            itemSel.innerHTML += `<option value="${m.id}">${m.nama} [${m.kode}]</option>`;
+        });
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('modalInputData'));
+    modal.show();
+}
+
+function autofillMasterData(masterId, kategori) {
+    const item = db_master_items.find(m => m.id == masterId);
+    if(item) {
+        document.getElementById('inp-kode').value = item.kode;
+        document.getElementById('inp-nama').value = item.nama;
+        document.getElementById('inp-sub').value = item.sub;
+    }
+}
+
+function handleSaveManualData(e) {
+    e.preventDefault();
+    const kat = document.getElementById('entry-kategori').value;
+    const editId = document.getElementById('entry-edit-id').value;
+    
+    // Penentuan Target Satuan (Jika SLOG yang mengedit/menginput, maka bisa mengalokasikan ke satuan jajaran mana saja)
+    let targetJajaran = currentUser.jajaran;
+    if(currentUser.role === 'SLOG KORPASGAT' && editId !== "") {
+        const existingRecord = db_inventory.find(i => i.id == editId);
+        if(existingRecord) targetJajaran = existingRecord.jajaran;
+    }
+
+    let payload = {
+        id: editId === "" ? Date.now() : parseInt(editId),
+        jajaran: targetJajaran,
+        base: kat
+    };
+
+    if(kat === 'SENMU') {
+        let awal = parseInt(document.getElementById('inp-awal').value) || 0;
+        let masuk = parseInt(document.getElementById('inp-masuk').value) || 0;
+        let keluar = parseInt(document.getElementById('inp-keluar').value) || 0;
+        payload = {
+            ...payload,
+            kode: document.getElementById('inp-kode').value,
+            nama_barang: document.getElementById('inp-nama').value,
+            sub_nama_barang: document.getElementById('inp-sub').value,
+            kaliber: document.getElementById('inp-kaliber').value,
+            satuan: document.getElementById('inp-satuan').value,
+            awal, masuk, keluar,
+            akhir: (awal + masuk - keluar),
+            b: parseInt(document.getElementById('inp-b').value) || 0,
+            rr: parseInt(document.getElementById('inp-rr').value) || 0,
+            rb: parseInt(document.getElementById('inp-rb').value) || 0,
+            keterangan: document.getElementById('inp-ket').value
+        };
+    } else if(kat === 'ALPALSUS') {
+        let awal = parseInt(document.getElementById('inp-awal').value) || 0;
+        let masuk = parseInt(document.getElementById('inp-masuk').value) || 0;
+        let keluar = parseInt(document.getElementById('inp-keluar').value) || 0;
+        payload = {
+            ...payload,
+            kode: document.getElementById('inp-kode').value,
+            nama_barang: document.getElementById('inp-nama').value,
+            sub_nama_barang: document.getElementById('inp-sub').value,
+            sn_pn: document.getElementById('inp-sn').value,
+            satuan: document.getElementById('inp-satuan').value,
+            awal, masuk, keluar,
+            akhir: (awal + masuk - keluar),
+            b: parseInt(document.getElementById('inp-b').value) || 0,
+            rr: parseInt(document.getElementById('inp-rr').value) || 0,
+            rb: parseInt(document.getElementById('inp-rb').value) || 0,
+            keterangan: document.getElementById('inp-ket').value
+        };
+    } else if(kat === 'RANMOR') {
+        payload = {
+            ...payload,
+            no_reg: document.getElementById('rm-noreg').value,
+            no_lama: document.getElementById('rm-nolama').value,
+            no_baru: document.getElementById('rm-nobaru').value,
+            merk_tipe: document.getElementById('rm-merktipe').value,
+            jenis: document.getElementById('rm-jenis').value,
+            tahun: document.getElementById('rm-tahun').value,
+            no_rangka: document.getElementById('rm-rangka').value,
+            no_mesin: document.getElementById('rm-mesin').value,
+            b: parseInt(document.getElementById('rm-b').value) || 0,
+            rr: parseInt(document.getElementById('rm-rr').value) || 0,
+            rb: parseInt(document.getElementById('rm-rb').value) || 0,
+            kondisi_persen: document.getElementById('rm-persen').value,
+            cc: document.getElementById('rm-cc').value,
+            bbm: document.getElementById('rm-bbm').value,
+            warna: document.getElementById('rm-warna').value,
+            hak_pakai: document.getElementById('rm-hakpakai').value,
+            masa_kbnkb: document.getElementById('rm-kbnkb').value,
+            proses: document.getElementById('rm-proses').value,
+            maju: document.getElementById('rm-maju').value,
+            turun: document.getElementById('rm-turun').value,
+            ukuran: document.getElementById('rm-banuk').value,
+            ban: document.getElementById('rm-banjml').value,
+            aki: document.getElementById('rm-aki').value,
+            keterangan: document.getElementById('rm-ket').value
+        };
+    }
+
+    if(editId === "") {
+        db_inventory.push(payload);
+    } else {
+        const idx = db_inventory.findIndex(i => i.id == editId);
+        if(idx !== -1) db_inventory[idx] = payload;
+    }
+
+    saveState();
+    renderAllTables();
+    applyUserAccessRole();
+    
+    // Tutup Modal Bootstrap
+    bootstrap.Modal.getInstance(document.getElementById('modalInputData')).hide();
+    alert("Laporan Kekuatan Data Logistik Berhasil Diperbarui.");
+}
+
+// SLOG KORPASGAT dapat mengedit data kekuatan laporan satuan jajaran secara langsung
+function editLaporanSatuanDirect(id, kategori) {
+    openInputModal(kategori);
+    document.getElementById('entry-edit-id').value = id;
+    document.getElementById('modalInputTitle').innerText = `[MODAL REVISI SLOG LEVEL 1] Edit Data ID: ${id}`;
+    
+    const d = db_inventory.find(i => i.id == id);
+    if(!d) return;
+
+    setTimeout(() => {
+        if(kategori === 'SENMU' || kategori === 'ALPALSUS') {
+            document.getElementById('inp-kode').value = d.kode;
+            document.getElementById('inp-nama').value = d.nama_barang;
+            document.getElementById('inp-sub').value = d.sub_nama_barang;
+            document.getElementById('inp-satuan').value = d.satuan;
+            document.getElementById('inp-awal').value = d.awal;
+            document.getElementById('inp-masuk').value = d.masuk;
+            document.getElementById('inp-keluar').value = d.keluar;
+            document.getElementById('inp-b').value = d.b;
+            document.getElementById('inp-rr').value = d.rr;
+            document.getElementById('inp-rb').value = d.rb;
+            document.getElementById('inp-ket').value = d.keterangan;
+            if(kategori === 'SENMU') document.getElementById('inp-kaliber').value = d.kaliber;
+            if(kategori === 'ALPALSUS') document.getElementById('inp-sn').value = d.sn_pn;
+        } else {
+            document.getElementById('rm-noreg').value = d.no_reg;
+            document.getElementById('rm-nolama').value = d.no_lama;
+            document.getElementById('rm-nobaru').value = d.no_baru;
+            document.getElementById('rm-merktipe').value = d.merk_tipe;
+            document.getElementById('rm-jenis').value = d.jenis;
+            document.getElementById('rm-tahun').value = d.tahun;
+            document.getElementById('rm-rangka').value = d.no_rangka;
+            document.getElementById('rm-mesin').value = d.no_mesin;
+            document.getElementById('rm-b').value = d.b;
+            document.getElementById('rm-rr').value = d.rr;
+            document.getElementById('rm-rb').value = d.rb;
+            document.getElementById('rm-persen').value = d.kondisi_persen;
+            document.getElementById('rm-cc').value = d.cc;
+            document.getElementById('rm-bbm').value = d.bbm;
+            document.getElementById('rm-warna').value = d.warna;
+            document.getElementById('rm-hakpakai').value = d.hak_pakai;
+            document.getElementById('rm-kbnkb').value = d.masa_kbnkb;
+            document.getElementById('rm-proses').value = d.proses;
+            document.getElementById('rm-maju').value = d.maju;
+            document.getElementById('rm-turun').value = d.turun;
+            document.getElementById('rm-banuk').value = d.ukuran;
+            document.getElementById('rm-banjml').value = d.ban;
+            document.getElementById('rm-aki').value = d.aki;
+            document.getElementById('rm-ket').value = d.keterangan;
+        }
+    }, 200);
+}
+
+// SIMULATOR BATCH IMPORT EXCEL FILE
+function triggerSimulateExcelUpload() {
+    const fileInp = document.getElementById('simulated-excel-file');
+    const kat = document.getElementById('entry-kategori').value;
+    
+    if(!fileInp.value) return alert("Pilih file spreadsheet .xlsx terlebih dahulu!");
+    
+    // Injeksi otomatis data simulasi konversi dari file excel jajaran jajaran korpasgat
+    if(kat === 'SENMU') {
+        db_inventory.push({ id: Date.now(), jajaran: currentUser.jajaran, base: 'SENMU', kode: 'SM-EXCEL', nama_barang: 'Pistol G2 Combat', sub_nama_barang: 'Pindad', kaliber: '9x19mm', satuan: 'Pucuk', awal: 20, masuk: 5, keluar: 0, akhir: 25, b: 25, rr: 0, rb: 0, keterangan: 'Import Excel Satuan' });
+    } else if(kat === 'ALPALSUS') {
+        db_inventory.push({ id: Date.now(), jajaran: currentUser.jajaran, base: 'ALPALSUS', kode: 'AP-EXCEL', nama_barang: 'Helm Kevlar Tactical', sub_nama_barang: 'MICH 2000', sn_pn: 'PN-8812', satuan: 'Buah', awal: 40, masuk: 10, keluar: 2, akhir: 48, b: 45, rr: 3, rb: 0, keterangan: 'Import Batch Sukses' });
+    } else {
+        db_inventory.push({ id: Date.now(), jajaran: currentUser.jajaran, base: 'RANMOR', no_reg: 'EX-REG', merk_tipe: 'M3 Amphibious Rig', jenis: 'Ranzi', tahun: 2019, b: 1, rr: 0, rb: 0, kondisi_persen: 100, keterangan: 'Batch Excel Ranmor' });
+    }
+    
+    saveState();
+    renderAllTables();
+    applyUserAccessRole();
+    bootstrap.Modal.getInstance(document.getElementById('modalInputData')).hide();
+    alert(`File Excel ${fileInp.files[0].name} Berhasil diekstraksi ke basis data internal ${currentUser.jajaran}!`);
+}
+
+// --- DISTRIBUSI ALOKASI & REALOKASI ANTAR JAJARAN ---
+function updateAlokasiItemSelect(kategori) {
+    const itemSel = document.getElementById('alokasi-item');
+    itemSel.innerHTML = '';
+    
+    // Ambil daftar inventory yang dimiliki oleh jajaran asal/aktif saat ini untuk direalokasikan
+    let avItems = db_inventory.filter(i => i.jajaran === currentUser.jajaran && i.base === kategori);
+    
+    // Jika SLOG (Level 1), bisa langsung menunjuk alokasi dari master items pusat
+    if(currentUser.role === 'SLOG KORPASGAT') {
+        db_master_items.filter(m => m.base === kategori).forEach(m => {
+            itemSel.innerHTML += `<option value="${m.nama} [${m.kode}]">${m.nama} [${m.kode}]</option>`;
+        });
+    } else {
+        avItems.forEach(i => {
+            let label = i.base === 'RANMOR' ? i.merk_tipe : i.nama_barang;
+            itemSel.innerHTML += `<option value="${label}">${label} (Stok: ${i.base==='RANMOR'?(i.b+i.rr+i.rb):i.akhir})</option>`;
+        });
+    }
+    if(itemSel.innerHTML === '') itemSel.innerHTML = '<option value="">-- Stok Kosong / Tidak Tersedia --</option>';
+}
+
+function handleKirimAlokasi(e) {
+    e.preventDefault();
+    const kat = document.getElementById('alokasi-kategori').value;
+    const item = document.getElementById('alokasi-item').value;
+    const tujuan = document.getElementById('alokasi-tujuan').value;
+    const jml = parseInt(document.getElementById('alokasi-jumlah').value) || 1;
+
+    if(!item || item.includes("Stok Kosong")) return alert("Item logistik tidak valid!");
+
+    db_alokasi.push({
+        id: Date.now(),
+        asal: currentUser.jajaran,
+        jajaran_tujuan: tujuan,
+        base: kat,
+        barang: item,
+        jumlah: jml,
+        status: 'PENDING'
+    });
+
+    saveState();
+    renderAllTables();
+    updateNotificationBadges();
+    document.getElementById('form-alokasi').reset();
+    alert(`Permintaan alokasi berhasil dikirimkan ke jajaran ${tujuan}. Notifikasi waktu nyata telah diteruskan.`);
+}
+
+function renderAlokasiLog() {
+    const tbody = document.getElementById('tbody-log-alokasi');
+    tbody.innerHTML = '';
+    
+    let filteredAlokasi = db_alokasi;
+    // Satuan Jajaran hanya dapat melihat data notifikasi / log alokasi miliknya sendiri
+    if(currentUser.role !== 'SLOG KORPASGAT') {
+        filteredAlokasi = db_alokasi.filter(a => a.asal === currentUser.jajaran || a.jajaran_tujuan === currentUser.jajaran);
+    }
+
+    filteredAlokasi.forEach(a => {
+        let tr = document.createElement('tr');
+        
+        // Cek Hak Akses Validasi Approve/Reject (Hanya jajaran tujuan atau SLOG Lvl 1 yang dapat mengeksekusi)
+        let aksiHtml = `<span class="text-muted">No Action</span>`;
+        if(a.status === 'PENDING') {
+            if(currentUser.jajaran === a.jajaran_tujuan || currentUser.role === 'SLOG KORPASGAT') {
+                aksiHtml = `
+                    <button class="btn btn-xs btn-success py-0 px-1 font-monospace" onclick="verifyAlokasi(${a.id}, 'APPROVED')" style="font-size:10px;">APPROVE</button>
+                    <button class="btn btn-xs btn-danger py-0 px-1 font-monospace" onclick="verifyAlokasi(${a.id}, 'REJECTED')" style="font-size:10px;">REJECT</button>
+                `;
+            } else {
+                aksiHtml = `<span class="text-warning" style="font-size:10px;"><i class="fa-solid fa-clock"></i> Menunggu Konfirmasi</span>`;
+            }
+        } else {
+            aksiHtml = `<span class="text-muted" style="font-size:10px;">Selesai di-Review</span>`;
+        }
+
+        tr.innerHTML = `
+            <td>${a.asal}</td>
+            <td><strong>${a.jajaran_tujuan}</strong></td>
+            <td><span class="badge bg-secondary">${a.base}</span></td>
+            <td class="text-start">${a.barang}</td>
+            <td class="font-monospace fw-bold">${a.jumlah}</td>
+            <td><span class="status-${a.status.toLowerCase()}">${a.status}</span></td>
+            <td>${aksiHtml}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function verifyAlokasi(id, tindakan) {
+    const idx = db_alokasi.findIndex(a => a.id == id);
+    if(idx === -1) return;
+    
+    db_alokasi[idx].status = tindakan;
+    
+    // Jika di-Approve, lakukan pengurangan otomatis pada stok mutasi asal dan penambahan ke jajaran tujuan
+    if(tindakan === 'APPROVED') {
+        const alok = db_alokasi[idx];
+        
+        // Simulasikan mutasi entri barang masuk ke jajaran tujuan
+        if(alok.base !== 'RANMOR') {
+            db_inventory.push({
+                id: Date.now() + 1,
+                jajaran: alok.jajaran_tujuan,
+                base: alok.base,
+                kode: 'MUTASI-IN',
+                nama_barang: alok.barang.split('[')[0].trim(),
+                awal: 0, masuk: alok.jumlah, keluar: 0, akhir: alok.jumlah,
+                b: alok.jumlah, rr: 0, rb: 0,
+                keterangan: `Alokasi masuk dari ${alok.asal}`
+            });
+            
+            // Kurangi stok jajaran asal jika bukan dari gudang pusat SLOG
+            if(alok.asal !== "SLOG KORPASGAT") {
+                db_inventory.push({
+                    id: Date.now() + 2,
+                    jajaran: alok.asal,
+                    base: alok.base,
+                    kode: 'MUTASI-OUT',
+                    nama_barang: alok.barang.split('[')[0].trim(),
+                    awal: 0, masuk: 0, keluar: alok.jumlah, akhir: -alok.jumlah,
+                    b: -alok.jumlah, rr: 0, rb: 0,
+                    keterangan: `Didistribusikan ke ${alok.jajaran_tujuan}`
+                });
+            }
+        } else {
+            // Logika Mutasi Ranmor Transfer Hak Pakai Unit Komando Satuan
+            db_inventory.push({
+                id: Date.now() + 3,
+                jajaran: alok.jajaran_tujuan,
+                base: 'RANMOR',
+                merk_tipe: alok.barang,
+                b: alok.jumlah, rr: 0, rb: 0, kondisi_persen: 100,
+                keterangan: `Mutasi Unit Ranmor dari ${alok.asal}`
+            });
+        }
+    }
+
+    saveState();
+    renderAllTables();
+    applyUserAccessRole();
+    alert(`Transaksi Distribusi Berhasil di-${tindakan}`);
+}
+
+// --- SIMULASI DOWNLOAD EXCEL (.XLSX) ---
+function triggerSimulatedDownloadExcel() {
+    alert("Sistem memproses kompilasi data laporan seluruh jajaran korpasgat...\n\nBerkas file 'Laporan_Inventory_Seluruh_Jajaran_Korpasgat.xlsx' berhasil diunduh ke direktori lokal komputer Anda.");
+}
+
+function logout() {
+    alert("Sesi logistik diamankan. Keluar dari sistem.");
+}
+</script>
+</body>
+</html>
