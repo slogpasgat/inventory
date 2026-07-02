@@ -19,7 +19,6 @@
         .table-military { background-color: #20261b !important; font-size: 12px; border-color: #3d4a34 !important; }
         .table-military th { background-color: #2c3626 !important; color: #ffc107 !important; text-align: center; vertical-align: middle; white-space: nowrap; }
         .table-military td { color: #ffffff !important; vertical-align: middle; border-color: #3d4a34 !important; background-color: #1d2218 !important; }
-        .table-military td strong { color: #ffffff !important; }
         
         .table-scroll-container { max-height: 500px; overflow: auto; border: 1px solid #3d4a34; }
         .min-width-table { min-width: 1200px; }
@@ -93,7 +92,7 @@
                 </div>
             </section>
 
-            <!-- VIEW: CATEGORY VIEWS (SENMU, ALPALSUS, RANMOR) -->
+            <!-- VIEW: CATEGORY (SENMU, ALPALSUS, RANMOR) -->
             <section id="view-category" class="view-section d-none">
                 <h3 id="category-title" class="text-warning text-uppercase border-bottom border-secondary pb-2 mb-4">Kategori</h3>
                 <div class="card card-tactical p-3">
@@ -134,7 +133,8 @@
                                 <input type="text" class="form-control mb-2" id="m-spec">
                                 <label class="form-label">6. Satuan</label>
                                 <input type="text" class="form-control mb-3" id="m-satuan" required>
-                                <button type="submit" class="btn btn-slog w-100">SIMPAN MASTER</button>
+                                <button type="submit" class="btn btn-slog w-100" id="btn-save-master">SIMPAN MASTER</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-master" onclick="resetMasterItemForm()">BATAL</button>
                             </form>
                         </div>
                     </div>
@@ -172,14 +172,14 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card card-tactical p-4">
-                            <h5 class="text-warning mb-3">Buat Akses (7 Kolom)</h5>
-                            <form onsubmit="handleSaveUser(event)">
-                                <input type="hidden" id="u-idx">
+                            <h5 class="text-warning mb-3" id="user-form-title">Buat Akses (7 Kolom)</h5>
+                            <form id="form-manage-user" onsubmit="handleSaveUser(event)">
+                                <input type="hidden" id="u-idx" value="">
                                 <label class="form-label">1. Nama Satuan</label>
                                 <input type="text" class="form-control mb-2" id="u-satuan" required>
                                 <div class="row">
                                     <div class="col-md-6"><label class="form-label">2. User</label><input type="text" class="form-control mb-2" id="u-user" required></div>
-                                    <div class="col-md-6"><label class="form-label">3. Pass</label><input type="password" class="form-control mb-2" id="u-pass" required></div>
+                                    <div class="col-md-6"><label class="form-label">3. Pass</label><input type="text" class="form-control mb-2" id="u-pass" required></div>
                                 </div>
                                 <label class="form-label">4. Nama Staf</label>
                                 <input type="text" class="form-control mb-2" id="u-nama" required>
@@ -189,7 +189,8 @@
                                 </div>
                                 <label class="form-label">7. No Telp</label>
                                 <input type="text" class="form-control mb-3" id="u-telp" required>
-                                <button type="submit" class="btn btn-slog w-100">BUAT USER AKSES</button>
+                                <button type="submit" class="btn btn-slog w-100" id="btn-save-user">BUAT USER AKSES</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mt-2 d-none" id="btn-cancel-user" onclick="resetUserForm()">BATAL EDIT</button>
                             </form>
                         </div>
                     </div>
@@ -197,7 +198,7 @@
                         <div class="card card-tactical p-3">
                             <div class="table-scroll-container">
                                 <table class="table table-military table-bordered min-width-table">
-                                    <thead><tr><th>No</th><th>Satuan</th><th>User</th><th>Nama</th><th>Pangkat</th><th>NRP</th><th>Telp</th><th>Opsi</th></tr></thead>
+                                    <thead><tr><th>Satuan</th><th>User</th><th>Nama</th><th>Pangkat</th><th>NRP</th><th>Telp</th><th>Opsi</th></tr></thead>
                                     <tbody id="tbody-users"></tbody>
                                 </table>
                             </div>
@@ -260,9 +261,8 @@ function handleSaveMasterItem(e) {
     if(idx === "") db_master.push(data); else db_master[idx] = data;
     localStorage.setItem('db_master_items', JSON.stringify(db_master));
     renderMasterTable();
-    e.target.reset();
-    document.getElementById('master-idx').value = "";
-    alert("Data Master Disimpan");
+    resetMasterItemForm();
+    alert("Data Master Berhasil Disimpan");
 }
 
 function renderMasterTable() {
@@ -274,11 +274,14 @@ function renderMasterTable() {
         if(fBase !== 'ALL' && item.base !== fBase) return;
         if(!(item.nama+item.kode+item.spec).toLowerCase().includes(sKey)) return;
         tbody.innerHTML += `<tr>
-            <td><span class="badge ${item.base==='SENMU'?'bg-danger':'bg-primary'}">${item.base}</span></td>
-            <td class="text-warning fw-bold">${item.kode}</td>
-            <td><strong>${item.nama}</strong>${item.sub ? '<br><small>'+item.sub+'</small>':''}</td>
-            <td>${item.spec}</td><td>${item.satuan}</td>
-            <td><button class="btn btn-sm btn-outline-warning p-1" onclick="editMaster(${i})"><i class="fa-solid fa-edit"></i></button></td></tr>`;
+            <td class="text-center"><span class="badge ${item.base==='SENMU'?'bg-danger':'bg-primary'}">${item.base}</span></td>
+            <td class="text-warning fw-bold text-center">${item.kode}</td>
+            <td><strong>${item.nama}</strong>${item.sub ? '<br><small style="color:#a3b899">'+item.sub+'</small>':''}</td>
+            <td>${item.spec}</td><td class="text-center">${item.satuan}</td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editMaster(${i})"><i class="fa-solid fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger p-1" onclick="db_master.splice(${i},1);localStorage.setItem('db_master_items',JSON.stringify(db_master));renderMasterTable()"><i class="fa-solid fa-trash"></i></button>
+            </td></tr>`;
     });
 }
 
@@ -291,48 +294,87 @@ function editMaster(i) {
     document.getElementById('m-sub').value = item.sub;
     document.getElementById('m-spec').value = item.spec;
     document.getElementById('m-satuan').value = item.satuan;
+    document.getElementById('btn-save-master').innerText = "UPDATE MASTER";
+    document.getElementById('btn-cancel-master').classList.remove('d-none');
 }
 
-// CATEGORY VIEW LOGIC
-function renderCategoryView(base) {
-    document.getElementById('category-title').innerText = "INVENTARIS " + base;
-    const tbody = document.getElementById('tbody-category');
-    tbody.innerHTML = '';
-    db_master.filter(i => i.base === base).forEach((item, index) => {
-        tbody.innerHTML += `<tr>
-            <td class="text-center">${index+1}</td>
-            <td class="text-warning fw-bold">${item.kode}</td>
-            <td><strong>${item.nama}</strong>${item.sub ? '<br><small>'+item.sub+'</small>':''}</td>
-            <td>${item.spec}</td>
-            <td class="text-center">${item.satuan}</td>
-        </tr>`;
-    });
+function resetMasterItemForm() {
+    document.getElementById('form-master-item').reset();
+    document.getElementById('master-idx').value = "";
+    document.getElementById('btn-save-master').innerText = "SIMPAN MASTER";
+    document.getElementById('btn-cancel-master').classList.add('d-none');
 }
 
 // USER LOGIC
 function handleSaveUser(e) {
     e.preventDefault();
+    const idx = document.getElementById('u-idx').value;
     const data = {
         satuan: document.getElementById('u-satuan').value.toUpperCase(),
         user: document.getElementById('u-user').value,
         pass: document.getElementById('u-pass').value,
-        nama: document.getElementById('u-nama').value,
-        pangkat: document.getElementById('u-pangkat').value,
+        nama: document.getElementById('u-nama').value.toUpperCase(),
+        pangkat: document.getElementById('u-pangkat').value.toUpperCase(),
         nrp: document.getElementById('u-nrp').value,
         telp: document.getElementById('u-telp').value
     };
-    db_users.push(data);
+    
+    if(idx === "") {
+        db_users.push(data);
+        alert("User Jajaran Berhasil Dibuat");
+    } else {
+        db_users[idx] = data;
+        alert("Data User Berhasil Diperbarui");
+    }
+
     localStorage.setItem('db_users', JSON.stringify(db_users));
     renderUserTable();
-    e.target.reset();
+    resetUserForm();
 }
 
 function renderUserTable() {
     const tbody = document.getElementById('tbody-users');
     tbody.innerHTML = '';
     db_users.forEach((u, i) => {
-        tbody.innerHTML += `<tr><td>${i+1}</td><td>${u.satuan}</td><td class="text-warning">${u.user}</td><td>${u.nama}</td><td>${u.pangkat}</td><td>${u.nrp}</td><td>${u.telp}</td><td><button class="btn btn-sm btn-outline-danger" onclick="db_users.splice(${i},1);renderUserTable()"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+        tbody.innerHTML += `<tr>
+            <td><strong>${u.satuan}</strong></td>
+            <td class="text-warning font-monospace">${u.user}</td>
+            <td>${u.nama}</td>
+            <td class="text-center">${u.pangkat}</td>
+            <td class="text-center font-monospace">${u.nrp}</td>
+            <td class="text-center">${u.telp}</td>
+            <td class="text-center" style="white-space:nowrap">
+                <button class="btn btn-sm btn-outline-warning p-1 me-1" onclick="editUser(${i})"><i class="fa-solid fa-edit"></i></button>
+                <button class="btn btn-sm btn-outline-danger p-1" onclick="if(confirm('Hapus User ini?')){db_users.splice(${i},1);localStorage.setItem('db_users',JSON.stringify(db_users));renderUserTable();}"><i class="fa-solid fa-trash"></i></button>
+            </td></tr>`;
     });
+}
+
+function editUser(i) {
+    const u = db_users[i];
+    document.getElementById('u-idx').value = i;
+    document.getElementById('u-satuan').value = u.satuan;
+    document.getElementById('u-user').value = u.user;
+    document.getElementById('u-pass').value = u.pass;
+    document.getElementById('u-nama').value = u.nama;
+    document.getElementById('u-pangkat').value = u.pangkat;
+    document.getElementById('u-nrp').value = u.nrp;
+    document.getElementById('u-telp').value = u.telp;
+    
+    document.getElementById('user-form-title').innerText = "Edit Akses Jajaran";
+    document.getElementById('btn-save-user').innerText = "UPDATE USER AKSES";
+    document.getElementById('btn-cancel-user').classList.remove('d-none');
+    
+    // Scroll ke form agar user tahu sedang mengedit
+    document.getElementById('form-manage-user').scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetUserForm() {
+    document.getElementById('form-manage-user').reset();
+    document.getElementById('u-idx').value = "";
+    document.getElementById('user-form-title').innerText = "Buat Akses (7 Kolom)";
+    document.getElementById('btn-save-user').innerText = "BUAT USER AKSES";
+    document.getElementById('btn-cancel-user').classList.add('d-none');
 }
 
 function updateDashboard() {
@@ -342,7 +384,7 @@ function updateDashboard() {
 }
 
 function logout() { alert("Sesi diamankan."); }
-document.addEventListener("DOMContentLoaded", () => { updateDashboard(); renderMasterTable(); });
+document.addEventListener("DOMContentLoaded", () => { updateDashboard(); renderMasterTable(); renderUserTable(); });
 </script>
 </body>
 </html>
