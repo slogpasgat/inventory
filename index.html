@@ -9,6 +9,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* STREAMING_CHUNK: Mengonfigurasi tema taktis militer gelap... */
         /* TEMA MILITER - DARK TACTICAL MODE */
         body {
             background-color: #191c16;
@@ -63,6 +64,7 @@
             vertical-align: middle;
         }
 
+        /* STREAMING_CHUNK: Memperbaiki visibilitas teks tabel anti warna hitam... */
         /* FIX VISIBILITAS TEKS PUTIH PADA TABEL */
         .table-military td {
             background-color: #1d2218 !important;
@@ -81,6 +83,7 @@
             color: #a3b899;
             border-radius: 4px;
             margin-bottom: 5px;
+            cursor: pointer;
         }
         .nav-link-military:hover, .nav-link-military.active {
             background-color: #343f2e;
@@ -120,6 +123,7 @@
 </head>
 <body>
 
+<!-- STREAMING_CHUNK: Merancang navigasi header atas... -->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-military p-3">
     <div class="container-fluid">
         <a class="navbar-brand fw-bold text-uppercase" href="#"><i class="fa-solid fa-jet-fighter"></i> INVENTORY KORPASGAT</a>
@@ -133,29 +137,149 @@
 <div class="container-fluid">
     <div class="row">
         
+        <!-- STREAMING_CHUNK: Menyusun menu navigasi sidebar jajaran... -->
         <!-- SIDEBAR NAVIGASI -->
         <nav class="col-md-2 d-none d-md-block sidebar p-3" id="sidebar-menu">
             <div class="position-sticky">
                 <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('senmu')"><i class="fa-solid fa-gun me-2"></i> SENMU</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('alpalsus')"><i class="fa-solid fa-vest-pattern me-2"></i> ALPALSUS</a></li>
-                    <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('ranmor')"><i class="fa-solid fa-truck-pickup me-2"></i> RANMOR</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military active" id="nav-dashboard" onclick="switchView('dashboard')"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military" id="nav-senmu" onclick="switchView('senmu')"><i class="fa-solid fa-gun me-2"></i> SENMU</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military" id="nav-alpalsus" onclick="switchView('alpalsus')"><i class="fa-solid fa-vest-pattern me-2"></i> ALPALSUS</a></li>
+                    <li class="nav-item"><a class="nav-link nav-link-military" id="nav-ranmor" onclick="switchView('ranmor')"><i class="fa-solid fa-truck-pickup me-2"></i> RANMOR</a></li>
                 </ul>
 
                 <div id="slog-special-menu" class="">
                     <h6 class="sidebar-heading px-3 mt-4 mb-2 text-warning text-uppercase">Otoritas SLOG</h6>
                     <ul class="nav flex-column">
-                        <li class="nav-item"><a class="nav-link nav-link-military active" href="#" onclick="switchView('manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-military" href="#" onclick="switchView('manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-military" id="nav-manage-items" onclick="switchView('manage-items')"><i class="fa-solid fa-boxes-stacked me-2"></i> Master Item</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-military" id="nav-manage-users" onclick="switchView('manage-users')"><i class="fa-solid fa-users-gear me-2"></i> User Jajaran</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
 
+        <!-- KONTEN UTAMA DENGAN VIEW PORTAL YANG DIKONTROL JS -->
         <main class="col-md-10 ms-sm-auto px-md-4 py-4">
             
-            <section id="view-manage-items" class="view-section">
+            <!-- STREAMING_CHUNK: Membangun modul view Dashboard... -->
+            <!-- VIEW: DASHBOARD -->
+            <section id="view-dashboard" class="view-section">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
+                    <i class="fa-solid fa-gauge"></i> Dashboard Ringkasan Logistik
+                </h3>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card card-tactical p-3 mb-2">
+                            <h6 class="text-warning">Kekuatan Senjata & Amunisi (SENMU)</h6>
+                            <h2 id="dash-count-senmu" class="text-white fw-bold">0</h2>
+                            <small class="text-muted">Total item terdaftar di pangkalan data</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-tactical p-3 mb-2">
+                            <h6 class="text-warning">Alat Peralatan Khusus (ALPALSUS)</h6>
+                            <h2 id="dash-count-alpalsus" class="text-white fw-bold">0</h2>
+                            <small class="text-muted">Perlengkapan taktis operasional aktif</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card card-tactical p-3 mb-2">
+                            <h6 class="text-warning">Kekuatan Armada Ranmor (RANMOR)</h6>
+                            <h2 id="dash-count-ranmor" class="text-white fw-bold">0</h2>
+                            <small class="text-muted">Armada taktis roda 2, roda 4, dan rantis</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-tactical p-4">
+                    <h5 class="text-warning mb-3">Status Sistem Logistik Korpasgat</h5>
+                    <p class="text-light">
+                        Selamat datang di <strong>System Logistik Digital KORPASGAT</strong>. Portal ini mengintegrasikan seluruh laporan inventaris master jajaran satuan secara real-time. Gunakan menu navigasi di sebelah kiri untuk melihat daftar armada taktis, amunisi, serta peralatan khusus.
+                    </p>
+                </div>
+            </section>
+
+            <!-- STREAMING_CHUNK: Membangun modul view SENMU... -->
+            <!-- VIEW: SENMU -->
+            <section id="view-senmu" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
+                    <i class="fa-solid fa-gun"></i> Inventaris Senjata & Amunisi (SENMU)
+                </h3>
+                <div class="card card-tactical p-3">
+                    <div class="table-responsive">
+                        <table class="table table-military table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Barang</th>
+                                    <th>Spek Kaliber</th>
+                                    <th>Satuan</th>
+                                    <th>Ketersediaan</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-senmu-view">
+                                <!-- Terisi otomatis lewat JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STREAMING_CHUNK: Membangun modul view ALPALSUS... -->
+            <!-- VIEW: ALPALSUS -->
+            <section id="view-alpalsus" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
+                    <i class="fa-solid fa-vest-pattern"></i> Inventaris Alat Peralatan Khusus (ALPALSUS)
+                </h3>
+                <div class="card card-tactical p-3">
+                    <div class="table-responsive">
+                        <table class="table table-military table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Barang</th>
+                                    <th>Spek/No Registrasi</th>
+                                    <th>Satuan</th>
+                                    <th>Kondisi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-alpalsus-view">
+                                <!-- Terisi otomatis lewat JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STREAMING_CHUNK: Membangun modul view RANMOR... -->
+            <!-- VIEW: RANMOR -->
+            <section id="view-ranmor" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
+                    <i class="fa-solid fa-truck-pickup"></i> Inventaris Kendaraan Bermotor (RANMOR)
+                </h3>
+                <div class="card card-tactical p-3">
+                    <div class="table-responsive">
+                        <table class="table table-military table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Merk / Tipe Kendaraan</th>
+                                    <th>Spek/No Mesin</th>
+                                    <th>Satuan</th>
+                                    <th>Status Armada</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody-ranmor-view">
+                                <!-- Terisi otomatis lewat JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STREAMING_CHUNK: Membangun modul view Otoritas Master Data Item... -->
+            <!-- VIEW: MASTER ITEM DATA (Otoritas SLOG) -->
+            <section id="view-manage-items" class="view-section d-none">
                 <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
                     <i class="fa-solid fa-boxes-stacked"></i> Otoritas Master Data Item Barang
                 </h3>
@@ -251,18 +375,103 @@
                     </div>
                 </div>
             </section>
-            <!-- View section lain disembunyikan untuk fokus pada master data -->
+
+            <!-- STREAMING_CHUNK: Membangun modul view User Jajaran... -->
+            <!-- VIEW: USER JAJARAN -->
+            <section id="view-manage-users" class="view-section d-none">
+                <h3 class="border-bottom border-secondary pb-2 mb-3 text-uppercase text-warning">
+                    <i class="fa-solid fa-users-gear"></i> Manajemen User Jajaran Satuan
+                </h3>
+                <div class="card card-tactical p-4">
+                    <h5 class="text-warning mb-3">Daftar Otoritas Komando Wilayah Satuan Jajaran</h5>
+                    <p class="text-light">
+                        Halaman ini mengelola hak akses login bagi tiap-tiap staf logistik Satuan Jajaran Komando KORPASGAT (Yonko, Denmatra, Satwalkol).
+                    </p>
+                    <div class="table-responsive mt-3">
+                        <table class="table table-military table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Satuan Jajaran</th>
+                                    <th>Kode Akses Operasional</th>
+                                    <th>Status Hubungan data</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td><strong>YONKO 461 PARAKO</strong></td>
+                                    <td class="text-center text-warning font-monospace">YON-461</td>
+                                    <td class="text-center text-success"><i class="fa-solid fa-circle-check"></i> Terkoneksi</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">2</td>
+                                    <td><strong>YONKO 471 PARAKO</strong></td>
+                                    <td class="text-center text-warning font-monospace">YON-471</td>
+                                    <td class="text-center text-success"><i class="fa-solid fa-circle-check"></i> Terkoneksi</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">3</td>
+                                    <td><strong>DENMATRA 1</strong></td>
+                                    <td class="text-center text-warning font-monospace">DENMAT-1</td>
+                                    <td class="text-center text-success"><i class="fa-solid fa-circle-check"></i> Terkoneksi</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 </div>
 
 <script>
+// STREAMING_CHUNK: Mengaktifkan database penampungan logistik sementara...
 // --- DATABASE SIMULATOR ---
 let db_master_items = JSON.parse(localStorage.getItem('db_master_items')) || [
     { base: 'SENMU', kode: 'SM-001', nama: 'MU1-TJ', sub: '', spec: '9 x 19 MM', satuan: 'Butir' },
-    { base: 'SENMU', kode: 'SM-002', nama: 'MU2-TJ', sub: '', spec: '7,62 x 51 MM', satuan: 'Butir' }
+    { base: 'SENMU', kode: 'SM-002', nama: 'MU2-TJ', sub: '', spec: '7,62 x 51 MM', satuan: 'Butir' },
+    { base: 'ALPALSUS', kode: 'AP-001', nama: 'Aqualung', sub: '', spec: 'SN-08182', satuan: 'Set' },
+    { base: 'RANMOR', kode: 'RM-001', nama: 'P6-ATAV', sub: '', spec: 'SSE-V1-2024', satuan: 'Unit' }
 ];
 
+// STREAMING_CHUNK: Mengonfigurasi logika navigasi menu multi-view...
+// --- LOGIKA NAVIGASI MULTI-VIEW ---
+function switchView(viewId) {
+    // Sembunyikan semua section view
+    document.querySelectorAll('.view-section').forEach(section => {
+        section.classList.add('d-none');
+    });
+    
+    // Tampilkan view yang dipilih
+    const activeSection = document.getElementById('view-' + viewId);
+    if (activeSection) {
+        activeSection.classList.remove('d-none');
+    }
+
+    // Ubah status aktif tombol navigasi sidebar
+    document.querySelectorAll('.nav-link-military').forEach(link => {
+        link.classList.remove('active');
+    });
+    const activeLink = document.getElementById('nav-' + viewId);
+    if (activeLink) {
+        activeLink.classList.add('active');
+    }
+
+    // Refresh data view yang spesifik jika diperlukan
+    if (viewId === 'dashboard') {
+        updateDashboardCounts();
+    } else if (viewId === 'senmu') {
+        renderSENMUViewTable();
+    } else if (viewId === 'alpalsus') {
+        renderALPALSUSViewTable();
+    } else if (viewId === 'ranmor') {
+        renderRANMORViewTable();
+    }
+}
+
+// STREAMING_CHUNK: Merancang fungsi otomatisasi penomoran kode barang...
 // --- LOGIKA OTOMATISASI KODE ---
 function generateAutoCode(base) {
     if (!base) { document.getElementById('master-kode').value = ""; return; }
@@ -273,6 +482,7 @@ function generateAutoCode(base) {
     document.getElementById('master-kode').value = prefix + formattedNumber;
 }
 
+// STREAMING_CHUNK: Mengatur aksi penyimpanan dan penyimpanan data presisten...
 // --- CONTROLLER FORM ---
 function handleSaveMasterItem(e) {
     e.preventDefault();
@@ -292,9 +502,13 @@ function handleSaveMasterItem(e) {
     localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
     filterAndSearchMasterTable();
     resetMasterItemForm();
-    alert("Data Master Berhasil Disimpan!");
+    updateDashboardCounts();
+    
+    // Tampilkan pesan sukses taktis (tanpa alert bawaan browser)
+    showTackticalMessage("Data Master Berhasil Disimpan!");
 }
 
+// STREAMING_CHUNK: Merancang engine tabel master yang aman tanpa strip...
 // --- ENGINE TABEL (HILANGKAN STRIP KOSONG) ---
 function filterAndSearchMasterTable() {
     const baseFilter = document.getElementById('table-filter-base').value;
@@ -335,6 +549,84 @@ function filterAndSearchMasterTable() {
     }
 }
 
+// STREAMING_CHUNK: Mengembangkan render data operasional masing-masing modul...
+// --- ENGINE RENDER TABEL KHUSUS KATEGORI ---
+function renderSENMUViewTable() {
+    const tbody = document.getElementById('tbody-senmu-view');
+    tbody.innerHTML = '';
+    const senmuItems = db_master_items.filter(item => item.base === 'SENMU');
+    
+    senmuItems.forEach(item => {
+        tbody.innerHTML += `
+            <tr>
+                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
+                <td><strong>${item.nama}</strong>${item.sub ? `<br><small>${item.sub}</small>` : ''}</td>
+                <td>${item.spec ? item.spec : ''}</td>
+                <td class="text-center">${item.satuan}</td>
+                <td class="text-center text-success"><i class="fa-solid fa-check"></i> Siaga</td>
+            </tr>
+        `;
+    });
+    if (tbody.innerHTML === '') {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada data Senjata & Amunisi.</td></tr>`;
+    }
+}
+
+function renderALPALSUSViewTable() {
+    const tbody = document.getElementById('tbody-alpalsus-view');
+    tbody.innerHTML = '';
+    const alpalsusItems = db_master_items.filter(item => item.base === 'ALPALSUS');
+    
+    alpalsusItems.forEach(item => {
+        tbody.innerHTML += `
+            <tr>
+                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
+                <td><strong>${item.nama}</strong>${item.sub ? `<br><small>${item.sub}</small>` : ''}</td>
+                <td>${item.spec ? item.spec : ''}</td>
+                <td class="text-center">${item.satuan}</td>
+                <td class="text-center text-info"><i class="fa-solid fa-shield-halved"></i> Terinventaris</td>
+            </tr>
+        `;
+    });
+    if (tbody.innerHTML === '') {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada data Alat Peralatan Khusus.</td></tr>`;
+    }
+}
+
+function renderRANMORViewTable() {
+    const tbody = document.getElementById('tbody-ranmor-view');
+    tbody.innerHTML = '';
+    const ranmorItems = db_master_items.filter(item => item.base === 'RANMOR');
+    
+    ranmorItems.forEach(item => {
+        tbody.innerHTML += `
+            <tr>
+                <td class="text-center font-monospace text-warning fw-bold">${item.kode}</td>
+                <td><strong>${item.nama}</strong>${item.sub ? `<br><small>${item.sub}</small>` : ''}</td>
+                <td>${item.spec ? item.spec : ''}</td>
+                <td class="text-center">${item.satuan}</td>
+                <td class="text-center text-warning"><i class="fa-solid fa-truck"></i> Operasional</td>
+            </tr>
+        `;
+    });
+    if (tbody.innerHTML === '') {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada data Kendaraan Bermotor.</td></tr>`;
+    }
+}
+
+// STREAMING_CHUNK: Menyinkronkan jumlah hitungan ringkasan dashboard statistik...
+// --- UPDATE DASHBOARD STATISTIK ---
+function updateDashboardCounts() {
+    const senmuCount = db_master_items.filter(i => i.base === 'SENMU').length;
+    const alpalsusCount = db_master_items.filter(i => i.base === 'ALPALSUS').length;
+    const ranmorCount = db_master_items.filter(i => i.base === 'RANMOR').length;
+
+    document.getElementById('dash-count-senmu').innerText = senmuCount + " Items";
+    document.getElementById('dash-count-alpalsus').innerText = alpalsusCount + " Perlengkapan";
+    document.getElementById('dash-count-ranmor').innerText = ranmorCount + " Armada";
+}
+
+// --- CONTROLLER EDIT & DELETE ---
 function editMasterItem(index) {
     const item = db_master_items[index];
     document.getElementById('master-item-idx').value = index;
@@ -360,12 +652,37 @@ function deleteMasterItem(index) {
         db_master_items.splice(index, 1);
         localStorage.setItem('db_master_items', JSON.stringify(db_master_items));
         filterAndSearchMasterTable();
+        updateDashboardCounts();
     }
 }
 
-document.addEventListener("DOMContentLoaded", filterAndSearchMasterTable);
-function switchView(id) { /* Logic navigasi */ }
-function logout() { alert("Keamanan sesi logistik diamankan..."); }
+// --- UTILITIES (TIDAK MENGGUNAKAN ALERT NATIVE) ---
+function showTackticalMessage(msg) {
+    const alertBox = document.createElement('div');
+    alertBox.style.position = 'fixed';
+    alertBox.style.bottom = '20px';
+    alertBox.style.right = '20px';
+    alertBox.style.backgroundColor = '#2c3626';
+    alertBox.style.border = '2px solid #ffc107';
+    alertBox.style.color = '#ffc107';
+    alertBox.style.padding = '15px 25px';
+    alertBox.style.borderRadius = '5px';
+    alertBox.style.fontFamily = 'Courier New, monospace';
+    alertBox.style.zIndex = '9999';
+    alertBox.innerHTML = `<i class="fa-solid fa-shield-halved me-2"></i> ${msg}`;
+    document.body.appendChild(alertBox);
+    setTimeout(() => { alertBox.remove(); }, 3000);
+}
+
+function logout() { 
+    showTackticalMessage("Keamanan sesi logistik diamankan..."); 
+}
+
+// --- INisialisasi SISTEM PADA WINDOW LOAD ---
+document.addEventListener("DOMContentLoaded", function() {
+    filterAndSearchMasterTable();
+    updateDashboardCounts();
+});
 </script>
 </body>
 </html>
